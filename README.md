@@ -1,4 +1,4 @@
-# twitch-bot
+# Bot for Twitch
 
 ![skhmt](https://img.shields.io/badge/made_by-skhmt-blue.svg?style=flat-square)
 ![version 0.4b](https://img.shields.io/badge/version-0.4b-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
@@ -9,9 +9,9 @@
 [![node-irc](https://img.shields.io/badge/using-node--irc-green.svg?style=flat-square)](https://github.com/martynsmith/node-irc/)
 [![plotly.js](https://img.shields.io/badge/using-plotly.js-green.svg?style=flat-square)](https://github.com/plotly/plotly.js/)
 
-### Get the latest Windows build in the /dist/ folder
+##### Get the latest Windows build in the /dist/ folder
 
-### To build on Windows:
+##### To build from scratch on Windows:
 * Get nw.js
 * Pull everything from src on this repository
 * Zip it to bot.zip (top level)
