@@ -9,8 +9,9 @@
 [![node-irc](https://img.shields.io/badge/using-node--irc-green.svg?style=flat-square)](https://github.com/martynsmith/node-irc/)
 [![plotly.js](https://img.shields.io/badge/using-plotly.js-green.svg?style=flat-square)](https://github.com/plotly/plotly.js/)
 
+## Get the latest build, ready to go for Windows, in the /dist/ folder
 
-To build on Windows:
+## To build on Windows:
 * Get nw.js
 * Pull everything from src on this repository
 * Zip it to bot.zip (top level)
