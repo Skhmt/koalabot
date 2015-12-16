@@ -5,12 +5,28 @@
 
 ##### Get the latest Windows build in the /dist/ folder
 
-##### Features
-- [ ] 
-- [x] 
-- [ ] 
-- [ ] 
-- [ ] 
+##### Features:
+- [x] Chat window with emoticons and viewer list
+- [x] !highlight / !ht command to tag a place for VOD editing later
+- [x] Quote system
+- [x] Custom commands
+- [x] Timed messages
+- [x] Spam control via link, word, caps, symbols
+- [x] Viewer count graphs
+- [x] Customizable !uptime command based on bot running time, stream uptime, or a custom set time 
+- [x] Chat logging
+- [x] Hosts logging
+- [ ] Giveaways
+- [ ] Song requests
+- [ ] Sound / video playing in response to a command or event
+- [ ] Loyalty points
+- [ ] User ranks
+- [ ] Mini games
+- [ ] Poll
+- [ ] More variables for custom commands
+- [ ] Individually disable timed messages
+- [ ] Individually disable custom and built-in commands
+- [ ] Whispers (unlikely that it will be done)
 
 ##### To build from scratch on Windows:
 * Get nw.js
