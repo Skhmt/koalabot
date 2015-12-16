@@ -20,4 +20,4 @@ To build on Windows:
 * Run: copy /b nw.exe+bot.nw bot.exe
 * You only need bot.exe, nw.pak, and icudtl.dat to run the program... for now at least.
 
-Note: if you build your own version, you'll need to get your own clientid and make your own oauth page. Don't directly use this: https://github.com/Skhmt/skhmt.github.io/blob/master/bot/oauth.html
+Note: if you build your own version, you'll need to get your own clientid and make your own oauth page. Don't use this actual page, although you may copy and use it on your own site: https://github.com/Skhmt/skhmt.github.io/blob/master/bot/oauth.html
