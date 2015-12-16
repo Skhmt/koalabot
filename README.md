@@ -36,7 +36,7 @@
 * Paste your oauth (ctrl-v) into the box
 * Click "Save Token"
 
-##### To build from scratch on Windows:
+##### To optionally build from scratch on Windows:
 * Get nw.js
 * Pull everything from src on this repository
 * Zip it to bot.zip (top level)
