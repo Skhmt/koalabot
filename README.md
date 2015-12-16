@@ -7,7 +7,7 @@
 [![jQuery](https://img.shields.io/badge/using-jQuery-green.svg?style=flat-square)](https://jquery.com/)
 [![jQueryUI](https://img.shields.io/badge/using-jQueryUI-green.svg?style=flat-square)](https://jqueryui.com/)
 [![node-irc](https://img.shields.io/badge/using-node--irc-green.svg?style=flat-square)](https://github.com/martynsmith/node-irc/)
-[![plotly.js](https://img.shields.io/badge/using-plotly.js-green.svg?style=flat-square)](https://github.com/plotly/plotly.js/)
+![plotly.js](https://img.shields.io/badge/git-plotly.js-green.svg?style=flat-square&link=https://github.com/plotly/plotly.js/&link=https://plot.ly/javascript/)]
 
 ##### Get the latest Windows build in the /dist/ folder
 
