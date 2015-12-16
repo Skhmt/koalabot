@@ -1,0 +1,14 @@
+{
+	"name": "Bot",
+	"description": "blah",
+	"version": "0.4a",
+	"main": "index.html",
+	"window": {
+		"width": 800,
+		"height": 600,
+		"title": "Bot",
+		"toolbar": false,
+		"icon": "followers.png",
+		"frame": false
+	}
+}

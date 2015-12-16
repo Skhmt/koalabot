@@ -1,0 +1,131 @@
+html {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #26b3f7;
+	padding-top: 0;
+	background-color: black;
+}
+
+*:focus {
+	outline: none;
+}
+
+#console {
+	display: inline-block;
+	width: calc(100vw - 257px);
+	height: calc(100vh - 26px - 95px);
+	overflow: auto;
+	word-wrap: break-word;
+	margin-right: 0;
+	padding-right: 0;
+}
+
+#userlist {
+	padding: 0 0 0 10px;
+	margin: 0;
+	display: inline-block;
+	float: right;
+	width: 200px;
+	height: calc(100vh - 26px - 95px);
+	overflow: auto;
+	border-style: solid;
+	border-width: 0 0 0 1px;
+	border-color: #26b3f7;
+	font-size: 14px;
+}
+
+#chatDiv, #chatText, #chatForm {
+	width: calc(100vw - 32px);
+}
+
+#tabs-1, #tabs-2, #tabs-3, #tabs-4, #tabs-5, #tabs-6, #tabs-7 {
+	padding-top: 10px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	height: calc(100vh - 94px);
+	font-size: 14px !important;
+}
+
+#tabs {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+#exit, #minimize, #maximize {
+	height: 20px;
+	width: 20px;
+}
+
+#top {
+	width: 100%;
+}
+
+#topTitle {
+	font-family: verdana, sans-serif;
+	color: #26b3f7;
+	font-size: 20px;
+	font-weight: bold;
+	letter-spacing: -0.5pt;
+}
+
+#topRight {
+	-webkit-app-region: no-drag;
+	float: right;
+}
+
+#commands {
+	width: calc(100vw - 33px);
+	height: calc(100vh - 160px);
+	overflow: auto;
+	word-wrap: break-word;
+	margin-top: 5px;
+}
+
+#timedMsgs {
+	width: calc(100vw - 33px);
+	height: calc(100vh - 130px);
+	overflow: auto;
+	word-wrap: break-word;
+	margin-top: 5px;
+}
+
+#quotes{
+	width: calc(100vw - 33px);
+	height: calc(100vh - 94px);
+	overflow: auto;
+	word-wrap: break-word;
+}
+
+.labelText {
+	color: #26b3f7;
+	font-weight: bold;
+}
+
+.ui-button .ui-button-text {
+	padding: 5px;
+}
+
+.ui-button .ui-button-icon {
+	padding: 2px;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+	font-size: 10pt !important;
+}
+
+.timedMessageSpan {
+	display: inline-block;
+	width: 60px;
+	font-style: italic;
+}
+
+.emoticon {
+	display: inline-block;
+	max-height: 17px;
+	height: auto;
+	width: auto;
+}
+
+

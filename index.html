@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Bot
+	</title>
+	
+	<script src="plotly-latest.min.js"></script>
+	<script src="jquery-2.1.4.min.js"></script>
+	<script src="jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery-ui.min.css" />
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<script src="commands.js"></script>
+	<script src="message.js"></script>
+	<script src="stats.js"></script>
+	<script src="moderation.js"></script>
+	<script src="timedMessages.js"></script>
+	<script src="timer.js"></script>
+	<script src="scripts.js"></script>
+</head>
+<body>
+
+	<div id="top" style="-webkit-app-region: drag;">
+		<span id="topTitle">Bot v0.4b</span>
+		<span id="topRight">
+			<button id="minimize">minimize</button>
+			<button id="maximize">maximize</button>
+			<button id="exit">exit</button>
+		</span>
+	</div>
+
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">Chat</a></li>
+			<li><a href="#tabs-2">Events</a></li>
+			<li><a href="#tabs-3">Quotes</a></li>
+			<li><a href="#tabs-4">Timed Msg</a></li>
+			<li><a href="#tabs-5">Spam</a></li>
+			<li><a href="#tabs-6">Commands</a></li>
+			<li><a href="#tabs-7">Settings</a></li>
+		</ul>
+
+		<div id="tabs-1">
+			<span id="console"></span>
+			<span id="userlist"></span>
+			<div id="chatDiv">
+				<form onsubmit="chat(); return false;" id="chatForm">
+					<input type="text" id="chatText" value="" autocomplete="off">
+				</form>
+			</div>
+		</div>
+
+		<div id="tabs-2">
+			<div id="hosts"></div> <!-- This tab's content is dynamically generated -->
+		</div>
+
+		<div id="tabs-3">
+			<div id="quotes"></div>
+		</div>
+
+		<div id="tabs-4">
+			<div>
+				<button id="addMsgButton">Add Message</button> &nbsp; &nbsp;
+				Text: <input type="text" id="addMsgText" value="" size="45"> &nbsp; &nbsp; 
+				Repeat interval: <input type="text" id="addMsgTime" value="120" size="4" style="text-align: right">s 
+			</div>
+			<div id="timedMsgs">
+				
+			</div>
+		</div>
+
+		<div id="tabs-5">
+			<div id="moderation">
+				<table>
+					<tr>
+						<td style="vertical-align: top;">
+							<form id="linkProRadioSet">
+								<input type="radio" id="linkProRadioOn" name="radio" value="on"><label for="linkProRadioOn">on</label>
+								<input type="radio" id="linkProRadioOff" name="radio" value="off"><label for="linkProRadioOff">off</label>
+							</form>
+						</td>
+						<td>
+							<span class="labelText">Link Protection</span><br>
+							Timeout: <input type="text" id="linkProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
+							Message: <input type="text" id="linkProTimeoutText" size="55">
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">
+							<form id="wordProRadioSet">
+								<input type="radio" id="wordProRadioOn" name="radio" value="on"><label for="wordProRadioOn">on</label>
+								<input type="radio" id="wordProRadioOff" name="radio" value="off"><label for="wordProRadioOff">off</label>
+							</form>
+						</td>
+						<td>
+							<span class="labelText">Word Protection</span><br>
+							Timeout: <input type="text" id="wordProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
+							Message: <input type="text" id="wordProTimeoutText" size="55"><br>
+							Banned word list, separated by spaces:<br>
+							<textarea id="wordProArea" rows="5" cols="82"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">
+							<form id="capsProRadioSet">
+								<input type="radio" id="capsProRadioOn" name="radio" value="on"><label for="capsProRadioOn">on</label>
+								<input type="radio" id="capsProRadioOff" name="radio" value="off"><label for="capsProRadioOff">off</label>
+							</form>
+						</td>
+						<td>
+							<span class="labelText">Capital Letter Protection</span><br>
+							Timeout: <input type="text" id="capsProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
+							Message: <input type="text" id="capsProTimeoutText" size="55"><br>
+							Capitals allowed per word: <input type="text" id="capsProPerWordField" size="3"> &nbsp; &nbsp;
+							Capitals allowed per post: <input type="text" id="capsProPerPostField" size="3"> <br>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top;">
+							<form id="symbolProRadioSet">
+								<input type="radio" id="symbolProRadioOn" name="radio" value="on"><label for="symbolProRadioOn">on</label>
+								<input type="radio" id="symbolProRadioOff" name="radio" value="off"><label for="symbolProRadioOff">off</label>
+							</form>
+						</td>
+						<td>
+							<span class="labelText">Symbols Protection</span><br>
+							Timeout: <input type="text" id="symbolProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
+							Message: <input type="text" id="symbolProTimeoutText" size="55"><br>
+							Symbols allowed per post: <input type="text" id="symbolProSymbolsField" size="3"> <br>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div id="tabs-6">
+			<div>
+				<button id="addCmdButton">Add Command</button>&nbsp;&nbsp; 
+				<span class="labelText">Name:</span> <input type="text" id="addCmdName" size="40">&nbsp;&nbsp; 
+				<span class="labelText">Level:</span> <select id="addCmdUserType">
+					<option value="">Any user</option>
+					<option value="sub">Only subs and mods</option>
+					<option value="mod">Only mods</option>
+					<option value="streamer">Only streamer</option>
+					</select>
+					<br>
+				<span class="labelText">Command:</span> <input type="text" id="addCmdText" size="82">
+			</div>
+			<div id="commands"></div>
+		</div>
+
+		<div id="tabs-7">
+			<div id="config">
+					<span class="labelText">Bot name:</span> <span id="displayName"></span>
+					<br><br>
+					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
+						<span class="labelText">Access token:</span> <input type="password" id="getOauthField" size="36">
+						<button id="saveOauth">Save token</button>
+					</form><button id="getOauthLink">Get token</button>
+					<br><br>
+					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
+						<span class="labelText">Channel:</span> <input type="text" id="getChannelField" size="20">
+						<button id="changeChannel">Change channel</button>
+					</form>
+					<br><br>
+					<span class="labelText" style="display: inline-block; width: 62px;">Game:</span>
+					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
+						<input type="text" id="gameField" size="75">
+						<button id="updateGameButton">Update</button>
+					</form>
+					<br>
+					<span class="labelText" style="display: inline-block; width: 62px;">Status:</span>
+					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
+						<input type="text" id="statusField" size="75">
+						<button id="updateStatusButton">Update</button>
+					</form>
+
+					<br><br><br><br>
+
+
+					<span class="labelText">Statistics:</span> &nbsp;
+					<button id="openViewerGraph">View</button> &nbsp;
+					<button id="newViewers">Reset &amp; backup</button>
+
+					<br><br>
+
+					<span class="labelText">Lap time: </span><span id="lapTime"></span> 
+					<button id="resetLap">Lap</button>
+
+					<br><br>
+
+					<span class="labelText">!uptime display: </span>
+					<form id="uptimeRadioSet" style="display: inline-block;">
+						<input type="radio" id="uptimeRadioBot" name="radio" value="bot"><label for="uptimeRadioBot">bot time</label>
+						<input type="radio" id="uptimeRadioStream" name="radio" value="stream"><label for="uptimeRadioStream">stream time</label>
+						<input type="radio" id="uptimeRadioLap" name="radio" value="lap"><label for="uptimeRadioLap">lap time</label>
+					</form>
+			</div>
+		</div>
+	</div>
+
+	
+	<!-- Dialog windows below -->
+	
+	
+	<div id="getOauthDialog" title="Get oauth">
+		<iframe src="https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&redirect_uri=http://skhmt.github.io/bot/oauth.html&scope=channel_editor+chat_login&force_verify=true" style="outline: none; width: 650px; height: 480px; margin: 0; padding: 0; border: 0;"></iframe>
+	</div>
+
+	<div id="graphDialog" title="Viewer stats">
+		<div id="graph" style="width: 700px; height: 500px;"></div>
+	</div>
+	
+</body>
+</html>
