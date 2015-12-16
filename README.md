@@ -5,6 +5,13 @@
 
 ##### Get the latest Windows build in the /dist/ folder
 
+##### Features
+- [ ] 
+- [x] 
+- [ ] 
+- [ ] 
+- [ ] 
+
 ##### To build from scratch on Windows:
 * Get nw.js
 * Pull everything from src on this repository
