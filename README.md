@@ -30,15 +30,6 @@
 - [ ] Whispers (unlikely that I will implement this for a variety of reasons)
 - [ ] Poll (Straw poll is integrated with BTTV, so it's unlikely I'll implement this)
 
-#### How to use:
-* Run bot.exe
-* Go to the "Settings" Tab
-* Click "Get Token"
-* Follow the instructions
-* Paste your oauth (ctrl-v) into the box
-* Click "Save Token"
-* If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
-
 #### Commands:
 |Command|Parameters|Description|
 |-------|-------------------|--------|
@@ -64,6 +55,15 @@
 * **0.4c (16 Dec 2015):** mostly bug fixes. Increased size of emotes again. Known issue: sometimes the chat portion of the chat tab resizes itself for a reason I can't figure out. To fix it, switch tabs.
 * **0.4b (15 Dec 2015):** added generic BTTV emotes, made the font a little smaller, added !bottime, !streamtime, !laptime, and the ability to choose which time !uptime uses. Added laptime so you can save, for example, the start of a 24 hr stream that !uptime will count from even if your computer crashes. Can update game and stream status from the settings tab, not just via chat commands. Minor UI changes all around. 
 * **0.4a (13 Dec 2015):** fixed a bug with !quote that could randomly play a quote even if it was deleted. Also made emoticons a tiny bit smaller to fix the problem with the auto-scroll not working.
+
+#### How to use:
+* Run bot.exe
+* Go to the "Settings" Tab
+* Click "Get Token"
+* Follow the instructions
+* Paste your oauth (ctrl-v) into the box
+* Click "Save Token"
+* If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
 
 #### Libs used:
 * [nw.js](https://github.com/nwjs/nw.js/)
