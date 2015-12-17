@@ -3,7 +3,7 @@
 ![skhmt](https://img.shields.io/badge/made_by-skhmt-blue.svg?style=flat-square)
 ![version 0.4c](https://img.shields.io/badge/version-0.4c-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
-#### Get the latest Windows build in the [/dist/](https://github.com/Skhmt/twitch-bot/tree/master/dist) folder
+#### Get the latest Windows build in the [/dist/](https://github.com/Skhmt/twitch-bot/tree/master/dist) folder. If you don't have it already, get [7zip](http://www.7-zip.org/).
 
 #### Features:
 - [x] Chat window with emoticons and viewer list
@@ -59,9 +59,9 @@
 |**!delquote**|[id]|Mod-only. *Deletes the quote with the given id.*|
 
 #### Changelog:
-* 0.4c (16 Dec 2015): mostly bug fixes. Increased size of emotes again. Known issue: sometimes the chat portion of the chat tab resizes itself for a reason I can't figure out. To fix it, switch tabs.
-* 0.4b (15 Dec 2015): added generic BTTV emotes, made the font a little smaller, added !bottime, !streamtime, !laptime, and the ability to choose which time !uptime uses. Added laptime so you can save, for example, the start of a 24 hr stream that !uptime will count from even if your computer crashes. Can update game and stream status from the settings tab, not just via chat commands. Minor UI changes all around. 
-* 0.4a (13 Dec 2015): fixed a bug with !quote that could randomly play a quote even if it was deleted. Also made emoticons a tiny bit smaller to fix the problem with the auto-scroll not working.
+* **0.4c (16 Dec 2015):** mostly bug fixes. Increased size of emotes again. Known issue: sometimes the chat portion of the chat tab resizes itself for a reason I can't figure out. To fix it, switch tabs.
+* **0.4b (15 Dec 2015):** added generic BTTV emotes, made the font a little smaller, added !bottime, !streamtime, !laptime, and the ability to choose which time !uptime uses. Added laptime so you can save, for example, the start of a 24 hr stream that !uptime will count from even if your computer crashes. Can update game and stream status from the settings tab, not just via chat commands. Minor UI changes all around. 
+* **0.4a (13 Dec 2015):** fixed a bug with !quote that could randomly play a quote even if it was deleted. Also made emoticons a tiny bit smaller to fix the problem with the auto-scroll not working.
 
 #### Libs used:
 * [nw.js](https://github.com/nwjs/nw.js/)
