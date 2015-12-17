@@ -1,4 +1,4 @@
-# Bot for Twitch
+# Bot for Twitch... Could use help with a name :p
 
 ![skhmt](https://img.shields.io/badge/made_by-skhmt-blue.svg?style=flat-square)
 ![version 0.4c](https://img.shields.io/badge/version-0.4c-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
