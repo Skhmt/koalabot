@@ -44,8 +44,17 @@ function timerTick(){
 		updateUserlist();
 		viewerPlayTime = now + viewerInterval;
 	}
-	
+
+	chatScroll();
+
 	setTimeout(function(){
 		timerTick();
 	}, refreshInterval);
+}
+
+function chatScroll(){
+	var out = document.getElementById("console");
+	if (out.scrollHeight - out.clientHeight <= out.scrollTop + 150) {
+		out.scrollTop = out.scrollHeight - out.clientHeight;
+	}
 }

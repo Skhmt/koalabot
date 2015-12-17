@@ -356,7 +356,7 @@ function updateUserlist() {
 			
 			var staffLen = response.chatters.staff.length;
 			if (staffLen > 0) {
-				output += "<p> <b>STAFF (" + staffLen + ")</b> <br> ";
+				output += "<p> <b style='color: #6d35ac;'>STAFF (" + staffLen + ")</b> <br> ";
 				for (var i = 0; i < staffLen; i++) {
 					output += response.chatters.staff[i] + " <br> ";
 				}
@@ -365,7 +365,7 @@ function updateUserlist() {
 
 			var modLen = response.chatters.moderators.length;
 			if (modLen > 0) {
-				output += "<p> <b>MODERATORS (" + modLen + ")</b> <br> ";
+				output += "<p> <b style='color: #34ae0a;'>MODERATORS (" + modLen + ")</b> <br> ";
 				for (var i = 0; i < modLen; i++) {
 					output += response.chatters.moderators[i] + " <br> ";
 				}
@@ -374,7 +374,7 @@ function updateUserlist() {
 
 			var adminLen = response.chatters.admins.length;
 			if (adminLen > 0) {
-				output += "<p> <b>ADMINS (" + adminLen + ")</b> <br> ";
+				output += "<p> <b style='color: #faaf19;'>ADMINS (" + adminLen + ")</b> <br> ";
 				for (var i = 0; i < adminLen; i++) {
 					output += response.chatters.admins[i] + " <br> ";
 				}
@@ -383,7 +383,7 @@ function updateUserlist() {
 
 			var globalLen = response.chatters.global_mods.length;
 			if (globalLen > 0) {
-				output += "<p> <b>GLOBAL MODS (" + globalLen + ")</b> <br> ";
+				output += "<p> <b style='color: #1a7026;'>GLOBAL MODS (" + globalLen + ")</b> <br> ";
 				for (var i = 0; i < globalLen; i++) {
 					output += response.chatters.global_mods[i] + " <br> ";
 				}
@@ -392,7 +392,7 @@ function updateUserlist() {
 
 			var viewLen = response.chatters.viewers.length;
 			if (viewLen > 0) {
-				output += "<p> <b>VIEWERS (" + viewLen + ")</b> <br> ";
+				output += "<p> <b style='color: #2e7db2;'>VIEWERS (" + viewLen + ")</b> <br> ";
 				for (var i = 0; i < viewLen; i++) {
 					output += response.chatters.viewers[i] + " <br> ";
 				}
@@ -431,7 +431,7 @@ function getEmoticons(){
 			"api_version" : 3
 		},
 		function(response){
-			emoticonsTwitch = response.emoticons;
+			if ("emoticons" in response) emoticonsTwitch = response.emoticons;
 		}
 	);
 }
@@ -459,26 +459,23 @@ function getEmoticons(){
 		}]
 	}
 */
-function getEmoticonsBTTV(){
+function getEmoticonsBTTV() {
+
 	$.getJSON(
 		"https://api.betterttv.net/2/channels/" + settings.channel.substring(1),
-		{
-			
-		},
-		function(response){
-			emoticonsBTTV = response.emotes;
+		{},
+		function (response) {
+			if ("emotes" in response) emoticonsBTTV = response.emotes;
 		}
 	);
 
 	$.getJSON(
 		"https://api.betterttv.net/emotes",
-		{
-
-		},
-		function(response){
-			emoticonsBTTVall = response.emotes;
+		{},
+		function (response) {
+			if ("emotes" in response) emoticonsBTTVall = response.emotes;
 		}
-	)
+	);
 }
 
 function writeEmoticons(message){
@@ -493,7 +490,7 @@ function writeEmoticons(message){
 		// checking BTTV channel specific emotes first since it's smaller
 		for(var j = 0; j < emoticonsBTTV.length; j++) {
 			if (tempword == emoticonsBTTV[j].code){
-				output += "<img src='https://cdn.betterttv.net/emote/" + emoticonsBTTV[j].id + "/1x' class='emoticon'> ";
+				output += "<img src='https://cdn.betterttv.net/emote/" + emoticonsBTTV[j].id + "/1x'> ";
 				found = true;
 				break;
 			}
@@ -503,7 +500,7 @@ function writeEmoticons(message){
 			// checking universal BTTV emotes
 			for(var j = 0; j < emoticonsBTTVall.length; j++) {
 				if (tempword == emoticonsBTTVall[j].regex){
-					output += "<img src='https:" + emoticonsBTTVall[j].url + "' class='emoticon'> ";
+					output += "<img src='https:" + emoticonsBTTVall[j].url + "'> ";
 					found = true;
 					break;
 				}
@@ -514,7 +511,7 @@ function writeEmoticons(message){
 			// checking official Twitch emotes
 			for(var j = 0; j < emoticonsTwitch.length; j++) {
 				if (tempword == emoticonsTwitch[j].regex){
-					output += "<img src='" + emoticonsTwitch[j].images[0].url + "' class='emoticon'> ";
+					output += "<img src='" + emoticonsTwitch[j].images[0].url + "'> ";
 					found = true;
 					break;
 				}
@@ -536,11 +533,15 @@ function log(message) {
 		scrollTop = distance from an element's top to its topmost visible content, it's 0 if there's no scrolling needed
 		allow 1px inaccuracy by adding 1
 	*/
-	var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 5;
-	
+	// if it's scrolled to the bottom within 20px before a chat message shows up, set isScrolledToBottom to true
+	var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 20;
+
+	// add message
 	$("#console").append(writeEmoticons(message) + "<br>");
-	
-	if(isScrolledToBottom) out.scrollTop = out.scrollHeight - out.clientHeight;
+
+	// if it was scrolled to the bottom before the message was appended, scroll to the bottom
+	if(isScrolledToBottom)
+		out.scrollTop = out.scrollHeight - out.clientHeight;
 
 	// remove html tags before writing to the log
 	var wrapped = $("<div>" + message + "</div>");

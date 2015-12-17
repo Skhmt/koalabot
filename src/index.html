@@ -22,7 +22,7 @@
 <body>
 
 	<div id="top" style="-webkit-app-region: drag;">
-		<span id="topTitle">Bot v0.4b</span>
+		<span id="topTitle">Bot v0.4c</span>
 		<span id="topRight">
 			<button id="minimize">minimize</button>
 			<button id="maximize">maximize</button>
@@ -42,8 +42,10 @@
 		</ul>
 
 		<div id="tabs-1">
-			<span id="console"></span>
-			<span id="userlist"></span>
+			<div id="consoleBox">
+				<span id="console"></span>
+				<span id="userlist"></span>
+			</div>
 			<div id="chatDiv">
 				<form onsubmit="chat(); return false;" id="chatForm">
 					<input type="text" id="chatText" value="" autocomplete="off">

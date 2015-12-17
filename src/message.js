@@ -44,6 +44,7 @@ function msgPriv(command, args){
 	var commands = command.split(";");
 
 	var color = commands[0].substring(7); // #1E90FF
+	if (color == "") color = "#d2691e";
 
 	var subscriber = false;
 	if (commands[3].substring(11) == "1") subscriber = true;
