@@ -22,11 +22,13 @@
 - [ ] Loyalty points
 - [ ] User ranks
 - [ ] Mini games
-- [ ] Poll
 - [ ] More variables for custom commands
 - [ ] Individually disable timed messages
 - [ ] Individually disable custom and built-in commands
-- [ ] Whispers (unlikely that it will be done)
+- [ ] Greetings / etc for all or certain users when they enter (like a fighter's entrance song!)
+- [ ] Follower / Sub notifications (unlikely I will implement this since I can't do donation notifications, so might as well use TwitchAlerts)
+- [ ] Whispers (unlikely that I will implement this for a variety of reasons)
+- [ ] Poll (Straw poll is integrated with BTTV, so it's unlikely I'll implement this)
 
 #### How to use:
 * Run bot.exe
