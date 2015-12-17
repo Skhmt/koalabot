@@ -5,7 +5,7 @@
 
 #### Get the latest Windows build in the [/dist/](https://github.com/Skhmt/twitch-bot/tree/master/dist) folder. If you don't have it already, get [7zip](http://www.7-zip.org/).
 
-#### Features:
+#### Features / to-do list:
 - [x] Chat window with emoticons and viewer list
 - [x] !highlight / !ht command to tag a place for VOD editing later
 - [x] Quote system
