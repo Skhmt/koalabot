@@ -68,6 +68,17 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 * Click "Save Token"
 * If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
 
+#### License:
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+
 #### Libs used:
 * [nw.js](https://github.com/nwjs/nw.js/)
 * [jQuery](https://jquery.com/)
