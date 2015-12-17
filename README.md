@@ -1,7 +1,7 @@
 # Bot for Twitch
 
 ![skhmt](https://img.shields.io/badge/made_by-skhmt-blue.svg?style=flat-square)
-![version 0.4b](https://img.shields.io/badge/version-0.4b-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
+![version 0.4c](https://img.shields.io/badge/version-0.4c-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 ##### Get the latest Windows build in the [/dist/](https://github.com/Skhmt/twitch-bot/tree/master/dist) folder
 
