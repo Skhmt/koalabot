@@ -1,3 +1,18 @@
+/*
+	Copyright (C) 2015  skhmt
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation version 3.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 var viewerData = [];
 
@@ -72,11 +87,29 @@ function drawGraph(){
 		{
 			x: tempX,
 			y: tempY,
-			type: "scatter"
+			type: "scatter",
+			fillcolor: "#000000",
 		}
 	];
+
+	var layout = {
+		width: 715,
+		height: 505,
+		margin: {
+			l: 60,
+			r: 60,
+			t: 60,
+			b: 60
+		},
+		paper_bgcolor: "black",
+		plot_bgcolor: "#222222",
+		yaxis: {title: "viewers"},
+		font: {
+			color: "white"
+		}
+	};
 	
-	Plotly.newPlot("graph", graphData);
+	Plotly.newPlot("graph", graphData, layout);
 }
 
 function saveViewerData() {
