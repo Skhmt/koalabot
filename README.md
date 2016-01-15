@@ -28,6 +28,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] More variables for custom commands
 - [ ] Individually disable timed messages
 - [ ] Individually disable custom and built-in commands
+- [ ] UNfollow notifications
 - [ ] Greetings / etc for all or certain users when they enter (like a fighter's entrance song!)
 - [ ] Follower / Sub notifications (unlikely I will implement this since I can't do donation notifications, so might as well use TwitchAlerts)
 - [ ] Whispers (unlikely that I will implement this for a variety of reasons)
