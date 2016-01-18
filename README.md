@@ -1,6 +1,5 @@
 # KoalaBot, a chat bot for Twitch
 
-![skhmt](https://img.shields.io/badge/made_by-skhmt-blue.svg?style=flat-square)
 ![version 0.5](https://img.shields.io/badge/version-0.5-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 #### What is this?
