@@ -1,7 +1,7 @@
-# Bot for Twitch... Could use help with a name :p
+# KoalaBot, a chat bot for Twitch
 
 ![skhmt](https://img.shields.io/badge/made_by-skhmt-blue.svg?style=flat-square)
-![version 0.4c](https://img.shields.io/badge/version-0.4c-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
+![version 0.5](https://img.shields.io/badge/version-0.4c-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 #### What is this?
 It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop and although I only provide a Windows version, it's possible to make an OS X or Linux version fairly easily - you'll have to do that on your own, but I can point you in the right direction. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
@@ -19,7 +19,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Customizable !uptime command based on bot running time, stream uptime, or a custom set time 
 - [x] Chat logging
 - [x] Hosts logging
-- [ ] Giveaways
+- [x] Giveaways
 - [ ] Song requests
 - [ ] Sound / video playing in response to a command or event
 - [ ] Loyalty points
@@ -47,7 +47,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!game**|[game name]|Mod-only. *Changes the game.*|
 |**!status**|[stream status]|Mod-only. *Changes the stream status.*|
 |**!permit**|[username]|Mod-only. *Allows the user to post links for 60 seconds.*|
-|**!addcom**|(-ul=[mod/sub/streamer]) [!commandname] [text]|Mod-only. *Adds a command. The new command can be set to only be used by a certain user level. Using %1, %2, %3, %4, or %5 when creating a command will replace it with that parameter when the command is run. For example, "!addcom !tree %1 and %2 sitting in a tree" then "!tree wolfish indy" would output "wolfish and indie sitting in a tree".*|
+|**!addcom**|(-ul=[mod/sub/streamer]) [!commandname] [text]|Mod-only. *Adds a command. The new command can be set to only be used by a certain user level. Using %1%, %2%, %3%, %4%, or %5% when creating a command will replace it with that parameter when the command is run. For example, "!addcom !tree %1% and %2% sitting in a tree" then "!tree wolfish indy" would output "wolfish and indie sitting in a tree".*|
 |**!addcmd**||*Same as above.*|
 |**!delcom**|[!commandname]|Mod-only. *Deletes a command.*|
 |**!delcmd**||*Same as above.*|
@@ -56,6 +56,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!delquote**|[id]|Mod-only. *Deletes the quote with the given id.*|
 
 #### Changelog:
+* **0.5 (18 Jan 2016):** fixed months being off by 1, the stream uptime not working, and mod/turbo icons not appearing. Added raffles - RAFFLE SETTINGS DO NOT SAVE. Updated custom command wild cards to require a % after the number as well (%1% instead of just %1).
 * **0.4c (16 Dec 2015):** mostly bug fixes. Increased size of emotes again. Known issue: sometimes the chat portion of the chat tab resizes itself for a reason I can't figure out. To fix it, switch tabs.
 * **0.4b (15 Dec 2015):** added generic BTTV emotes, made the font a little smaller, added !bottime, !streamtime, !laptime, and the ability to choose which time !uptime uses. Added laptime so you can save, for example, the start of a 24 hr stream that !uptime will count from even if your computer crashes. Can update game and stream status from the settings tab, not just via chat commands. Minor UI changes all around. 
 * **0.4a (13 Dec 2015):** fixed a bug with !quote that could randomly play a quote even if it was deleted. Also made emoticons a tiny bit smaller to fix the problem with the auto-scroll not working.
