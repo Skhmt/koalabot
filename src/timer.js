@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2015  skhmt
+	Copyright (C) 2016  skhmt
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,59 +18,52 @@
 
 var timerList = [];
 // [{message: "", playTime: "", interval: ""}, ... ]
-// playtime is in ms since epoch, interval is in ms
-var refreshInterval;
-var hostInterval;
-var viewerInterval;
-var hostPlayTime;
-var viewerPlayTime;
 
-function timerSetup(){
-	refreshInterval = 500; // in ms
+function timerSetup() {
+	var refreshInterval = 500; // in ms
 	
 	var now = new Date().getTime();
 	
-	hostInterval = 15*1000;
-	viewerInterval = 60*1000;
-	hostPlayTime = now;
-	viewerPlayTime = now;
+	var hostInterval = 15*1000;
+	var viewerInterval = 30*1000;
+	var hostPlayTime = now;
+	var viewerPlayTime = now;
 	
-	
-	timerTick();
+	timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, refreshInterval );
 }
 
 
 
-function timerTick(){
+function timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, refreshInterval ) {
 	var now = new Date().getTime();
 	
-	for (var i = 0; i < timerList.length; i++){
-		if (now >= timerList[i].playTime){ // if it's at or past the time to play the message
-			cmdSay(timerList[i].message); // play the message
+	for ( var i = 0; i < timerList.length; i++ ) {
+		if ( now >= timerList[i].playTime ) { // if it's at or past the time to play the message
+			cmdSay( timerList[i].message ); // play the message
 			timerList[i].playTime = now + timerList[i].interval; // set a new playTime
 		}
 	}
 	
-	if (now >= hostPlayTime && settings.channel != null) {
+	if ( now >= hostPlayTime && settings.channel !== null ) {
 		updateHosts();
 		hostPlayTime = now + hostInterval;
 	}
 	
-	if (now >= viewerPlayTime && settings.channel != null) {
+	if ( now >= viewerPlayTime && settings.channel !== null ) {
 		updateUserlist();
 		viewerPlayTime = now + viewerInterval;
 	}
 
 	chatScroll();
 
-	setTimeout(function(){
-		timerTick();
-	}, refreshInterval);
+	setTimeout( function() {
+		timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, refreshInterval );
+	}, refreshInterval );
 }
 
-function chatScroll(){
+function chatScroll() {
 	var out = document.getElementById("console");
-	if (out.scrollHeight - out.clientHeight <= out.scrollTop + 150) {
+	if ( out.scrollHeight - out.clientHeight <= out.scrollTop + 150 ) {
 		out.scrollTop = out.scrollHeight - out.clientHeight;
 	}
 }

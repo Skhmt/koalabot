@@ -1,5 +1,5 @@
 <!--
-	Copyright (C) 2015  skhmt
+	Copyright (C) 2016  skhmt
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
 <html>
 <head>
 	<title>
-		Bot
+		KoalaBot
 	</title>
 	
 	<script src="plotly-latest.min.js"></script>
-	<script src="jquery-2.1.4.min.js"></script>
+	<script src="jquery-2.2.0.min.js"></script>
 	<script src="jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="jquery-ui.min.css" />
 	
@@ -33,13 +33,15 @@
 	<script src="moderation.js"></script>
 	<script src="timedMessages.js"></script>
 	<script src="timer.js"></script>
+	<script src="raffle.js"></script>
 	<script src="scripts.js"></script>
 </head>
 <body>
 
 	<div id="top" style="-webkit-app-region: drag;">
-		<span id="topTitle">Bot v0.4c</span>
+		<span id="topTitle">KoalaBot v0.5</span>
 		<span id="topRight">
+			<button id="devTools">devtools</button>
 			<button id="minimize">minimize</button>
 			<button id="maximize">maximize</button>
 			<button id="exit">exit</button>
@@ -54,10 +56,11 @@
 			<li><a href="#tabs-4">Timed Msg</a></li>
 			<li><a href="#tabs-5">Spam</a></li>
 			<li><a href="#tabs-6">Commands</a></li>
-			<li><a href="#tabs-7">Settings</a></li>
+			<li><a href="#tabs-7">Raffle</a></li>
+			<li><a href="#tabs-8">Settings</a></li>
 		</ul>
 
-		<div id="tabs-1">
+		<div id="tabs-1" class="tab">
 			<div id="consoleBox">
 				<span id="console"></span>
 				<span id="userlist"></span>
@@ -69,15 +72,15 @@
 			</div>
 		</div>
 
-		<div id="tabs-2">
+		<div id="tabs-2" class="tab">
 			<div id="hosts"></div> <!-- This tab's content is dynamically generated -->
 		</div>
 
-		<div id="tabs-3">
+		<div id="tabs-3" class="tab">
 			<div id="quotes"></div>
 		</div>
 
-		<div id="tabs-4">
+		<div id="tabs-4" class="tab">
 			<div>
 				<button id="addMsgButton">Add Message</button> &nbsp; &nbsp;
 				Text: <input type="text" id="addMsgText" value="" size="45"> &nbsp; &nbsp; 
@@ -88,7 +91,7 @@
 			</div>
 		</div>
 
-		<div id="tabs-5">
+		<div id="tabs-5" class="tab">
 			<div id="moderation">
 				<table>
 					<tr>
@@ -152,7 +155,7 @@
 			</div>
 		</div>
 
-		<div id="tabs-6">
+		<div id="tabs-6" class="tab">
 			<div>
 				<button id="addCmdButton">Add Command</button>&nbsp;&nbsp; 
 				<span class="labelText">Name:</span> <input type="text" id="addCmdName" size="40">&nbsp;&nbsp; 
@@ -168,7 +171,36 @@
 			<div id="commands"></div>
 		</div>
 
-		<div id="tabs-7">
+		<div id="tabs-7" class="tab">
+			<div id="raffleList"></div>
+
+			<button id="raffleStart">start</button>
+			<button id="raffleStop">stop</button>
+			<button id="raffleWinner">pick winner</button>
+			<span class="labelText" id="raffleStatus"></span>
+			<br><br>
+			<span class="labelText">Keyword: !</span><input type="text" id="raffleKeyword" value="raffle"><br>
+			<br>
+			<span class="labelText">Length of time to enter: </span><input type="text" id="raffleTime" value="5"> minutes<br>
+			<br>
+			<form id="raffleAnnounceSet">
+				<span class="labelText">Announce winner in chat: </span>
+				<input type="radio" id="raffleAnnounceOn" name="raffleAnnounceRadio" value="on"><label for="raffleAnnounceOn">ON</label>
+				<input type="radio" id="raffleAnnounceTen" name="raffleAnnounceRadio" value="ten"><label for="raffleAnnounceTen">10s delay</label>
+				<input type="radio" id="raffleAnnounceOff" name="raffleAnnounceRadio" value="off"><label for="raffleAnnounceOff">OFF</label>
+			</form>
+			<br>
+			<span class="labelText">Start Text (%key% for the keyword and %time% for minutes):</span><br>
+			<textarea id="raffleStartText" rows="3" cols="64">Raffle starting, plz type %key% to enter! It will end in %time% minutes, good luck!</textarea><br>
+			<br>
+			<span class="labelText">End Text:</span><br>
+			<textarea id="raffleEndText" rows="3" cols="64">The raffle has ended!</textarea><br>
+			<br>
+			<span class="labelText">Winner Text (%winner% for the winner's username):</span><br>
+			<textarea id="raffleWinnerText" rows="3" cols="64">The winrar is: %winner% </textarea><br>
+		</div>
+
+		<div id="tabs-8" class="tab">
 			<div id="config">
 					<span class="labelText">Bot name:</span> <span id="displayName"></span>
 					<br><br>

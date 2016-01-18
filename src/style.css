@@ -44,12 +44,12 @@ html {
 	width: calc(100vw - 32px);
 }
 
-#tabs-1, #tabs-2, #tabs-3, #tabs-4, #tabs-5, #tabs-6, #tabs-7 {
-	padding-top: 10px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	height: calc(100vh - 94px);
+.tab {
+	padding-top: 10px !important;
+	padding-right: 5px !important;
+	padding-bottom: 5px !important;
+	padding-left: 5px !important;
+	height: calc(100vh - 94px) !important;
 	font-size: 14px !important;
 }
 
@@ -59,7 +59,7 @@ html {
 	border: 0;
 }
 
-#exit, #minimize, #maximize {
+#exit, #minimize, #maximize, #devTools {
 	height: 20px;
 	width: 20px;
 }
@@ -97,11 +97,23 @@ html {
 	margin-top: 5px;
 }
 
-#quotes{
+#quotes {
 	width: calc(100vw - 33px);
 	height: calc(100vh - 94px);
 	overflow: auto;
 	word-wrap: break-word;
+}
+
+#raffleList {
+	float: left;
+	width: 200px;
+	height: calc(100vh - 105px);
+	border: #26b3f7;
+	border-width: 1px;
+	border-style: solid;
+	overflow: auto;
+	margin-right: 10px;
+	padding: 5px;
 }
 
 .labelText {
@@ -119,6 +131,8 @@ html {
 
 .ui-tabs .ui-tabs-nav li a {
 	font-size: 10pt !important;
+	padding: 5pt !important;
+	font-weight: bold;
 }
 
 .timedMessageSpan {

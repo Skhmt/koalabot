@@ -1,7 +1,7 @@
 {
-	"name": "Bot",
+	"name": "KoalaBot",
 	"description": "blah",
-	"version": "0.4a",
+	"version": "0.5",
 	"main": "index.html",
 	"window": {
 		"width": 800,
