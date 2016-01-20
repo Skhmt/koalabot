@@ -25,6 +25,8 @@
 	<script src="jquery-2.2.0.min.js"></script>
 	<script src="jquery-ui.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="jquery-ui.min.css" />
+
+	<script src="https://www.youtube.com/iframe_api"></script>
 	
 	<link rel="stylesheet" type="text/css" href="style.css" />
 	<script src="commands.js"></script>
@@ -34,6 +36,7 @@
 	<script src="timedMessages.js"></script>
 	<script src="timer.js"></script>
 	<script src="raffle.js"></script>
+	<script src="songs.js"></script>
 	<script src="scripts.js"></script>
 </head>
 <body>
@@ -57,7 +60,8 @@
 			<li><a href="#tabs-5">Spam</a></li>
 			<li><a href="#tabs-6">Commands</a></li>
 			<li><a href="#tabs-7">Raffle</a></li>
-			<li><a href="#tabs-8">Settings</a></li>
+			<li><a href="#tabs-8">Music</a></li>
+			<li><a href="#tabs-9">Settings</a></li>
 		</ul>
 
 		<div id="tabs-1" class="tab">
@@ -201,6 +205,12 @@
 		</div>
 
 		<div id="tabs-8" class="tab">
+			<div id="songList"></div>
+			<div id="ytPlayer"></div>
+
+		</div>
+
+		<div id="tabs-9" class="tab">
 			<div id="config">
 					<span class="labelText">Bot name:</span> <span id="displayName"></span>
 					<br><br>

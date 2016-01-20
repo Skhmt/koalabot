@@ -116,6 +116,18 @@ html {
 	padding: 5px;
 }
 
+#songList {
+	float: left;
+	width: 300px;
+	height: calc(100vh - 105px);
+	border: #26b3f7;
+	border-width: 1px;
+	border-style: solid;
+	overflow: auto;
+	margin-right: 10px;
+	padding: 5px;
+}
+
 .labelText {
 	color: #26b3f7;
 	font-weight: bold;

@@ -198,6 +198,9 @@ $(document).ready( function() {
 	
 	// setting up the raffle tab
 	raffleSetup();
+
+	// setting up songs
+	songsSetup();
 	
 	// loading settings.ini
 	try {
