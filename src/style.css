@@ -118,12 +118,13 @@ html {
 
 #songList {
 	float: left;
-	width: 300px;
+	width: 280px;
 	height: calc(100vh - 105px);
 	border: #26b3f7;
 	border-width: 1px;
 	border-style: solid;
 	overflow: auto;
+	word-wrap: break-word;
 	margin-right: 10px;
 	padding: 5px;
 }
@@ -131,6 +132,21 @@ html {
 .labelText {
 	color: #26b3f7;
 	font-weight: bold;
+}
+
+blink, .blink {
+	color: #ff0000;
+	font-weight: bold;
+	-webkit-animation: blink 1s step-end infinite;
+	animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  67% { opacity: 0 }
+}
+
+@-webkit-keyframes blink {
+  67% { opacity: 0 }
 }
 
 .ui-button .ui-button-text {

@@ -37,12 +37,13 @@
 	<script src="timer.js"></script>
 	<script src="raffle.js"></script>
 	<script src="songs.js"></script>
+	<script src="quotes.js"></script>
 	<script src="scripts.js"></script>
 </head>
 <body>
 
 	<div id="top" style="-webkit-app-region: drag;">
-		<span id="topTitle">KoalaBot v0.5</span>
+		<span id="topTitle">KoalaBot v0.5b</span>
 		<span id="topRight">
 			<button id="devTools">devtools</button>
 			<button id="minimize">minimize</button>
@@ -183,9 +184,9 @@
 			<button id="raffleWinner">pick winner</button>
 			<span class="labelText" id="raffleStatus"></span>
 			<br><br>
-			<span class="labelText">Keyword: !</span><input type="text" id="raffleKeyword" value="raffle"><br>
+			<span class="labelText">Keyword: !</span><input type="text" id="raffleKeyword"><br>
 			<br>
-			<span class="labelText">Length of time to enter: </span><input type="text" id="raffleTime" value="5"> minutes<br>
+			<span class="labelText">Length of time to enter: </span><input type="text" id="raffleTime"> minutes<br>
 			<br>
 			<form id="raffleAnnounceSet">
 				<span class="labelText">Announce winner in chat: </span>
@@ -195,19 +196,29 @@
 			</form>
 			<br>
 			<span class="labelText">Start Text (%key% for the keyword and %time% for minutes):</span><br>
-			<textarea id="raffleStartText" rows="3" cols="64">Raffle starting, plz type %key% to enter! It will end in %time% minutes, good luck!</textarea><br>
+			<textarea id="raffleStartText" rows="3" cols="64"></textarea><br>
 			<br>
 			<span class="labelText">End Text:</span><br>
-			<textarea id="raffleEndText" rows="3" cols="64">The raffle has ended!</textarea><br>
+			<textarea id="raffleEndText" rows="3" cols="64"></textarea><br>
 			<br>
 			<span class="labelText">Winner Text (%winner% for the winner's username):</span><br>
-			<textarea id="raffleWinnerText" rows="3" cols="64">The winrar is: %winner% </textarea><br>
+			<textarea id="raffleWinnerText" rows="3" cols="64"></textarea><br>
 		</div>
 
 		<div id="tabs-8" class="tab">
 			<div id="songList"></div>
-			<div id="ytPlayer"></div>
-
+			<iframe id="ytPlayer" type="text/html" width="450" height="254"
+					src="http://www.youtube.com/embed/JFYVcz7h3o0?enablejsapi=1" frameborder="0"
+					nwUserAgent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36"></iframe>
+			<br><br>
+				<button id="nextSongButton">Next Song</button> 
+				<button id="muteSongButton">Mute</button>
+				<span id="muteSongStatus" class="blink"></span>
+			<br><br>
+				<form onsubmit="return false;">
+					<button id="addSongButton">Add Song</button>
+					<input type="text" id="addSongText" size="40">
+				</form>
 		</div>
 
 		<div id="tabs-9" class="tab">

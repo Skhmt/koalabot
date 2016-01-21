@@ -14,9 +14,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+var raffleSettings = {};
 var raffleTimeout = "";
 var raffleEntrants = [];
-var raffleAnnounceRadio = "on";
 
 function raffleSetup() {
 	$("#raffleStart").button().click(startRaffle);
@@ -31,6 +31,70 @@ function raffleSetup() {
 	$("#raffleAnnounceSet input[type=radio]").change( function() {
 		raffleAnnounceRadio = this.value;
 	} );
+
+
+	// settings
+	try {
+		var readFile = fs.readFileSync( execPath + "\\settings\\raffleSettings.ini" );
+		raffleSettings = $.parseJSON( readFile );
+	} catch(e) { // if there isn't a raffleSettings.ini, just use the default settings
+		raffleSettings = {
+			announce: "on",
+			startText: "Raffle starting, plz type %key% to enter! It will end in %time% minutes, good luck!",
+			endText: "The raffle has ended!",
+			winnerText: "The winrar is: %winner%",
+			time: 5,
+			keyword: "raffle"
+		};
+		save();
+	}
+
+	if ( raffleSettings.announce === "on" ) {
+		$("#raffleAnnounceOn").attr( "checked", true );
+	} else if ( raffleSettings.announce === "ten" ) {
+		$("#raffleAnnounceTen").attr( "checked", true );
+	} else {
+		$("#raffleAnnounceOff").attr( "checked", true );
+	}
+	$("#raffleAnnounceSet").buttonset( "refresh" );
+
+	// raffleAnnounce listener
+	$("#raffleAnnounceSet input[type=radio]").change( function() {
+		raffleSettings.announce = this.value;
+		save();
+	} );
+
+
+	$("#raffleStartText").val(raffleSettings.startText);
+	$("#raffleStartText").change( function() {
+		raffleSettings.startText = $("#raffleStartText").val();
+		save();
+	} );
+
+	$("#raffleEndText").val(raffleSettings.endText);
+	$("#raffleEndText").change( function() {
+		raffleSettings.endText = $("#raffleEndText").val();
+		save();
+	} );
+
+	$("#raffleWinnerText").val(raffleSettings.winnerText);
+	$("#raffleWinnerText").change( function() {
+		raffleSettings.winnerText = $("#raffleWinnerText").val();
+		save();
+	} );
+
+	$("#raffleTime").val(raffleSettings.time);
+	$("#raffleTime").on( "input", function() {
+		raffleSettings.time = $("#raffleTime").val();
+		save();
+	} );
+
+	$("#raffleKeyword").val(raffleSettings.keyword);
+	$("#raffleKeyword").on( "input", function() {
+		raffleSettings.keyword = $("#raffleKeyword").val();
+		save();
+	} );
+
 }
 
 function startRaffle() {

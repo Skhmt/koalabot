@@ -26,15 +26,17 @@ function timerSetup() {
 	
 	var hostInterval = 15*1000;
 	var viewerInterval = 30*1000;
+	var followerInterval = 15*1000;
 	var hostPlayTime = now;
 	var viewerPlayTime = now;
+	var followerPlayTime = now;
 	
-	timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, refreshInterval );
+	timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime, viewerPlayTime, followerPlayTime, refreshInterval );
 }
 
 
 
-function timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, refreshInterval ) {
+function timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime, viewerPlayTime, followerPlayTime, refreshInterval ) {
 	var now = new Date().getTime();
 	
 	for ( var i = 0; i < timerList.length; i++ ) {
@@ -54,10 +56,15 @@ function timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, 
 		viewerPlayTime = now + viewerInterval;
 	}
 
+	if ( now >= followerPlayTime && settings.channel !== null ) {
+		updateFollowers();
+		followerPlayTime = now + followerInterval;
+	}
+
 	chatScroll();
 
 	setTimeout( function() {
-		timerTick( hostInterval, viewerInterval, hostPlayTime, viewerPlayTime, refreshInterval );
+		timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime, viewerPlayTime, followerPlayTime, refreshInterval );
 	}, refreshInterval );
 }
 

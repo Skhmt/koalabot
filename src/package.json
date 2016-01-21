@@ -1,14 +1,15 @@
 {
 	"name": "KoalaBot",
 	"description": "blah",
-	"version": "0.5",
+	"version": "0.5b",
 	"main": "index.html",
 	"window": {
 		"width": 800,
 		"height": 600,
 		"title": "Bot",
 		"toolbar": false,
-		"icon": "followers.png",
+		"icon": "koala.png",
 		"frame": false
-	}
+	},
+	"user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36"
 }

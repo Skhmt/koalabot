@@ -31,11 +31,13 @@ var modSettings;
 var emoticonsTwitch = [];
 var emoticonsBTTV = [];
 var emoticonsBTTVall = [];
+var followers = [];
 
 var settings = {
 	access_token: "",
 	username: "",
-	channel: ""
+	channel: "",
+	id: ""
 };
 
 
@@ -307,6 +309,8 @@ function runHU() {
 	// getting when you change channel because it's channel-specific
 	getEmoticonsBTTV();
 
+	getFollowers();
+
 	// get subscriber image URL of the channel you're in
 	$.getJSON(
 		"https://api.twitch.tv/kraken/chat/" + settings.channel.substring(1) + "/badges",
@@ -451,7 +455,6 @@ function getEmoticons() {
 }
 
 function getEmoticonsBTTV() {
-
 	$.getJSON(
 		"https://api.betterttv.net/2/channels/" + settings.channel.substring(1),
 		{},
@@ -589,4 +592,48 @@ function save() {
 	fs.writeFile( execPath + "\\settings\\cmdSettings.ini", JSON.stringify( cmds ), function ( err ) {
 		if ( err ) log( "* Error saving cmdSettings" );
 	} );
+
+	// saving raffleSettings.ini
+	fs.writeFile( execPath + "\\settings\\raffleSettings.ini", JSON.stringify( raffleSettings ), function ( err ) {
+		if ( err ) log( "* Error saving raffleSettings" );
+	} );
+}
+
+function getFollowers() {
+	followers = [];
+	$.getJSON(
+		"https://api.twitch.tv/kraken/channels/" + settings.channel.substring(1) + "/follows",
+		{
+			"limit": 100
+		},
+		function ( response ) {
+			for ( var i = 0; i < response.follows.length; i++ ) {
+				followers.push( response.follows[i].user.display_name );
+			}
+		}
+	);
+}
+
+function updateFollowers() {
+	$.getJSON(
+		"https://api.twitch.tv/kraken/channels/" + settings.channel.substring(1) + "/follows",
+		{
+			"limit": 100
+		},
+		function ( response ) {
+			if ( !("follows" in response) ) {
+				return;
+			}
+			for ( var i = 0; i < response.follows.length; i++ ) {
+				var tempUser = response.follows[i].user.display_name;
+				if ( followers.indexOf(tempUser) == -1 ) {
+					followers.unshift( tempUser );
+					$("#hosts").append( getTimeStamp() + " Follow: " + tempUser + "<br>" );
+					// cmdSay( "Thanks for following " + tempUser + "!" );
+				} else {
+					break;
+				}
+			}
+		}
+	);
 }
