@@ -5,7 +5,7 @@
 #### What is this?
 It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop and although I only provide a Windows version, it's possible to make an OS X or Linux version fairly easily - you'll have to do that on your own, but I can point you in the right direction. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
 
-#### Latest [Windows](https://github.com/Skhmt/twitch-bot/releases/download/0.5b/bot0.5b-win32.zip) build.
+#### Latest [Windows](https://github.com/Skhmt/twitch-bot/releases/) releases.
 
 #### Features / to-do list:
 - [x] Chat window with emoticons and viewer list
@@ -55,14 +55,6 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!volume**|[volume 0-100]|Mod-only. *Sets the song volume to this.*|
 |**!mute**||Mod-only. *Mutes/unmutes the song, does not change the volume level.*|
 |**!songrequest**|[youtube id or youtube url]|*Adds a song to the queue.*|
-
-#### Changelog:
-* **0.6 (24 Jan 2016):** Bug fixes, added follower/sub/host notifications in chat, added ability to disable song requests, added %user% wildcard for spam protection messages
-* **0.5b (20 Jan 2016):** Raffle settings save. Added song requests. Added follower logging (since your bot joined the channel) to your hosts tab. The current song playing on your playlist is stored in logs\song.log
-* **0.5 (18 Jan 2016):** fixed months being off by 1, the stream uptime not working, and mod/turbo icons not appearing. Added raffles - RAFFLE SETTINGS DO NOT SAVE. Updated custom command wild cards to require a % after the number as well (%1% instead of just %1).
-* **0.4c (16 Dec 2015):** mostly bug fixes. Increased size of emotes again. Known issue: sometimes the chat portion of the chat tab resizes itself for a reason I can't figure out. To fix it, switch tabs.
-* **0.4b (15 Dec 2015):** added generic BTTV emotes, made the font a little smaller, added !bottime, !streamtime, !laptime, and the ability to choose which time !uptime uses. Added laptime so you can save, for example, the start of a 24 hr stream that !uptime will count from even if your computer crashes. Can update game and stream status from the settings tab, not just via chat commands. Minor UI changes all around. 
-* **0.4a (13 Dec 2015):** fixed a bug with !quote that could randomly play a quote even if it was deleted. Also made emoticons a tiny bit smaller to fix the problem with the auto-scroll not working.
 
 #### How to use:
 * Run bot.exe
