@@ -22,14 +22,12 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Song requests
 - [x] Follower logging
 - [x] Sub notifications
-- [ ] Sound / video playing in response to a command or event
-- [ ] Loyalty points
+- [ ] Update backend to allow plugins
+- [ ] Loyalty points / Regulars
 - [ ] User ranks
-- [ ] Mini games
 - [ ] More variables for custom commands
-- [ ] Individually disable timed messages
-- [ ] Individually disable custom and built-in commands
 - [ ] Greetings / etc for all or certain users when they enter (like a fighter's entrance song!)
+- [ ] Sound / video playing in response to a command or event
 
 #### Commands:
 |Command|Parameters|Description|
@@ -58,6 +56,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!songrequest**|[youtube id or youtube url]|*Adds a song to the queue.*|
 
 #### Changelog:
+* **0.6 (24 Jan 2016):** Bug fixes, added follower/sub/host notifications in chat, added ability to disable song requests, added %user% wildcard for spam protection messages
 * **0.5b (20 Jan 2016):** Raffle settings save. Added song requests. Added follower logging (since your bot joined the channel) to your hosts tab. The current song playing on your playlist is stored in logs\song.log
 * **0.5 (18 Jan 2016):** fixed months being off by 1, the stream uptime not working, and mod/turbo icons not appearing. Added raffles - RAFFLE SETTINGS DO NOT SAVE. Updated custom command wild cards to require a % after the number as well (%1% instead of just %1).
 * **0.4c (16 Dec 2015):** mostly bug fixes. Increased size of emotes again. Known issue: sometimes the chat portion of the chat tab resizes itself for a reason I can't figure out. To fix it, switch tabs.
