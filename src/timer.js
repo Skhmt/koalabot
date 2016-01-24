@@ -19,24 +19,30 @@
 var timerList = [];
 // [{message: "", playTime: "", interval: ""}, ... ]
 
+
+
 function timerSetup() {
-	var refreshInterval = 500; // in ms
 	
 	var now = new Date().getTime();
+
+	var timerSettings = {
+		refreshInterval: 100,
+		hostInterval: 10*1000,
+		viewerInterval: 15*1000,
+		followerInterval: 10*1000,
+		subInterval: 10*1000,
+		hostPlayTime: now,
+		viewerPlayTime: now,
+		followerPlayTIme: now,
+		subPlayTime: now,
+	};
 	
-	var hostInterval = 15*1000;
-	var viewerInterval = 30*1000;
-	var followerInterval = 15*1000;
-	var hostPlayTime = now;
-	var viewerPlayTime = now;
-	var followerPlayTime = now;
-	
-	timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime, viewerPlayTime, followerPlayTime, refreshInterval );
+	timerTick( timerSettings );
 }
 
 
 
-function timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime, viewerPlayTime, followerPlayTime, refreshInterval ) {
+function timerTick( timerSettings ) {
 	var now = new Date().getTime();
 	
 	for ( var i = 0; i < timerList.length; i++ ) {
@@ -46,26 +52,31 @@ function timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime
 		}
 	}
 	
-	if ( now >= hostPlayTime && settings.channel !== null ) {
+	if ( now >= timerSettings.hostPlayTime && settings.channel !== null ) {
 		updateHosts();
-		hostPlayTime = now + hostInterval;
+		timerSettings.hostPlayTime = now + timerSettings.hostInterval;
 	}
 	
-	if ( now >= viewerPlayTime && settings.channel !== null ) {
+	if ( now >= timerSettings.viewerPlayTime && settings.channel !== null ) {
 		updateUserlist();
-		viewerPlayTime = now + viewerInterval;
+		timerSettings.viewerPlayTime = now + timerSettings.viewerInterval;
 	}
 
-	if ( now >= followerPlayTime && settings.channel !== null ) {
+	if ( now >= timerSettings.followerPlayTime && settings.channel !== null ) {
 		updateFollowers();
-		followerPlayTime = now + followerInterval;
+		timerSettings.followerPlayTime = now + timerSettings.followerInterval;
+	}
+
+	if ( now >= timerSettings.subPlayTime && settings.channel !== null ) {
+		updateSubs();
+		timerSettings.subPlayTime = now + timerSettings.subInterval;
 	}
 
 	chatScroll();
 
 	setTimeout( function() {
-		timerTick( hostInterval, viewerInterval, followerInterval, hostPlayTime, viewerPlayTime, followerPlayTime, refreshInterval );
-	}, refreshInterval );
+		timerTick( timerSettings );
+	}, timerSettings.refreshInterval );
 }
 
 function chatScroll() {

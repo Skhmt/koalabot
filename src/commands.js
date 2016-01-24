@@ -50,22 +50,23 @@ function cmdSetup() {
 	} );
 	
 	try {
-		var readFile = fs.readFileSync( execPath + "\\settings\\cmdSettings.ini" );
+		var readFile = fs.readFileSync( `${execPath}\\settings\\cmdSettings.ini` );
 		cmds = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
 		cmds = {
 			symbol : "!",
 			custom : [], //{name, userType, text}
 			quotes: [],
-			uptime: "bot"
+			uptime: "bot",
+			songRequests: true
 		};
 	}
 	
 	// loading lap info
 	try {
-		var readFile = fs.readFileSync( execPath + "\\logs\\lap.log", "utf8" );
+		var readFile = fs.readFileSync( `${execPath}\\logs\\lap.log`, "utf8" );
 		lap = new Date( parseInt(readFile,10) );
-		$("#lapTime").html( lap.toDateString() + " " + lap.toLocaleTimeString() );
+		$("#lapTime").html( `${lap.toDateString()} ${lap.toLocaleTimeString()}` );
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
 		resetLap();
 	}
@@ -97,7 +98,7 @@ function cmdSetup() {
 }
 
 // the first character of text is a !
-function parseCommand( text, from, userType, subscriber ) {
+function parseCommand( text, from, mod, subscriber ) {
 	// make an array of all the words, delineated by spaces
 	var cmd = text.split(" ");
 	
@@ -108,21 +109,21 @@ function parseCommand( text, from, userType, subscriber ) {
 		switch( lcCmd ) {
 			// UPTIME
 			case cmds.symbol + "bottime":
-				cmdSay( "The bot has been running for " + timeDifference( startDate.getTime() ) );
+				cmdSay( `The bot has been running for ${timeDifference( startDate.getTime() )}` );
 				break;
 			case cmds.symbol + "streamtime":
 				streamTime();
 				break;
 			case cmds.symbol + "laptime":
-				cmdSay( "The current lap time is " + timeDifference( lap.getTime() ) );
+				cmdSay( `The current lap time is ${timeDifference( lap.getTime() )}` );
 				break;
 			case cmds.symbol + "uptime":
 				if ( cmds.uptime === "bot" ) {
-					cmdSay( "Uptime: " + timeDifference( startDate.getTime() ) );
+					cmdSay( `Uptime: ${timeDifference( startDate.getTime() )}` );
 				} else if ( cmds.uptime === "stream" ) {
 					streamTime();
 				} else {
-					cmdSay( "Uptime: " + timeDifference( lap.getTime() ) );
+					cmdSay( `Uptime: ${timeDifference( lap.getTime() )}` );
 				}
 				break;
 
@@ -132,18 +133,22 @@ function parseCommand( text, from, userType, subscriber ) {
 				break;
 			case cmds.symbol + "highlight":
 			case cmds.symbol + "ht":
-				if ( userType === "mod" ) highlightThis( from, cmd );
+				if ( mod ) highlightThis( from, cmd );
 				break;
 			case cmds.symbol + "permit":
-				if ( userType === "mod" ) permit( cmd );
+				if ( mod ) permit( cmd );
+				break;
+			case cmds.symbol + "bot":
+				cmdSay( "This is KoalaBot. It is being developed by skhmt using NW.js. Get it at: https://github.com/Skhmt/twitch-bot" );
 				break;
 
 			// GAME & STATUS
 			case cmds.symbol + "game":
-				if ( userType === "mod" ) changeGame( from, cmd.join(" ").substring(6) );
+				if ( mod ) changeGame( from, cmd.join(" ").substring(6) );
 				break;
 			case cmds.symbol + "status":
-				if ( userType === "mod" ) changeStatus( from, cmd.join(" ").substring(8) );
+				if ( mod ) changeStatus( from, cmd.join(" ").substring(8) );
+				break;
 				break;
 
 			// QUOTES
@@ -154,7 +159,7 @@ function parseCommand( text, from, userType, subscriber ) {
 				addQuote( cmd );
 				break;
 			case cmds.symbol + "delquote":
-				if ( userType === "mod" ) delQuote( cmd );
+				if ( mod ) delQuote( cmd );
 				break;
 
 			// SONGS
@@ -162,13 +167,13 @@ function parseCommand( text, from, userType, subscriber ) {
 				getSong();
 				break;
 			case cmds.symbol + "skipsong":
-				if ( userType === "mod" ) nextSong();
+				if ( mod ) nextSong();
 				break;
 			case cmds.symbol + "volume":
-				if ( userType === "mod" ) setVolume( cmd[1] );
+				if ( mod ) setVolume( cmd[1] );
 				break;
 			case cmds.symbol + "mute":
-				if ( userType === "mod" ) toggleMute();
+				if ( mod ) toggleMute();
 				break;
 			case cmds.symbol + "songrequest":
 				addSong( cmd[1], from );
@@ -182,14 +187,14 @@ function parseCommand( text, from, userType, subscriber ) {
 			// CUSTOM COMMANDS
 			case cmds.symbol + "addcmd":
 			case cmds.symbol + "addcom":
-				if ( userType === "mod" ) addCmd( from, cmd );
+				if ( mod ) addCmd( from, cmd );
 				break;
 			case cmds.symbol + "delcmd":
 			case cmds.symbol + "delcom":
-				if ( userType === "mod" ) delCmd( from, cmd );
+				if ( mod ) delCmd( from, cmd );
 				break;
 			default:
-				customCommand( from, userType, subscriber, cmd );
+				customCommand( from, mod, subscriber, cmd );
 				break;
 		}
 	}
@@ -201,14 +206,13 @@ function refreshCommands() {
 	
 	// rewrite commands div
 	for ( var i = 0; i < cmds.custom.length; i++ ) {
-		var output = "";
-		output += "<button id='cmdDel" + i + "' onclick='delCmdButton(" + i + ")'>delete</button> ";
-		output += "<span style='display: inline-block; width: 140px;'><b>" + cmds.symbol + cmds.custom[i].name + "</b></span> ";
-		output += "<span style='display: inline-block; width: 75px;'><i>";
+		var output = `<button id='cmdDel${i}' onclick='delCmdButton(${i})'>delete</button>
+			<span style='display: inline-block; width: 140px;'><b>${cmds.symbol + cmds.custom[i].name}</b></span>
+			<span style='display: inline-block; width: 75px;'><i>`;
+
 		if ( cmds.custom[i].userType == "" ) output += "[All users]";
-		else output += "[" + cmds.custom[i].userType + "]";
-		output += "</i></span> ";
-		output += cmds.custom[i].text + "<br />";
+		else output += `[${cmds.custom[i].userType}]`;
+		output += `</i></span>${cmds.custom[i].text}<br />`;
 		
 		$("#commands").append( output );
 		
@@ -227,7 +231,7 @@ function refreshCommands() {
 // this is a chat function
 function addCmd( from, cmd ) {
 	if ( cmd[1] == null ) {
-		return cmdSay( "Usage: " + cmds.symbol + "addcom (-ul=mod) [" + cmds.symbol + "command] [text]" );
+		return cmdSay( `Usage: ${cmds.symbol}addcom (-ul=mod) [${cmds.symbol}command] [text]` );
 	}
 	
 	// check if it exists as a fixed command
@@ -251,7 +255,7 @@ function addCmd( from, cmd ) {
 	}
 	
 	if ( cmd[0] === null ) {
-		return cmdSay("Usage: " + cmds.symbol + "addcom (-ul=mod) [" + cmds.symbol + "command] [text]");
+		return cmdSay( `Usage: ${cmds.symbol}addcom (-ul=mod) [${cmds.symbol}command] [text]` );
 	}
 	
 	// get the command name
@@ -266,7 +270,7 @@ function addCmd( from, cmd ) {
 	tempCommand.text = cmd.join(" ");
 
 	cmds.custom.push( tempCommand );
-	cmdSay( "Adding command: "+tempCommand.name+", ul: "+tempCommand.userType+", text: " + tempCommand.text );
+	cmdSay( `Adding command: ${tempCommand.name}, ul: ${tempCommand.userType}, text: ${tempCommand.text}` );
 	save();
 	refreshCommands();
 }
@@ -306,21 +310,21 @@ function delCmd( from, cmd ) {
 	if ( cmdIndex === "" ) return cmdSay( "Error, could not find command." ); //not a valid command
 	
 	cmds.custom.splice( cmdIndex,1 );
-	cmdSay( "Deleted command: " + cmd[1] );
+	cmdSay( `Deleted command: ${cmd[1]}` );
 	save();
 	refreshCommands();
 }
 
 function delCmdButton( id ) {
-	if ( confirm("Are you sure you want to delete " + cmds.custom[id].name + " ?") ) {
-		cmds.custom.splice(id,1);
+	if ( confirm( `Are you sure you want to delete ${cmds.custom[id].name} ?` ) ) {
+		cmds.custom.splice( id, 1 );
 		save();
 		refreshCommands();
 	}
 }
 
 // running a custom command
-function customCommand( from, userType, subscriber, cmd ) {
+function customCommand( from, mod, subscriber, cmd ) {
 	var cmdIndex = "";
 	var lcCmd = cmd[0].toLowerCase();
 	for ( var i = 0; i < cmds.custom.length; i++ ) {
@@ -335,9 +339,9 @@ function customCommand( from, userType, subscriber, cmd ) {
 	
 	// checking permissions
 	if ( cmds.custom[cmdIndex].userType === "mod" ){
-		if ( userType !== "mod" ) return;
+		if ( !mod ) return;
 	} else if ( cmds.custom[cmdIndex].userType === "sub" ) {
-		if ( userType !== "mod" && !subscriber ) return; // requires a sub or mod, user is not a mod and not a sub
+		if ( !mod && !subscriber ) return; // requires a sub or mod, user is not a mod and not a sub
 	} else if ( cmds.custom[cmdIndex].userType === "streamer" ){
 		if ( from !== settings.channel.substring(1) && from !== settings.username ) return;
 	}
@@ -355,7 +359,7 @@ function customCommand( from, userType, subscriber, cmd ) {
 
 function cmdSay( text ) {
 	bot.say( settings.channel, text );
-	log( "<b>[" + cmds.symbol + "] " + text + "</b>" );
+	log( `<b>[${cmds.symbol}] ${text}</b>` );
 }
 
 // takes a time in miliseconds since Jan 1 1970 and returns the difference between then and now as a string
@@ -384,7 +388,7 @@ function timeDifference(oldtime) {
 function highlightThis( from, text ) {
 	// Get time the stream started
 	$.getJSON(
-		"https://api.twitch.tv/kraken/streams/" + settings.channel.substring(1),
+		`https://api.twitch.tv/kraken/streams/${settings.channel.substring(1)}`,
 		{
 			"client_id" : clientid,
 			"api_version" : 3
@@ -395,15 +399,15 @@ function highlightThis( from, text ) {
 			}
 
 			var created = response.stream.created_at; // ex: "2015-12-03T20:39:04Z"
-			var temp = new Date( created.substring(0,10) + " " + created.substring(11,19) + " UTC" );
+			var temp = new Date( created );
 			var highlight = timeDifference( temp.getTime() );
 			
-			cmdSay( from + " highlighted " + highlight + "." );
+			cmdSay( `${from} highlighted ${highlight}.` );
 			
 			// write to log
 			var dateNow = new Date();
-			var output = "[" + dateNow.toDateString() + ", " + dateNow.toLocaleTimeString() + "]";
-			output += " " + from + ": ";
+			var output = `[${dateNow.toDateString()}, ${dateNow.toLocaleTimeString()}]`;
+			output += ` ${from}: `;
 			output += highlight;
 			if ( text.length > 1 ) {
 				output += " ( ";
@@ -413,9 +417,9 @@ function highlightThis( from, text ) {
 				output += ")";
 			}
 			output += "\r\n";
-			
-			fs.appendFile( execPath + "\\logs\\highlights.log", output, function(err) {
-				if (err) $("#console").append("* Error writing to highlights" + "<br>");
+
+			fs.appendFile( `${execPath}\\logs\\highlights.log`, output, function(err) {
+				if (err) log( "* Error writing to highlights" );
 			} );
 		}
 	);
@@ -423,56 +427,56 @@ function highlightThis( from, text ) {
 
 function streamTime() {
 	$.getJSON(
-	"https://api.twitch.tv/kraken/streams/" + settings.channel.substring(1),
-	{
-		"client_id" : clientid,
-		"api_version" : 3
-	},
-	function(response) {
-		if ( "error" in response ) {
-			return cmdSay(error);
-		}
-		var created = response.stream.created_at; // ex: "2015-12-03T20:39:04Z"
-		var temp = new Date( created );
-		var timediff = timeDifference ( temp );
-		return cmdSay( "The stream has been live for " + timediff );
+		`https://api.twitch.tv/kraken/streams/${settings.channel.substring(1)}`,
+		{
+			"client_id" : clientid,
+			"api_version" : 3
+		},
+		function(response) {
+			if ( "error" in response ) {
+				return cmdSay(error);
+			}
+			var created = response.stream.created_at; // ex: "2015-12-03T20:39:04Z"
+			var temp = new Date( created );
+			var timediff = timeDifference ( temp );
+			return cmdSay( `The stream has been live for ${timediff}` );
 	} );
 }
 
 function resetLap() {
 	lap = new Date();
 
-	fs.writeFile(execPath + "\\logs\\lap.log", lap.getTime(), function(err) {
-		if (err) log("* Error saving lap time");
+	fs.writeFile( `${execPath}\\logs\\lap.log`, lap.getTime(), function(err) {
+		if (err) log( "* Error saving lap time" );
 	} );
 
-	$("#lapTime").html( lap.toDateString() + " " + lap.toLocaleTimeString() );
+	$("#lapTime").html( `${lap.toDateString()} ${lap.toLocaleTimeString()}` );
 }
 
 // https://github.com/justintv/Twitch-API/blob/master/v3_resources/follows.md#get-usersuserfollowschannelstarget
 // ex of non-follower: {"error":"Not Found","status":404,"message":"skhmt is not following lirik"}
 function isFollower( from ) {
 	$.getJSON(
-		"https://api.twitch.tv/kraken/users/" + from + "/follows/channels/" + settings.channel.substring(1),
+		`https://api.twitch.tv/kraken/users/${from}/follows/channels/${settings.channel.substring(1)}`,
 		{
 			"client_id" : clientid,
 			"api_version" : 3
 		},
 		function(response){
-			cmdSay( from + " is a follower." );
+			cmdSay( `${from} is a follower.` );
 			/* ex of created_at: "2015-12-03T20:39:04+00:00"
 				not doing anything with this for now
 			 */
 			// var followedTime = response.created_at;
 		}
 	).error(function() {
-		cmdSay( from + " is not a follower." );
+		cmdSay( `${from} is not a follower.` );
 	} );
 }
 
 function changeGame( from, game ) {
 	$.get(
-		"https://api.twitch.tv/kraken/channels/" + settings.channel.substring(1),
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
 		{
 			"channel[game]": game,
 			"_method": "put",
@@ -480,13 +484,13 @@ function changeGame( from, game ) {
 		}
 	);
 	
-	cmdSay( from + " has changed the stream game to: " + game );
+	cmdSay( `${from} has changed the stream game to: ${game}` );
 	$("#gameField").val( game );	
 }
 
 function changeStatus( from, status ) {
 	$.get(
-		"https://api.twitch.tv/kraken/channels/" + settings.channel.substring(1),
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
 		{
 			"channel[status]":status,
 			"_method": "put",
@@ -494,22 +498,6 @@ function changeStatus( from, status ) {
 		}
 	);
 	
-	cmdSay( from + " has changed the stream status to: " + status );
+	cmdSay( `${from} has changed the stream status to: ${status}` );
 	$("#statusField").val( status );
 }
-
-function permit( cmd ) {
-	var permitTime = 60;
-	
-	var user = cmd[1];
-	
-	cmdSay( user + " has been permitted to post a link for " + permitTime + " seconds." );
-	
-	permitted.push( user );
-
-	setTimeout( function() {
-		var indexToRemove = permitted.indexOf( user );
-		permitted.splice( indexToRemove, 1 );
-	}, permitTime*1000); 
-}
-

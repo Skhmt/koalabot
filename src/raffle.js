@@ -46,7 +46,6 @@ function raffleSetup() {
 			time: 5,
 			keyword: "raffle"
 		};
-		save();
 	}
 
 	if ( raffleSettings.announce === "on" ) {
@@ -122,7 +121,7 @@ function startRaffle() {
 
 	// set a timeout for stopraffle
 	raffleTimeout = setTimeout(stopRaffle, $("#raffleTime").val() * 60 * 1000);
-	$("#raffleStatus").html( "Raffle started! Ending in " + $("#raffleTime").val() + " minutes.");
+	$("#raffleStatus").html( `Raffle started! Ending in ${$("#raffleTime").val()} minutes.`);
 }
 
 function stopRaffle() {
@@ -144,11 +143,11 @@ function pickRaffle() {
 
 	var winner = raffleEntrants[ Math.floor( Math.random() * raffleEntrants.length ) ];
 
-	$("#raffleStatus").html( "WINNER: " + winner );
+	$("#raffleStatus").html( `WINNER: ${winner}` );
 
-	if ( raffleAnnounceRadio === "on" ) {
+	if ( raffleSettings.announce === "on" ) {
 		winnerText( winner );
-	} else if ( raffleAnnounceRadio === "ten" ) {
+	} else if ( raffleSettings.announce === "ten" ) {
 		setTimeout( function() {
 			winnerText(winner);
 		}, 10*1000 );
@@ -173,5 +172,5 @@ function addToRaffle( username ) {
 	}
 
 	raffleEntrants.push( username );
-	$("#raffleList").append( username + "<br>" );
+	$("#raffleList").append( `${username}<br>` );
 }

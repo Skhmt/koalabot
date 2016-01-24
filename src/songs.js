@@ -38,18 +38,60 @@ function songsSetup() {
             addSong( $("#addSongText").val(), settings.username );
             $("#addSongText").val("");
     } );
+
+    $("#songsSet").buttonset();
+
+    // songs radio state
+    if ( cmds.songRequests ) {
+        $("#songsOn").attr( "checked", true );
+        $("#nextSongButton").button( "enable" );
+        $("#muteSongButton").button( "enable" );
+        $("#addSongButton").button( "enable" );
+    } else {
+        $("#songsOff").attr( "checked", true );
+        $("#nextSongButton").button( "disable" );
+        $("#muteSongButton").button( "disable" );
+        $("#addSongButton").button( "disable" );
+    }
+    $("#songsSet").buttonset( "refresh" );
+
+    // songs click listener
+    $("#songsSet input[type=radio]").change( function() {
+        if ( this.value === "on" ){
+            cmds.songRequests = true;
+            $("#nextSongButton").button( "enable" );
+            $("#muteSongButton").button( "enable" );
+            $("#addSongButton").button( "enable" );
+        } else {
+            cmds.songRequests = false;
+            $("#nextSongButton").button( "disable" );
+            $("#muteSongButton").button( "disable" );
+            $("#addSongButton").button( "disable" );
+        }
+        save();
+    } );
 }
 
 function onYouTubeIframeAPIReady() {
     ytPlayer = new YT.Player('ytPlayer', {
-        height: '254',
-        width: '450',
+        height: 254,
+        width: 450,
         videoId: 'JFYVcz7h3o0',
+        playerVars: {
+            fs: 0,
+            rel: 0,
+            modestbranding: 1,
+            iv_load_policy: 3
+        },
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange,
             'onError': onError
         }
+    } );
+
+    fs.writeFile( `${execPath}\\logs\\song.log`, "", function ( err ) {
+        if ( err ) log( "* Error saving song log" );
     } );
 }
 
@@ -71,6 +113,8 @@ function onError(event) {
 }
 
 function nextSong() {
+    if ( !cmds.songRequests ) return;
+
     currentSong = null;
     if ( songQ.length > 0 ) {
         var tempSong = songQ.shift();
@@ -78,13 +122,14 @@ function nextSong() {
         ytPlayer.playVideo();
         currentSong = tempSong;
         updateSongList();
-        fs.writeFile( execPath + "\\logs\\song.log", currentSong.title, function ( err ) {
+        fs.writeFile( `${execPath}\\logs\\song.log`, currentSong.title, function ( err ) {
             if ( err ) log( "* Error saving song log" );
         } );
     }   
 }
 
 function addSong(videoid, username) {
+    if ( !cmds.songRequests ) return;
 
     // allows most copy-pastes to work
     if ( videoid.length != 11 ) {
@@ -106,19 +151,10 @@ function addSong(videoid, username) {
                 cmdSay( "Error, invalid youtube video." );
             } else {
                 var videotitle = response.items[0].snippet.title;
-
-                /* add "contentDetails" to "part"
-                var videoLength = response.items[0].contentDetails.duration.substring(2); // PT57M59S -> 57M59S
-                videoLength = videoLength.split("M");
-                if ( videoLength.length != 1 && videoLength[0] >= 10 ){ // if it is greater than 1 minute and also greater than 10 minutes 59 seconds
-                    cmdSay( "Youtube video " + videotitle + " is over 10 minutes and will not added to the queue." );
-                    return;
-                }
-                */
                 
                 var pushObj = { id: videoid, title: videotitle, user: username };
                 songQ.push( pushObj );
-                cmdSay( "\"" + videotitle + "\" added to the queue by " + username );
+                cmdSay( `"${videotitle}" added to the queue by ${username}` );
 
                 updateSongList();
 
@@ -132,18 +168,22 @@ function addSong(videoid, username) {
 }
 
 function setVolume(vol) {
+    if ( !cmds.songRequests ) return;
+
     if ( vol >= 0 && vol <= 100 ) {
         ytPlayer.setVolume( vol );
-        cmdSay( "Volume set to " + vol);
+        cmdSay( `Volume set to ${vol}` );
     }
 }
 
 function getSong() {
+    if ( !cmds.songRequests ) return;
+
     if ( currentSong == null ) {
         cmdSay( "No song is playing." );
     }
     else {
-        cmdSay( "\"" + currentSong.title + "\", requested by " + currentSong.user );
+        cmdSay( `"${currentSong.title}", requested by ${currentSong.user}` );
     }
 }
 
@@ -152,7 +192,7 @@ function updateSongList() {
     var output = "";
     for ( var i = 0; i < songQ.length; i++ ) {
         var order = i + 1;
-        output += "<span class='labelText'>" + order + ".</span> " + songQ[i].title + "<br>";
+        output += `<span class="labelText">${order}.</span> ${songQ[i].title}<br>`;
     }
 
     $("#songList").html( output );

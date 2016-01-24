@@ -21,7 +21,7 @@ var timedMessages = [];
 function timedMessagesSetup() {
 	
 	try {
-		var readFile = fs.readFileSync( execPath + "\\settings\\timedMessages.ini" );
+		var readFile = fs.readFileSync( `${execPath}\\settings\\timedMessages.ini` );
 		timedMessages = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a timedMessages.ini, just use the default settings
 		timedMessages = [];
@@ -46,9 +46,9 @@ function refreshMessages() {
 	for ( var i = 0; i < timedMessages.length; i++ ) {
 		var output = "";
 		// build a message... [X] [Time] [Message]
-		output += "<button id='msg" + i + "' class='msgDeleteButton' onclick='deleteMessage(" + i + ")'>delete</button> ";
-		output += "<span class='timedMessageSpan'>" + timedMessages[i].time + "s</span> ";
-		output += timedMessages[i].text + "<br />";
+		output += `<button id='msg${i}' class='msgDeleteButton' onclick='deleteMessage(${i})'>delete</button> `;
+		output += `<span class='timedMessageSpan'>${timedMessages[i].time}s</span> `;
+		output += `${timedMessages[i].text}<br> `;
 		
 		// add the message to the ui list of messages
 		$("#timedMsgs").append( output );
@@ -102,7 +102,7 @@ function addMessage() {
 }
 
 function deleteMessage( id ) {
-	if ( confirm( "Are you sure you want to delete \"" + timedMessages[id].text + "\" ?" ) ) {
+	if ( confirm( `Are you sure you want to delete "${timedMessages[id].text}" ?` ) ) {
 		timedMessages.splice( id, 1 );
 		save();
 		refreshMessages();

@@ -85,11 +85,11 @@ function msgPriv( command, args ) {
 	// output icons and such
 	if ( settings.channel.substring(1) === from.toLowerCase() ) output += "<img src='http://chat-badges.s3.amazonaws.com/broadcaster.png'>";
 	if ( mod ) output += "<img src='http://chat-badges.s3.amazonaws.com/mod.png'>";
-	if ( subscriber ) output += "<img src='" + subBadgeUrl + "' />";
+	if ( subscriber ) output += `<img src='${subBadgeUrl}' />`;
 	if ( turbo ) output += "<img src='http://chat-badges.s3.amazonaws.com/turbo.png'>";
 
 	// output FROM info
-	output += " <b style='color: " + color + ";'>" + from + "</b>";
+	output += `<b style='color: ${color};'>${from}</b>`;
 	
 
 	// reconstructing the string after it was split by " "
@@ -99,13 +99,13 @@ function msgPriv( command, args ) {
 		// Args 0: skhmt!skhmt@skhmt.tmi.twitch.tv PRIVMSG #skhmt :ACTION does things
 	
 	if ( text === "\001ACTION" ) {
-		text = "<span style='color: " + color + ";'>"; // remove the word "ACTION" from the action
+		text = `<span style='color: ${color};'>`; // remove the word "ACTION" from the action
 		for ( var i = 4; i < args.length; i++ ) { // construct "text"
 			text += " " + args[i];
 		}
 		text += "</span>"; // close the bold tag
 		
-		moderation( from, userType, text );
+		moderation( from, mod, text );
 		return log( output + text );
 	}
 	
@@ -119,10 +119,10 @@ function msgPriv( command, args ) {
 	
 	// if it's a command, send to parseCommand
 	if ( text.substring(0,1) === cmds.symbol ) {
-		parseCommand( text, from, userType, subscriber );
+		parseCommand( text, from, mod, subscriber );
 	}
 	
-	moderation( from, userType, text );
+	moderation( from, mod, text );
 }
 
 
@@ -138,11 +138,11 @@ function msgRoom( command, args ) {
 	var subsOnly = commands[3].substring(10);
 	
 	if ( r9k === 0 && slow === 0 && subsOnly === 0 ) {
-		log("* No roomstate options set for " + args[2]);
+		log(`* No roomstate options set for ${args[2]}`);
 	} else {
-		var output = "* Roomstate options for " + args[2] + ":";
+		var output = `* Roomstate options for ${args[2]}:`;
 		if ( r9k === 1 ) output += " r9k";
-		if ( slow > 0 ) output += " slow("+slow+")";
+		if ( slow > 0 ) output += ` slow(${slow})`;
 		if ( subsOnly === 1 ) output += " subscribers-only";
 		
 		log( output );

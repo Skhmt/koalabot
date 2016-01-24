@@ -27,24 +27,20 @@ function statsSetup() {
 	$("#newViewers")
 		.button()
 		.click( function() {
-			var tempPath = execPath + "\\logs\\viewerStats-";
-			tempPath += viewerData[0].d.substring(0,10) + "_";
+			var tempPath = `${execPath}\\logs\\viewerStats-${viewerData[0].d.substring(0,10)}_`;
 		
 			var tempdate = viewerData[0].d.substring(11); // 22:23:00
 			tempdate = tempdate.split( ":" );
-			tempdate = tempdate.join( "-" )
+			tempdate = tempdate.join( "-" );
 			
-			tempPath += tempdate;
-			tempPath += ".log";
-			
-			fs.writeFileSync( tempPath, JSON.stringify( viewerData ) );
+			fs.writeFileSync( `${tempPath + tempdate}.log`, JSON.stringify( viewerData ) );
 			
 			viewerData = [];
 			saveViewerData();
 	} );
 	
 	try {
-		var readFile = fs.readFileSync( execPath + "\\logs\\viewerStats.log" );
+		var readFile = fs.readFileSync( `${execPath}\\logs\\viewerStats.log` );
 		var data = $.parseJSON( readFile );
 		viewerData = data;
 	} catch (e) {
@@ -69,7 +65,7 @@ function exportViewers( viewers ) {
 	var tempDay = dateNow.getDate();
 	if ( tempDay < 10 ) tempDay = "0" + tempDay;
 	
-	pushObj.d= dateNow.getFullYear() + "-" + tempMonth + "-" + tempDay + " " + tempTime.substring( 0, 8 );
+	pushObj.d = `${dateNow.getFullYear()}-${tempMonth}-${tempDay} ${tempTime.substring( 0, 8 )}`;
 	pushObj.v = viewers;
 	
 	viewerData.push( pushObj );
@@ -117,5 +113,5 @@ function drawGraph() {
 }
 
 function saveViewerData() {
-	fs.writeFileSync( execPath + "\\logs\\viewerStats.log", JSON.stringify( viewerData ) );
+	fs.writeFileSync( `${execPath}\\logs\\viewerStats.log`, JSON.stringify( viewerData ) );
 }

@@ -16,6 +16,8 @@
 
 // moderation.js
 
+var modSettings;
+
 function modSetup(){
 	
 	$("#linkProRadioSet").buttonset();
@@ -27,32 +29,32 @@ function modSetup(){
 	$("#symbolProRadioSet").buttonset();
 	
 	try {
-		var readFile = fs.readFileSync( execPath + "\\settings\\modSettings.ini" );
+		var readFile = fs.readFileSync( `${execPath}\\settings\\modSettings.ini` );
 		modSettings = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
 		modSettings = {
 			linkPro : {
 				on: true,
-				timeout : 2,
-				timeoutText : ""
+				timeout : 1,
+				timeoutText : "%user% don't post links without permission"
 			},
 			wordPro : {
 				on: true,
-				timeout : 2,
-				timeoutText : "",
+				timeout : 1,
+				timeoutText : "%user% don't say that!",
 				badwords : ["hitbox"]
 			},
 			capsPro : {
 				on: true,
-				timeout : 2,
-				timeoutText : "",
+				timeout : 1,
+				timeoutText : "%user% LOUD NOISES!!",
 				capsPerWord : 3,
 				capsTotal : 10
 			},
 			symbolPro : {
 				on: true,
-				timeout: 2,
-				timeoutText: "",
+				timeout: 1,
+				timeoutText: "%user% English only please thx",
 				symbols : 5
 			}
 		};
@@ -213,49 +215,65 @@ function modSetup(){
 	
 }
 
-function moderation( from, userType, text ) {
-	if ( userType !== "mod" ) {
+function moderation( from, mod, text ) {
+	if ( !mod ) {
 		
 		if ( modSettings.linkPro.on ) {
 			if( linkPro( from, text ) ) {
-				log( "* Link protection timeout on: " + from );
+				log( `* Link protection timeout on: ${from}` );
 				setTimeout(
-					bot.say( settings.channel, "/timeout " + from + " " + modSettings.linkPro.timeout ),
+					bot.say( settings.channel, `/timeout ${from} ${modSettings.linkPro.timeout}` ),
 					1000);
-					if( modSettings.linkPro.timeoutText !== "" ) cmdSay( modSettings.linkPro.timeoutText );
+					if( modSettings.linkPro.timeoutText !== "" ) {
+						var output = modSettings.linkPro.timeoutText;
+						output = output.replace( /%user%/g, from );
+						cmdSay( output );
+					}
 				return;
 			}
 		}
 		
 		if ( modSettings.wordPro.on ) {
 			if( wordPro( text ) ) {
-				log( "* Word protection timeout on: " + from );
+				log( `* Word protection timeout on: ${from}` );
 				setTimeout(
-					bot.say( settings.channel, "/timeout " + from + " " + modSettings.wordPro.timeout ),
+					bot.say( settings.channel, `/timeout ${from} ${modSettings.wordPro.timeout}` ),
 					1000 );
-					if( modSettings.wordPro.timeoutText !== "" ) cmdSay( modSettings.wordPro.timeoutText );
+					if( modSettings.wordPro.timeoutText !== "" ) {
+						var output = modSettings.wordPro.timeoutText;
+						output = output.replace( /%user%/g, from );
+						cmdSay( output );
+					}
 				return;
 			}
 		}
 		
 		if ( modSettings.capsPro.on ) {
 			if( capsPro( text ) ) {
-				log( "* Caps protection timeout on: " + from );
+				log( `* Caps protection timeout on: ${from}` );
 				setTimeout(
-					bot.say( settings.channel, "/timeout " + from + " " + modSettings.capsPro.timeout ),
+					bot.say( settings.channel, `/timeout ${from} ${modSettings.capsPro.timeout}` ),
 					1000 );
-					if( modSettings.capsPro.timeoutText !== "" ) cmdSay( modSettings.capsPro.timeoutText );
+					if( modSettings.capsPro.timeoutText !== "" ) {
+						var output = modSettings.capsPro.timeoutText;
+						output = output.replace( /%user%/g, from );
+						cmdSay( output );
+					}
 				return;
 			}
 		}
 		
 		if ( modSettings.symbolPro.on ) {
 			if( symbolPro( text ) ) {
-				log( "* Symbol protection timeout on: " + from );
+				log( `* Symbol protection timeout on: ${from}` );
 				setTimeout(
-					bot.say( settings.channel, "/timeout " + from + " " + modSettings.symbolPro.timeout ),
+					bot.say( settings.channel, `/timeout ${from} ${modSettings.symbolPro.timeout}` ),
 					1000 );
-					if( modSettings.symbolPro.timeoutText !== "" ) cmdSay( modSettings.symbolPro.timeoutText );
+					if( modSettings.symbolPro.timeoutText !== "" ) {
+						var output = modSettings.symbolPro.timeoutText;
+						output = output.replace( /%user%/g, from );
+						cmdSay( output );
+					}
 				return;
 			}
 		}
@@ -263,10 +281,28 @@ function moderation( from, userType, text ) {
 	}
 }
 
+function permit( cmd ) {
+	var permitTime = 60;
+
+	var user = cmd[1];
+
+	cmdSay( `${user} has been permitted to post a link for ${permitTime} seconds.` );
+
+	permitted.push( user.toLowerCase() );
+
+	setTimeout( function() {
+		var indexToRemove = permitted.indexOf( user );
+		permitted.splice( indexToRemove, 1 );
+	}, permitTime*1000);
+}
+
+
 // returns true if link protection finds a link
 function linkPro( from, text ) {
 	// if user isn't in the array "permitted" (is approved to post a link), return false
-	if ( permitted.indexOf(from) !== -1 ) {
+	var user = from.toLowerCase();
+
+	if ( permitted.indexOf( user ) !== -1 ) {
 		return false;
 	}
 	

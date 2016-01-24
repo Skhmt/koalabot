@@ -38,12 +38,13 @@
 	<script src="raffle.js"></script>
 	<script src="songs.js"></script>
 	<script src="quotes.js"></script>
+	<script src="events.js"></script>
 	<script src="scripts.js"></script>
 </head>
 <body>
 
 	<div id="top" style="-webkit-app-region: drag;">
-		<span id="topTitle">KoalaBot v0.5b</span>
+		<span id="topTitle">KoalaBot v0.6</span>
 		<span id="topRight">
 			<button id="devTools">devtools</button>
 			<button id="minimize">minimize</button>
@@ -54,18 +55,18 @@
 
 	<div id="tabs">
 		<ul>
-			<li><a href="#tabs-1">Chat</a></li>
-			<li><a href="#tabs-2">Events</a></li>
-			<li><a href="#tabs-3">Quotes</a></li>
-			<li><a href="#tabs-4">Timed Msg</a></li>
-			<li><a href="#tabs-5">Spam</a></li>
-			<li><a href="#tabs-6">Commands</a></li>
-			<li><a href="#tabs-7">Raffle</a></li>
-			<li><a href="#tabs-8">Music</a></li>
-			<li><a href="#tabs-9">Settings</a></li>
+			<li><a href="#tab-chat">Chat</a></li>
+			<li><a href="#tab-events">Events</a></li>
+			<li><a href="#tab-songs">Music</a></li>
+			<li><a href="#tab-raffle">Raffle</a></li>
+			<li><a href="#tab-commands">Commands</a></li>
+			<li><a href="#tab-timed">Timed Msg</a></li>
+			<li><a href="#tab-quotes">Quotes</a></li>
+			<li><a href="#tab-moderation">Spam</a></li>
+			<li><a href="#tab-settings">Settings</a></li>
 		</ul>
 
-		<div id="tabs-1" class="tab">
+		<div id="tab-chat" class="tab">
 			<div id="consoleBox">
 				<span id="console"></span>
 				<span id="userlist"></span>
@@ -77,15 +78,63 @@
 			</div>
 		</div>
 
-		<div id="tabs-2" class="tab">
+		<div id="tab-events" class="tab">
+			<table>
+				<tr>
+					<td style="vertical-align: top;">
+						<form id="followerChatRadioSet">
+							<input type="radio" id="followerChatOn" name="radio" value="on">
+							<label for="followerChatOn">on</label>
+							<input type="radio" id="followerChatOff" name="radio" value="off">
+							<label for="followerChatOff">off</label>
+						</form>
+					</td>
+					<td>
+						<span class="labelText">New follower notification in chat</span> <br>
+						Message in chat (%user% for user name):
+						<input type="text" id="followerChatText" size="45">
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top;">
+						<form id="subChatRadioSet">
+							<input type="radio" id="subChatOn" name="radio" value="on">
+							<label for="subChatOn">on</label>
+							<input type="radio" id="subChatOff" name="radio" value="off">
+							<label for="subChatOff">off</label>
+						</form>
+					</td>
+					<td>
+						<span class="labelText">New sub notification in chat</span> <br>
+						Message in chat (%user% for user name):
+						<input type="text" id="subChatText" size="45">
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align: top;">
+						<form id="hostChatRadioSet">
+							<input type="radio" id="hostChatOn" name="radio" value="on">
+							<label for="hostChatOn">on</label>
+							<input type="radio" id="hostChatOff" name="radio" value="off">
+							<label for="hostChatOff">off</label>
+						</form>
+					</td>
+					<td>
+						<span class="labelText">Host notification in chat</span> <br>
+						Message in chat (%user% for user name):
+						<input type="text" id="hostChatText" size="45">
+					</td>
+				</tr>
+			</table>
+
 			<div id="hosts"></div> <!-- This tab's content is dynamically generated -->
 		</div>
 
-		<div id="tabs-3" class="tab">
+		<div id="tab-quotes" class="tab">
 			<div id="quotes"></div>
 		</div>
 
-		<div id="tabs-4" class="tab">
+		<div id="tab-timed" class="tab">
 			<div>
 				<button id="addMsgButton">Add Message</button> &nbsp; &nbsp;
 				Text: <input type="text" id="addMsgText" value="" size="45"> &nbsp; &nbsp; 
@@ -96,7 +145,7 @@
 			</div>
 		</div>
 
-		<div id="tabs-5" class="tab">
+		<div id="tab-moderation" class="tab">
 			<div id="moderation">
 				<table>
 					<tr>
@@ -160,7 +209,7 @@
 			</div>
 		</div>
 
-		<div id="tabs-6" class="tab">
+		<div id="tab-commands" class="tab">
 			<div>
 				<button id="addCmdButton">Add Command</button>&nbsp;&nbsp; 
 				<span class="labelText">Name:</span> <input type="text" id="addCmdName" size="40">&nbsp;&nbsp; 
@@ -176,7 +225,7 @@
 			<div id="commands"></div>
 		</div>
 
-		<div id="tabs-7" class="tab">
+		<div id="tab-raffle" class="tab">
 			<div id="raffleList"></div>
 
 			<button id="raffleStart">start</button>
@@ -205,12 +254,18 @@
 			<textarea id="raffleWinnerText" rows="3" cols="64"></textarea><br>
 		</div>
 
-		<div id="tabs-8" class="tab">
+		<div id="tab-songs" class="tab">
 			<div id="songList"></div>
 			<iframe id="ytPlayer" type="text/html" width="450" height="254"
 					src="http://www.youtube.com/embed/JFYVcz7h3o0?enablejsapi=1" frameborder="0"
 					nwUserAgent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36"></iframe>
 			<br><br>
+			<form id="songsSet">
+				<span class="labelText">Song requests: </span>
+				<input type="radio" id="songsOn" name="songsRadio" value="on"><label for="songsOn">ON</label>
+				<input type="radio" id="songsOff" name="songsRadio" value="off"><label for="songsOff">OFF</label>
+			</form>
+			<br>
 				<button id="nextSongButton">Next Song</button> 
 				<button id="muteSongButton">Mute</button>
 				<span id="muteSongStatus" class="blink"></span>
@@ -221,7 +276,7 @@
 				</form>
 		</div>
 
-		<div id="tabs-9" class="tab">
+		<div id="tab-settings" class="tab">
 			<div id="config">
 					<span class="labelText">Bot name:</span> <span id="displayName"></span>
 					<br><br>
@@ -276,7 +331,7 @@
 	
 	
 	<div id="getOauthDialog" title="Get oauth">
-		<iframe src="https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&redirect_uri=http://skhmt.github.io/bot/oauth.html&scope=channel_editor+chat_login&force_verify=true" style="outline: none; width: 650px; height: 480px; margin: 0; padding: 0; border: 0;"></iframe>
+		<iframe src="https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&redirect_uri=http://skhmt.github.io/bot/oauth.html&scope=channel_editor+chat_login+channel_subscriptions&force_verify=true" style="outline: none; width: 650px; height: 480px; margin: 0; padding: 0; border: 0;"></iframe>
 	</div>
 
 	<div id="graphDialog" title="Viewer stats">

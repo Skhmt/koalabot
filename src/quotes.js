@@ -43,19 +43,19 @@ function quote( cmd ) {
 		return cmdSay( "Quote does not exist." );
 	}
 	var tempQuote = activeQuotes[theindex];
-	cmdSay( "\"" + tempQuote.message + "\" - " + tempQuote.who + ", " + tempQuote.date );
+	cmdSay( `"${tempQuote.message}" - ${tempQuote.who}, ${tempQuote.date}` );
 }
 
 // !addquote [user] [quote...]
 function addQuote( cmd ) {
 	if ( cmd[1] == null || cmd[2] == null ) {
-		return cmdSay( "Usage: " + cmds.symbol + "addquote [author] [quote]" ); // not enough params to make a quote... perhaps send an error message?
+		return cmdSay( `Usage: ${cmds.symbol}addquote [author] [quote]` ); // not enough params to make a quote... perhaps send an error message?
 	}
 	var tempQuote = {
 		active: true,
-		message:"",
-		who:"",
-		date:""
+		message: "",
+		who: "",
+		date: ""
 	};
 	tempQuote.who = cmd[1];
 	tempQuote.date = ( new Date().toDateString() ).substring(4);
@@ -66,7 +66,7 @@ function addQuote( cmd ) {
 	
 	tempQuote.message = tempMessage.join(" ");
 	
-	cmdSay( "Quote added, id:" + ( cmds.quotes.push( tempQuote ) - 1 ) );
+	cmdSay( `Quote added at id:${cmds.quotes.push( tempQuote ) - 1}` );
 	
 	save();
 	refreshQuotes();
@@ -74,15 +74,28 @@ function addQuote( cmd ) {
 
 // just setting to false, not actually deleting so the numbering doesn't change
 function delQuote( cmd ) {
-	if( cmd[1] === parseInt(cmd[1],10) && cmd[1] >= 0 && cmd[1] < cmds.quotes.length ) {
-		cmds.quotes[cmd[1]].active = false;
-		save();
-		refreshQuotes();
+	var i = cmd[1];
+	if ( i != parseInt(i, 10) ) {
+		cmdSay( `Error, ${i} is not a number.` );
+		return;
 	}
+	if ( i < 0 || i > cmds.quotes.length ) {
+		cmdSay( `Error, no such quote exists.` );
+		return;
+	}
+	if ( cmds.quotes[i].active == false ) {
+		cmdSay( `Error, that quote has already been deleted.` );
+		return;
+	}
+
+	cmds.quotes[cmd[1]].active = false;
+	cmdSay( `Quote at id: ${i} has been deleted.` );
+	save();
+	refreshQuotes();
 }
 
 function delQuoteButton( i ) {
-	if ( confirm( "Are you sure you want to delete \"" + cmds.quotes[i].message + "\" ?" ) ) {
+	if ( confirm( `Are you sure you want to delete "${cmds.quotes[i].message}" ?` ) ) {
 		cmds.quotes[i].active = false;
 		save();
 		refreshQuotes();
@@ -94,11 +107,11 @@ function refreshQuotes() {
 	for ( var i = 0; i < cmds.quotes.length; i++ ) {
 		if ( cmds.quotes[i].active ) {
 			var output = "";
-			output += "<button id='quote" + i + "' onclick='delQuoteButton(" + i + ")'>delete</button> ";
-			output += i + ": ";
-			output += "\"<i>" + cmds.quotes[i].message + "</i>\" ";
-			output += "- <b>" + cmds.quotes[i].who + "</b>, " + cmds.quotes[i].date;
-			output +="<br>";
+			output += `<button id='quote${i}' onclick='delQuoteButton(${i})'>delete</button> `;
+			output += `${i} : `;
+			output += `"<i>${cmds.quotes[i].message}</i>"`;
+			output += `- <b>${cmds.quotes[i].who}</b>, ${cmds.quotes[i].date}`;
+			output += `<br>`;
 			$("#quotes").append( output );
 			
 			$("#quote"+i).button( {
