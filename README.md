@@ -1,6 +1,6 @@
 # KoalaBot, a chat bot for Twitch
 
-![version 0.5b](https://img.shields.io/badge/version-0.5b-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
+![version 0.6](https://img.shields.io/badge/version-0.6-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 #### What is this?
 It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop and although I only provide a Windows version, it's possible to make an OS X or Linux version fairly easily - you'll have to do that on your own, but I can point you in the right direction. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
@@ -21,6 +21,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Giveaways
 - [x] Song requests
 - [x] Follower logging
+- [x] Sub notifications
 - [ ] Sound / video playing in response to a command or event
 - [ ] Loyalty points
 - [ ] User ranks
@@ -28,11 +29,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] More variables for custom commands
 - [ ] Individually disable timed messages
 - [ ] Individually disable custom and built-in commands
-- [ ] UNfollow notifications
 - [ ] Greetings / etc for all or certain users when they enter (like a fighter's entrance song!)
-- [ ] Sub notifications (unlikely I will implement this since I can't do donation notifications, so might as well use TwitchAlerts)
-- [ ] Whispers (unlikely that I will implement this for a variety of reasons)
-- [ ] Poll (Straw poll is integrated with BTTV, so it's unlikely I'll implement this)
 
 #### Commands:
 |Command|Parameters|Description|
