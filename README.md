@@ -32,6 +32,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 #### Commands:
 |Command|Parameters|Description|
 |-------|-------------------|--------|
+|**!bot**|n/a|*Links to this page.*|
 |**!uptime**|n/a|*Configurable in the "Settings" tab to display either the bot uptime, the stream uptime, or the lap time.*|
 |**!bottime**|n/a|*Shows the amount of time the bot has been open.*|
 |**!streamtime**|n/a|*Shows the amount of time your stream has been going (if your stream disconnects, this resets).*|
