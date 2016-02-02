@@ -17,25 +17,21 @@
 var viewerData = [];
 
 function statsSetup() {
-	$("#openViewerGraph")
-		.button()
-		.click( function() {
-			drawGraph();
-			$("#graphDialog").dialog( "open" );
+	$("#openViewerGraph").click( function() {
+		drawGraph();
+		$("#graphDialog").dialog( "open" );
 	} );
 
-	$("#newViewers")
-		.button()
-		.click( function() {
-			var tempPath = `${execPath}\\logs\\viewerStats-${viewerData[0].d.substring(0,10)}_`;
-		
-			var tempdate = viewerData[0].d.substring(11); // 22:23:00
-			tempdate = tempdate.split( ":" );
-			tempdate = tempdate.join( "-" );
-			
-			fs.writeFileSync( `${tempPath + tempdate}.log`, JSON.stringify( viewerData ) );
-			
-			viewerData = [];
+	$("#newViewers").click( function() {
+		var tempPath = `${execPath}\\logs\\viewerStats-${viewerData[0].d.substring(0,10)}_`;
+
+		var tempdate = viewerData[0].d.substring(11); // 22:23:00
+		tempdate = tempdate.split( ":" );
+		tempdate = tempdate.join( "-" );
+
+		fs.writeFileSync( `${tempPath + tempdate}.log`, JSON.stringify( viewerData ) );
+
+		viewerData = [];
 			saveViewerData();
 	} );
 	

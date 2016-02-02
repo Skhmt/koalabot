@@ -27,10 +27,9 @@ function timedMessagesSetup() {
 		timedMessages = [];
 	}
 
-	$("#addMsgButton")
-		.button()
-		.click( function() {
-			addMessage();
+	$("#addMsgButton").click( function() {
+		addMessage();
+		return false;
 	} );
 	
 	refreshMessages();
@@ -46,20 +45,13 @@ function refreshMessages() {
 	for ( var i = 0; i < timedMessages.length; i++ ) {
 		var output = "";
 		// build a message... [X] [Time] [Message]
-		output += `<button id='msg${i}' class='msgDeleteButton' onclick='deleteMessage(${i})'>delete</button> `;
-		output += `<span class='timedMessageSpan'>${timedMessages[i].time}s</span> `;
-		output += `${timedMessages[i].text}<br> `;
+		output += `<button id='msg${i}' onclick='deleteMessage(${i})'
+			class='btn btn-primary btn-sm'>X</button>
+			<span class='timedMessageSpan'>${timedMessages[i].time}s</span> &nbsp; &nbsp; &nbsp;
+			${timedMessages[i].text}<br> `;
 		
 		// add the message to the ui list of messages
 		$("#timedMsgs").append( output );
-		
-		// style the button
-		$("#msg" + i).button( {
-			icons: {
-				primary: "ui-icon-closethick"
-			},
-			text: false
-		} );
 		
 		// create an interval
 		//var intervalId = setInterval(playMessage(i), timedMessages[i].time * 1000);

@@ -5,11 +5,11 @@
 	"main": "index.html",
 	"window": {
 		"width": 800,
+		"min_width": 800,
 		"height": 600,
-		"title": "Bot",
+		"title": "KoalaBot 0.7",
 		"toolbar": false,
 		"icon": "koala.png",
-		"frame": false
-	},
-	"user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36"
+		"frame": true
+	}
 }

@@ -20,62 +20,46 @@ var ytAPIkey = "AIzaSyDHIEtPmB3cOp2nHFA9T2LAz-xcfXyZJ2A";
 var currentSong;
 
 function songsSetup() {
-    $("#nextSongButton")
-        .button()
-        .click( function() {
-            nextSong();
+
+    $("#nextSongButton").click( function() {
+        nextSong();
     } );
 
-    $("#muteSongButton")
-        .button()
-        .click( function() {
-            toggleMute();
+    $("#muteSongButton").click( function() {
+        toggleMute();
     } );
 
-    $("#addSongButton")
-        .button()
-        .click( function() {
-            addSong( $("#addSongText").val(), settings.username );
-            $("#addSongText").val("");
+    $("#addSongButton").click( function() {
+        addSong( $("#addSongText").val(), settings.username );
+        $("#addSongText").val("");
     } );
 
-    $("#songsSet").buttonset();
 
     // songs radio state
-    if ( cmds.songRequests ) {
-        $("#songsOn").attr( "checked", true );
-        $("#nextSongButton").button( "enable" );
-        $("#muteSongButton").button( "enable" );
-        $("#addSongButton").button( "enable" );
+    if ( cmdSettings.songRequests ) {
+        $("#songsOn").prop( "checked", true );
+        $("#songsOn").parent().addClass("active");
     } else {
-        $("#songsOff").attr( "checked", true );
-        $("#nextSongButton").button( "disable" );
-        $("#muteSongButton").button( "disable" );
-        $("#addSongButton").button( "disable" );
+        $("#songsOff").prop( "checked", true );
+        $("#songsOff").parent().addClass("active");
     }
-    $("#songsSet").buttonset( "refresh" );
 
     // songs click listener
-    $("#songsSet input[type=radio]").change( function() {
+    $("input[name='songsRadio']").change( function() {
         if ( this.value === "on" ){
-            cmds.songRequests = true;
-            $("#nextSongButton").button( "enable" );
-            $("#muteSongButton").button( "enable" );
-            $("#addSongButton").button( "enable" );
+            cmdSettings.songRequests = true;
         } else {
-            cmds.songRequests = false;
-            $("#nextSongButton").button( "disable" );
-            $("#muteSongButton").button( "disable" );
-            $("#addSongButton").button( "disable" );
+            cmdSettings.songRequests = false;
         }
         save();
     } );
 }
 
+
 function onYouTubeIframeAPIReady() {
     ytPlayer = new YT.Player('ytPlayer', {
-        height: 254,
-        width: 450,
+        height: 250,
+        width: 400,
         videoId: 'JFYVcz7h3o0',
         playerVars: {
             fs: 0,
@@ -113,7 +97,7 @@ function onError(event) {
 }
 
 function nextSong() {
-    if ( !cmds.songRequests ) return;
+    if ( !cmdSettings.songRequests ) return;
 
     currentSong = null;
     if ( songQ.length > 0 ) {
@@ -129,7 +113,7 @@ function nextSong() {
 }
 
 function addSong(videoid, username) {
-    if ( !cmds.songRequests ) return;
+    if ( !cmdSettings.songRequests ) return;
 
     // allows most copy-pastes to work
     if ( videoid.length != 11 ) {
@@ -167,8 +151,15 @@ function addSong(videoid, username) {
     );
 }
 
-function setVolume(vol) {
-    if ( !cmds.songRequests ) return;
+function cmdAddSong(params, from, mod, subscriber) {
+    addSong( params[0], from );
+}
+
+function cmdSetVolume(params, from, mod, subscriber) {
+    if ( !cmdSettings.songRequests ) return;
+    if ( !mod ) return;
+
+    var vol = params[0];
 
     if ( vol >= 0 && vol <= 100 ) {
         ytPlayer.setVolume( vol );
@@ -176,14 +167,26 @@ function setVolume(vol) {
     }
 }
 
-function getSong() {
-    if ( !cmds.songRequests ) return;
+function cmdGetSong(params, from, mod, subscriber) {
+    if ( !cmdSettings.songRequests ) return;
 
     if ( currentSong == null ) {
         cmdSay( "No song is playing." );
     }
     else {
         cmdSay( `"${currentSong.title}", requested by ${currentSong.user}` );
+    }
+}
+
+function cmdSkipSong(params, from, mod, subscriber){
+    if ( mod ) {
+        nextSong();
+    }
+}
+
+function cmdMute(params, from, mod, subscriber){
+    if ( mod ) {
+        toggleMute();
     }
 }
 
@@ -199,6 +202,7 @@ function updateSongList() {
 }
 
 function toggleMute() {
+    if ( !cmdSettings.songRequests ) return;
     if ( ytPlayer.isMuted() ) {
         ytPlayer.unMute();
         $("#muteSongStatus").html("");

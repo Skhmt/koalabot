@@ -20,14 +20,6 @@ var modSettings;
 
 function modSetup(){
 	
-	$("#linkProRadioSet").buttonset();
-	
-	$("#wordProRadioSet").buttonset();
-	
-	$("#capsProRadioSet").buttonset();
-	
-	$("#symbolProRadioSet").buttonset();
-	
 	try {
 		var readFile = fs.readFileSync( `${execPath}\\settings\\modSettings.ini` );
 		modSettings = $.parseJSON( readFile );
@@ -62,14 +54,15 @@ function modSetup(){
 	
 	// linkPro button states
 	if ( modSettings.linkPro.on ) {
-		$("#linkProRadioOn").attr( "checked", true );
+		$("#linkProRadioOn").prop( "checked", true );
+		$("#linkProRadioOn").parent().addClass("active");
 	} else {
-		$("#linkProRadioOff").attr( "checked", true );
+		$("#linkProRadioOff").prop( "checked", true );
+		$("#linkProRadioOff").parent().addClass("active");
 	}
-	$("#linkProRadioSet").buttonset( "refresh" );
 	
 	// linkPro button click listener 
-	$("#linkProRadioSet input[type=radio]").change( function() {
+	$("input[name='linkProRadio']").change( function() {
 		if ( this.value === "on" ){
 			modSettings.linkPro.on = true;
 		} else {
@@ -80,14 +73,15 @@ function modSetup(){
 	
 	// wordPro button states
 	if ( modSettings.wordPro.on ) {
-		$("#wordProRadioOn").attr( "checked", true );
+		$("#wordProRadioOn").prop( "checked", true );
+		$("#wordProRadioOn").parent().addClass("active");
 	} else {
-		$("#wordProRadioOff").attr( "checked", true );
+		$("#wordProRadioOff").prop( "checked", true );
+		$("#wordProRadioOff").parent().addClass("active");
 	}
-	$("#wordProRadioSet").buttonset( "refresh" );
 	
 	// wordPro button click listener
-	$("#wordProRadioSet input[type=radio]").change( function() {
+	$("input[name='wordProRadio']").change( function() {
 		if ( this.value === "on" ) {
 			modSettings.wordPro.on = true;
 		} else {
@@ -98,14 +92,15 @@ function modSetup(){
 	
 	// capsPro button states
 	if ( modSettings.capsPro.on ) {
-		$("#capsProRadioOn").attr( "checked", true );
+		$("#capsProRadioOn").prop( "checked", true );
+		$("#capsProRadioOn").parent().addClass("active");
 	} else {
-		$("#capsProRadioOff").attr( "checked", true );
+		$("#capsProRadioOff").prop( "checked", true );
+		$("#capsProRadioOff").parent().addClass("active");
 	}
-	$("#capsProRadioSet").buttonset( "refresh" );
 	
 	// capsPro button click listener
-	$("#capsProRadioSet input[type=radio]").change( function() {
+	$("input[name='capsProRadio']").change( function() {
 		if ( this.value === "on" ) {
 			modSettings.capsPro.on = true;
 		} else {
@@ -116,14 +111,15 @@ function modSetup(){
 	
 	// symbolPro button states
 	if ( modSettings.capsPro.on ) {
-		$("#symbolProRadioOn").attr( "checked", true );
+		$("#symbolProRadioOn").prop( "checked", true );
+		$("#symbolProRadioOn").parent().addClass("active");
 	} else {
-		$("#symbolProRadioOff").attr( "checked", true );
+		$("#symbolProRadioOff").prop( "checked", true );
+		$("#symbolProRadioOff").parent().addClass("active");
 	}
-	$("#symbolProRadioSet").buttonset( "refresh" );
 	
 	// symbolPro button click listener
-	$("#symbolProRadioSet input[type=radio]").change( function() {
+	$("input[name='symbolProRadio']").change( function() {
 		if ( this.value === "on" ) {
 			modSettings.symbolPro.on = true;
 		} else {
@@ -281,10 +277,12 @@ function moderation( from, mod, text ) {
 	}
 }
 
-function permit( cmd ) {
+function cmdPermit( params, from, mod, subscriber ) {
+	if ( !mod ) return;
+
 	var permitTime = 60;
 
-	var user = cmd[1];
+	var user = params[0];
 
 	cmdSay( `${user} has been permitted to post a link for ${permitTime} seconds.` );
 

@@ -18,324 +18,610 @@
 <html>
 <head>
 	<title>
-		KoalaBot
+		KoalaBot 0.7
 	</title>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<script src="plotly-latest.min.js"></script>
-	<script src="jquery-2.2.0.min.js"></script>
-	<script src="jquery-ui.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="jquery-ui.min.css" />
+	<script src="js/plotly-latest.min.js"></script>
+	<script src="js/jquery-2.2.0.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<link rel="stylesheet" id="botTheme" href="css/bootstrap.min.css" type="text/css" />
 
 	<script src="https://www.youtube.com/iframe_api"></script>
 	
-	<link rel="stylesheet" type="text/css" href="style.css" />
-	<script src="commands.js"></script>
-	<script src="message.js"></script>
-	<script src="stats.js"></script>
-	<script src="moderation.js"></script>
-	<script src="timedMessages.js"></script>
-	<script src="timer.js"></script>
-	<script src="raffle.js"></script>
-	<script src="songs.js"></script>
-	<script src="quotes.js"></script>
-	<script src="events.js"></script>
-	<script src="scripts.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script src="js/commands.js"></script>
+	<script src="js/commands-static.js"></script>
+	<script src="js/message.js"></script>
+	<script src="js/stats.js"></script>
+	<script src="js/moderation.js"></script>
+	<script src="js/timedMessages.js"></script>
+	<script src="js/timer.js"></script>
+	<script src="js/raffle.js"></script>
+	<script src="js/songs.js"></script>
+	<script src="js/quotes.js"></script>
+	<script src="js/events.js"></script>
+	<script src="js/scripts.js"></script>
 </head>
 <body>
+	<!-- <div id="top" style="-webkit-app-region: drag;">  </div> or no-drag -->
 
-	<div id="top" style="-webkit-app-region: drag;">
-		<span id="topTitle">KoalaBot v0.6</span>
-		<span id="topRight">
-			<button id="devTools">devtools</button>
-			<button id="minimize">minimize</button>
-			<button id="maximize">maximize</button>
-			<button id="exit">exit</button>
-		</span>
-	</div>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- Nav bar -->
+			<span class="navbar-brand">kb</span>
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#tab-chat" data-toggle="tab">Chat</a></li>
+				<li><a href="#tab-events" data-toggle="tab">Events</a></li>
+				<li><a href="#tab-music" data-toggle="tab">Music</a></li>
+				<li><a href="#tab-raffle" data-toggle="tab">Raffle</a></li>
+				<li><a href="#tab-commands" data-toggle="tab">Commands</a></li>
+				<li><a href="#tab-timedMessages" data-toggle="tab">Timed Msgs</a></li>
+				<li><a href="#tab-quotes" data-toggle="tab">Quotes</a></li>
 
-	<div id="tabs">
-		<ul>
-			<li><a href="#tab-chat">Chat</a></li>
-			<li><a href="#tab-events">Events</a></li>
-			<li><a href="#tab-songs">Music</a></li>
-			<li><a href="#tab-raffle">Raffle</a></li>
-			<li><a href="#tab-commands">Commands</a></li>
-			<li><a href="#tab-timed">Timed Msg</a></li>
-			<li><a href="#tab-quotes">Quotes</a></li>
-			<li><a href="#tab-moderation">Spam</a></li>
-			<li><a href="#tab-settings">Settings</a></li>
-		</ul>
+				<li class="dropdown">
+					<a href="#" data-toggle="dropdown" class="dropdown-toggle">Modules <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#" data-toggle="tab">Module 1</a></li>
+						<li><a href="#" data-toggle="tab">Module 2</a></li>
+					</ul>
+				</li>
 
-		<div id="tab-chat" class="tab">
-			<div id="consoleBox">
-				<span id="console"></span>
-				<span id="userlist"></span>
+				<li class="dropdown">
+					<a href="#" data-toggle="dropdown" class="dropdown-toggle">Settings <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#tab-botConfig" data-toggle="tab">Bot Config</a></li>
+						<li><a href="#tab-spam" data-toggle="tab">Spam</a></li>
+						<li><a href="#tab-statistics" data-toggle="tab">Statistics</a></li>
+						<li class="divider"></li>
+						<li><a href="#" onclick="win.showDevTools();" data-toggle="tab">Dev Console</a></li>
+						<li><a href="#tab-about" data-toggle="tab">About</a></li>
+					</ul>
+				</li>
+
+			</ul>
+		</div>
+	</nav>
+
+
+	<div class="tab-content">
+
+		<!-- CHAT -->
+		<div class="tab-pane active" id="tab-chat">
+			<div class="row-fluid">
+				<div class="col-sm-9">
+					<div class="well well-sm" id="console" style="height: calc(100vh - 125px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
+				<div class="col-sm-3">
+					<div class="well well-sm" id="userlist" style="height: calc(100vh - 125px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
 			</div>
-			<div id="chatDiv">
-				<form onsubmit="chat(); return false;" id="chatForm">
-					<input type="text" id="chatText" value="" autocomplete="off">
-				</form>
-			</div>
-		</div>
-
-		<div id="tab-events" class="tab">
-			<table>
-				<tr>
-					<td style="vertical-align: top;">
-						<form id="followerChatRadioSet">
-							<input type="radio" id="followerChatOn" name="radio" value="on">
-							<label for="followerChatOn">on</label>
-							<input type="radio" id="followerChatOff" name="radio" value="off">
-							<label for="followerChatOff">off</label>
-						</form>
-					</td>
-					<td>
-						<span class="labelText">New follower notification in chat</span> <br>
-						Message in chat (%user% for user name):
-						<input type="text" id="followerChatText" size="45">
-					</td>
-				</tr>
-				<tr>
-					<td style="vertical-align: top;">
-						<form id="subChatRadioSet">
-							<input type="radio" id="subChatOn" name="radio" value="on">
-							<label for="subChatOn">on</label>
-							<input type="radio" id="subChatOff" name="radio" value="off">
-							<label for="subChatOff">off</label>
-						</form>
-					</td>
-					<td>
-						<span class="labelText">New sub notification in chat</span> <br>
-						Message in chat (%user% for user name):
-						<input type="text" id="subChatText" size="45">
-					</td>
-				</tr>
-				<tr>
-					<td style="vertical-align: top;">
-						<form id="hostChatRadioSet">
-							<input type="radio" id="hostChatOn" name="radio" value="on">
-							<label for="hostChatOn">on</label>
-							<input type="radio" id="hostChatOff" name="radio" value="off">
-							<label for="hostChatOff">off</label>
-						</form>
-					</td>
-					<td>
-						<span class="labelText">Host notification in chat</span> <br>
-						Message in chat (%user% for user name):
-						<input type="text" id="hostChatText" size="45">
-					</td>
-				</tr>
-			</table>
-
-			<div id="hosts"></div> <!-- This tab's content is dynamically generated -->
-		</div>
-
-		<div id="tab-quotes" class="tab">
-			<div id="quotes"></div>
-		</div>
-
-		<div id="tab-timed" class="tab">
-			<div>
-				<button id="addMsgButton">Add Message</button> &nbsp; &nbsp;
-				Text: <input type="text" id="addMsgText" value="" size="45"> &nbsp; &nbsp; 
-				Repeat interval: <input type="text" id="addMsgTime" value="120" size="4" style="text-align: right">s 
-			</div>
-			<div id="timedMsgs">
-				
-			</div>
-		</div>
-
-		<div id="tab-moderation" class="tab">
-			<div id="moderation">
-				<table>
-					<tr>
-						<td style="vertical-align: top;">
-							<form id="linkProRadioSet">
-								<input type="radio" id="linkProRadioOn" name="radio" value="on"><label for="linkProRadioOn">on</label>
-								<input type="radio" id="linkProRadioOff" name="radio" value="off"><label for="linkProRadioOff">off</label>
-							</form>
-						</td>
-						<td>
-							<span class="labelText">Link Protection</span><br>
-							Timeout: <input type="text" id="linkProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
-							Message: <input type="text" id="linkProTimeoutText" size="55">
-						</td>
-					</tr>
-					<tr>
-						<td style="vertical-align: top;">
-							<form id="wordProRadioSet">
-								<input type="radio" id="wordProRadioOn" name="radio" value="on"><label for="wordProRadioOn">on</label>
-								<input type="radio" id="wordProRadioOff" name="radio" value="off"><label for="wordProRadioOff">off</label>
-							</form>
-						</td>
-						<td>
-							<span class="labelText">Word Protection</span><br>
-							Timeout: <input type="text" id="wordProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
-							Message: <input type="text" id="wordProTimeoutText" size="55"><br>
-							Banned word list, separated by spaces:<br>
-							<textarea id="wordProArea" rows="5" cols="82"></textarea>
-						</td>
-					</tr>
-					<tr>
-						<td style="vertical-align: top;">
-							<form id="capsProRadioSet">
-								<input type="radio" id="capsProRadioOn" name="radio" value="on"><label for="capsProRadioOn">on</label>
-								<input type="radio" id="capsProRadioOff" name="radio" value="off"><label for="capsProRadioOff">off</label>
-							</form>
-						</td>
-						<td>
-							<span class="labelText">Capital Letter Protection</span><br>
-							Timeout: <input type="text" id="capsProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
-							Message: <input type="text" id="capsProTimeoutText" size="55"><br>
-							Capitals allowed per word: <input type="text" id="capsProPerWordField" size="3"> &nbsp; &nbsp;
-							Capitals allowed per post: <input type="text" id="capsProPerPostField" size="3"> <br>
-						</td>
-					</tr>
-					<tr>
-						<td style="vertical-align: top;">
-							<form id="symbolProRadioSet">
-								<input type="radio" id="symbolProRadioOn" name="radio" value="on"><label for="symbolProRadioOn">on</label>
-								<input type="radio" id="symbolProRadioOff" name="radio" value="off"><label for="symbolProRadioOff">off</label>
-							</form>
-						</td>
-						<td>
-							<span class="labelText">Symbols Protection</span><br>
-							Timeout: <input type="text" id="symbolProTimeoutField" size="3" style="text-align: right">s &nbsp; &nbsp;
-							Message: <input type="text" id="symbolProTimeoutText" size="55"><br>
-							Symbols allowed per post: <input type="text" id="symbolProSymbolsField" size="3"> <br>
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-
-		<div id="tab-commands" class="tab">
-			<div>
-				<button id="addCmdButton">Add Command</button>&nbsp;&nbsp; 
-				<span class="labelText">Name:</span> <input type="text" id="addCmdName" size="40">&nbsp;&nbsp; 
-				<span class="labelText">Level:</span> <select id="addCmdUserType">
-					<option value="">Any user</option>
-					<option value="sub">Only subs and mods</option>
-					<option value="mod">Only mods</option>
-					<option value="streamer">Only streamer</option>
-					</select>
-					<br>
-				<span class="labelText">Command:</span> <input type="text" id="addCmdText" size="82">
-			</div>
-			<div id="commands"></div>
-		</div>
-
-		<div id="tab-raffle" class="tab">
-			<div id="raffleList"></div>
-
-			<button id="raffleStart">start</button>
-			<button id="raffleStop">stop</button>
-			<button id="raffleWinner">pick winner</button>
-			<span class="labelText" id="raffleStatus"></span>
-			<br><br>
-			<span class="labelText">Keyword: !</span><input type="text" id="raffleKeyword"><br>
-			<br>
-			<span class="labelText">Length of time to enter: </span><input type="text" id="raffleTime"> minutes<br>
-			<br>
-			<form id="raffleAnnounceSet">
-				<span class="labelText">Announce winner in chat: </span>
-				<input type="radio" id="raffleAnnounceOn" name="raffleAnnounceRadio" value="on"><label for="raffleAnnounceOn">ON</label>
-				<input type="radio" id="raffleAnnounceTen" name="raffleAnnounceRadio" value="ten"><label for="raffleAnnounceTen">10s delay</label>
-				<input type="radio" id="raffleAnnounceOff" name="raffleAnnounceRadio" value="off"><label for="raffleAnnounceOff">OFF</label>
-			</form>
-			<br>
-			<span class="labelText">Start Text (%key% for the keyword and %time% for minutes):</span><br>
-			<textarea id="raffleStartText" rows="3" cols="64"></textarea><br>
-			<br>
-			<span class="labelText">End Text:</span><br>
-			<textarea id="raffleEndText" rows="3" cols="64"></textarea><br>
-			<br>
-			<span class="labelText">Winner Text (%winner% for the winner's username):</span><br>
-			<textarea id="raffleWinnerText" rows="3" cols="64"></textarea><br>
-		</div>
-
-		<div id="tab-songs" class="tab">
-			<div id="songList"></div>
-			<iframe id="ytPlayer" type="text/html" width="450" height="254"
-					src="http://www.youtube.com/embed/JFYVcz7h3o0?enablejsapi=1" frameborder="0"
-					nwUserAgent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36"></iframe>
-			<br><br>
-			<form id="songsSet">
-				<span class="labelText">Song requests: </span>
-				<input type="radio" id="songsOn" name="songsRadio" value="on"><label for="songsOn">ON</label>
-				<input type="radio" id="songsOff" name="songsRadio" value="off"><label for="songsOff">OFF</label>
-			</form>
-			<br>
-				<button id="nextSongButton">Next Song</button> 
-				<button id="muteSongButton">Mute</button>
-				<span id="muteSongStatus" class="blink"></span>
-			<br><br>
-				<form onsubmit="return false;">
-					<button id="addSongButton">Add Song</button>
-					<input type="text" id="addSongText" size="40">
-				</form>
-		</div>
-
-		<div id="tab-settings" class="tab">
-			<div id="config">
-					<span class="labelText">Bot name:</span> <span id="displayName"></span>
-					<br><br>
-					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
-						<span class="labelText">Access token:</span> <input type="password" id="getOauthField" size="36">
-						<button id="saveOauth">Save token</button>
-					</form><button id="getOauthLink">Get token</button>
-					<br><br>
-					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
-						<span class="labelText">Channel:</span> <input type="text" id="getChannelField" size="20">
-						<button id="changeChannel">Change channel</button>
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<form class="form-group" id="chatForm" onsubmit="chat(); return false;">
+						<input type="text" class="form-control input-sm" id="chatText" value="" autocomplete="off" placeholder="chat...">
 					</form>
-					<br><br>
-					<span class="labelText" style="display: inline-block; width: 62px;">Game:</span>
-					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
-						<input type="text" id="gameField" size="75">
-						<button id="updateGameButton">Update</button>
-					</form>
-					<br>
-					<span class="labelText" style="display: inline-block; width: 62px;">Status:</span>
-					<form onsubmit="return false;" style="padding:0; margin:0; display: inline-block">
-						<input type="text" id="statusField" size="75">
-						<button id="updateStatusButton">Update</button>
-					</form>
-
-					<br><br><br><br>
-
-
-					<span class="labelText">Statistics:</span> &nbsp;
-					<button id="openViewerGraph">View</button> &nbsp;
-					<button id="newViewers">Reset &amp; backup</button>
-
-					<br><br>
-
-					<span class="labelText">Lap time: </span><span id="lapTime"></span> 
-					<button id="resetLap">Lap</button>
-
-					<br><br>
-
-					<span class="labelText">!uptime display: </span>
-					<form id="uptimeRadioSet" style="display: inline-block;">
-						<input type="radio" id="uptimeRadioBot" name="radio" value="bot"><label for="uptimeRadioBot">bot time</label>
-						<input type="radio" id="uptimeRadioStream" name="radio" value="stream"><label for="uptimeRadioStream">stream time</label>
-						<input type="radio" id="uptimeRadioLap" name="radio" value="lap"><label for="uptimeRadioLap">lap time</label>
-					</form>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	
-	<!-- Dialog windows below -->
-	
-	
-	<div id="getOauthDialog" title="Get oauth">
-		<iframe src="https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&redirect_uri=http://skhmt.github.io/bot/oauth.html&scope=channel_editor+chat_login+channel_subscriptions&force_verify=true" style="outline: none; width: 650px; height: 480px; margin: 0; padding: 0; border: 0;"></iframe>
-	</div>
+		<!-- EVENTS -->
+		<div class="tab-pane" id="tab-events">
+			<div class="row-fluid">
+				<div class="col-sm-5">
+					<div class="well well-sm" style="height: calc(100vh - 75px); overflow: auto;
+	word-wrap: break-word;" id="hosts"></div>
+				</div>
+				<div class="col-sm-7">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="form-group">
+								<span class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="followerChatRadio" type="button" id="followerChatOn">&#10004;</input>
+									</label>
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="followerChatRadio" type="button" id="followerChatOff">&#10008;</input>
+									</label>
+								</span>
+								<strong>&nbsp; Follower notifications in chat</strong>
+								<input type="text" id="followerChatText" class="form-control input-sm">
+							</div>
+							<div class="form-group">
+								<span class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="hostChatRadio" type="button" id="hostChatOn">&#10004;</input>
+									</label>
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="hostChatRadio" type="button" id="hostChatOff">&#10008;</input>
+									</label>
+								</span>
+								<strong>&nbsp; Host notifications in chat</strong>
+								<input type="text" id="hostChatText" class="form-control input-sm">
+							</div>
+							<div class="form-group">
+								<span class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="subChatRadio" type="button" id="subChatOn">&#10004;</input>
+									</label>
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="subChatRadio" type="button" id="subChatOff">&#10008;</input>
+									</label>
+								</span>
+								<strong>&nbsp; Subscriber notifications in chat</strong>
+								<input type="text" id="subChatText" class="form-control input-sm">
+							</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
 
-	<div id="graphDialog" title="Viewer stats">
-		<div id="graph"></div>
+		<!-- MUSIC -->
+		<div class="tab-pane" id="tab-music">
+			<div class="row-fluid">
+				<div class="col-sm-5">
+					<div class="well well-sm" id="songList" style="height: calc(100vh - 75px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
+				<div class="col-sm-7">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div id="ytPlayer"></div>
+						</div>
+						<div class="panel-body">
+							<label class="control-label">Song requests:</label>&nbsp;
+							<span class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="songsRadio" type="button" id="songsOn" value="on">ON</input>
+								</label>
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="songsRadio" type="button" id="songsOff" value="off">OFF</input>
+								</label>
+							</span>
+							<br><br>
+							<button id="nextSongButton" class="btn btn-primary btn-sm">Next Song</button> 
+							<button id="muteSongButton" class="btn btn-primary btn-sm">Mute</button>
+							<span id="muteSongStatus" class="blink"></span>
+							<br><br>
+							<form class="form-inline">
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<span class="input-group-addon">v=</span>
+										<input type="text" class="form-control" id="addSongText">
+									</div>
+								</div> <!-- form group -->
+								&nbsp;
+								<button class="btn btn-primary btn-sm" id="addSongButton" type="button">Add Song</button>
+							</form>
+						</div> <!-- panel-body -->
+					</div> <!-- panel -->
+				</div> <!-- col -->
+			</div> <!-- row -->
+		</div>
+
+		<!-- RAFFLE -->
+		<div class="tab-pane" id="tab-raffle">
+			<div class="row-fluid">
+				<div class="col-sm-4">
+					<div class="well well-sm" id="raffleList" style="height: calc(100vh - 75px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
+				<div class="col-sm-8">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<button id="raffleStart" class="btn btn-primary btn-sm">start</button>
+							<button id="raffleStop" class="btn btn-primary btn-sm">stop</button>
+							<button id="raffleWinner" class="btn btn-primary btn-sm">pick winner</button>
+							<span class="labelText" id="raffleStatus"></span>
+						</div>
+						<div class="panel-body">
+							<form class="form-inline">
+								<label class="control-label">Keyword:</label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<span class="input-group-addon">!</span>
+										<input type="text" id="raffleKeyword" class="form-control">
+									</div>
+								</div>
+							</form>
+							<br>
+							<form class="form-inline">
+								<label class="control-label">Length of time to enter:</label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<input type="text" id="raffleTime" class="form-control" size="3">
+										<span class="input-group-addon">minutes</span>
+									</div>
+								</div>
+							</form>
+							<br>
+							<form class="form-inline">
+								<label class="control-label">Announce winner in chat:</label>&nbsp;
+
+								<span class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary btn-xs">
+										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceOn" value="on">ON</input>
+									</label>
+									<label class="btn btn-primary btn-xs">
+										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceTen" value="ten">10s delay</input>
+									</label>
+									<label class="btn btn-primary btn-xs">
+										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceOff" value="off">OFF</input>
+									</label>
+								</span>
+							</form>
+							<br>
+							<label class="control-label">Start Text (%key% for keyword, %time% for minutes):</label><br>
+							<textarea id="raffleStartText" rows="2" class="form-control"></textarea>
+							<br>
+							<label class="control-label">End Text:</label><br>
+							<textarea id="raffleEndText" rows="1" class="form-control"></textarea>
+							<br>
+							<label class="control-label">Winner Text (%winner% for the winner's username):</label><br>
+							<textarea id="raffleWinnerText" rows="1" class="form-control"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- COMMANDS -->
+		<div class="tab-pane" id="tab-commands">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<form class="form-inline">
+								<div class="form-group">
+									<button id="addCmdButton" class="btn btn-primary btn-sm">Add Command</button>&nbsp;&nbsp; 
+									<label class="control-label">Name:</label>&nbsp;
+										<input type="text" id="addCmdName" class="form-control input-sm">&nbsp;&nbsp; 
+									&nbsp;&nbsp; 
+									<label class="control-label">Level:</label>&nbsp;
+										<select id="addCmdUserType" class="form-control input-sm">
+											<option value="">Any user</option>
+											<option value="sub">Only subs and mods</option>
+											<option value="mod">Only mods</option>
+											<option value="streamer">Only streamer</option>
+										</select>
+										<br><br>
+									<label class="control-label">Command:</label>&nbsp;
+									<input type="text" id="addCmdText"  class="form-control input-sm" size="82">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="well well-sm" id="commands" style="height: calc(100vh - 220px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- TIMED MESSAGES -->
+		<div class="tab-pane" id="tab-timedMessages">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<form class="form-inline">
+								<div class="form-group">
+									<button id="addMsgButton" class="btn btn-primary btn-sm">Add Message</button>
+									&nbsp; &nbsp;
+									<label class="control-label">Repeat interval:</label>&nbsp;
+									<div class="input-group input-group-sm">
+										<input type="text" id="addMsgTime" value="120" class="form-control" size="3">
+										<span class="input-group-addon">seconds</span>
+									</div>
+									<br><br>
+									<label class="control-label">Text:</label>&nbsp;
+									<input type="text" id="addMsgText" value="" class="form-control input-sm" size="95">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="well well-sm" id="timedMsgs" style="height: calc(100vh - 220px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- QUOTES -->
+		<div class="tab-pane" id="tab-quotes">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="well well-sm" id="quotes" style="height: calc(100vh - 75px); overflow: auto;
+	word-wrap: break-word;"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- SPAM -->
+		<div class="tab-pane" id="tab-spam">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+						<!-- Link Protection -->
+						<div class="form-group">
+							<span class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="linkProRadio" type="button" id="linkProRadioOn" value="on">&#10004;</input>
+								</label>
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="linkProRadio" type="button" id="linkProRadioOff" value="off">&#10008;</input>
+								</label>
+							</span>
+							<strong>&nbsp; Link Protection</strong>
+							<form class="form-inline">
+								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+								<label class="control-label">Timeout:</label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<input type="text" id="linkProTimeoutField" class="form-control" size="2">
+										<span class="input-group-addon">s</span>
+									</div>
+								</div>
+								&nbsp; &nbsp; 
+								<label class="control-label">Message:</label>&nbsp;
+								<input type="text" id="linkProTimeoutText" class="form-control input-sm" size="50">
+							</form>
+						</div>
+						<!-- Word Protection -->
+						<div class="form-group">
+							<span class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="wordProRadio" type="button" id="wordProRadioOn" value="on">&#10004;</input>
+								</label>
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="wordProRadio" type="button" id="wordProRadioOff" value="off">&#10008;</input>
+								</label>
+							</span>
+							<strong>&nbsp; Word Protection</strong>
+							<form class="form-inline">
+								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+								<label class="control-label">Timeout:</label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<input type="text" id="wordProTimeoutField" class="form-control" size="2">
+										<span class="input-group-addon">s</span>
+									</div>
+								</div>
+								&nbsp; &nbsp; 
+								<label class="control-label">Message:</label>&nbsp;
+								<input type="text" id="wordProTimeoutText" class="form-control input-sm" size="50">
+							</form>
+							&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+							<div style="display: inline-block; width: calc(100% - 135px);">
+								<label class="control-label">Banned word list, separated by spaces:</label>&nbsp;
+								<textarea id="wordProArea" rows="3" class="form-control"></textarea>
+							</div>
+						</div>
+						<!-- Caps Protection -->
+						<div class="form-group">
+							<span class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="capsProRadio" type="button" id="capsProRadioOn" value="on">&#10004;</input>
+								</label>
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="capsProRadio" type="button" id="capsProRadioOff" value="off">&#10008;</input>
+								</label>
+							</span>
+							<strong>&nbsp; Capital Letter Protection</strong>
+							<form class="form-inline">
+								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+								<label class="control-label">Timeout:</label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<input type="text" id="capsProTimeoutField" class="form-control" size="2">
+										<span class="input-group-addon">s</span>
+									</div>
+								</div>
+								&nbsp; &nbsp; 
+								<label class="control-label">Message:</label>&nbsp;
+								<input type="text" id="capsProTimeoutText" class="form-control input-sm" size="50">
+								<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+								<label class="control-label">Caps per word:</label>&nbsp;
+								<input type="text" id="capsProPerWordField" class="form-control input-sm" size="3">
+								<label class="control-label">Caps per post:</label>&nbsp;
+								<input type="text" id="capsProPerPostField" class="form-control input-sm" size="3">
+							</form>
+						</div>
+						<!-- Symbols Protection -->
+						<div class="form-group">
+							<span class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOn" value="on">&#10004;</input>
+								</label>
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOff" value="off">&#10008;</input>
+								</label>
+							</span>
+							<strong>&nbsp; Symbols Protection</strong>
+							<form class="form-inline">
+								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+								<label class="control-label">Timeout:</label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<input type="text" id="symbolProTimeoutField" class="form-control" size="2">
+										<span class="input-group-addon">s</span>
+									</div>
+								</div>
+								&nbsp; &nbsp; 
+								<label class="control-label">Message:</label>&nbsp;
+								<input type="text" id="symbolProTimeoutText" class="form-control input-sm" size="50">
+								<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+								<label class="control-label">Symbols allowed per post:</label>&nbsp;
+								<input type="text" id="symbolProSymbolsField" class="form-control input-sm" size="3">
+							</form>
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- BOT CONFIG -->
+		<div class="tab-pane" id="tab-botConfig">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<label class="control-label">Bot name:</label>&nbsp;
+							<span id="displayName"></span>
+							<br>
+							<form class="form-inline">
+								<label class="control-label">Access token:</label>&nbsp;
+								<input type="password" id="getOauthField" class="form-control input-sm" size="30">
+								<button id="saveOauth" class="btn btn-primary btn-sm">Save token</button>
+								<button id="getOauthLink" class="btn btn-primary btn-sm"
+										data-toggle="modal" data-target="#getOauthModal" onclick="return false;">Get token</button>
+							</form>
+							<form class="form-inline">
+								<label class="control-label">Channel:</label> &nbsp;
+								<input type="text" id="getChannelField" class="form-control input-sm" size="20">
+								<button id="changeChannel" class="btn btn-primary btn-sm">Change channel</button>
+							</form>
+							<form class="form-inline">
+								<label class="control-label">Game:</label> &nbsp;
+								<input type="text" id="gameField" class="form-control input-sm" size="75">
+								<button id="updateGameButton" class="btn btn-primary btn-sm">Update</button>
+							</form>
+							<form class="form-inline">
+								<label class="control-label">Status:</label> &nbsp;
+								<input type="text" id="statusField" class="form-control input-sm" size="75">
+								<button id="updateStatusButton" class="btn btn-primary btn-sm">Update</button>
+							</form>
+							<br>
+							<label class="control-label">Lap time: </label>&nbsp;
+							<span id="lapTime"></span>
+							<br>
+							<button id="resetLap" class="btn btn-primary btn-sm">Lap</button>
+
+							<br><br>
+							<form class="form-inline">
+								<label class="control-label">!uptime display: </label>&nbsp;
+								<span class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioBot" value="bot">bot time</input>
+									</label>
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioStream" value="stream">stream time</input>
+									</label>
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioLap" value="lap">lap time</input>
+									</label>
+								</span>
+							</form>
+
+							<br><br>
+							<form class="form-inline">
+								<label class="control-label">Theme: </label> &nbsp;
+								<span id="botThemeCurrent"></span>
+								<br>
+								<select id="botThemeList" class="form-control input-sm">
+									<option value="default">Default</option>
+									<!-- This is dynamically generated -->
+								</select>
+								<button class="btn btn-primary btn-sm" id="botThemeChange">Change Theme</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- STATISTICS -->
+		<div class="tab-pane" id="tab-statistics">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<label class="control-label">Statistics:</label> &nbsp;
+							<button id="openViewerGraph" class="btn btn-primary btn-sm">View</button> &nbsp;
+							<button id="newViewers" class="btn btn-primary btn-sm">Reset &amp; backup</button>
+						</div>
+						<div class="panel-body">
+							<div id="graph"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ABOUT -->
+		<div class="tab-pane" id="tab-about">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<h3>KoalaBot</h3>
+							<p>
+								<em>https://github.com/Skhmt/twitch-bot</em>
+							</p>
+							<p>
+								Made by: skhmt, 2016
+							</p>
+							<p>
+								Thanks to the people below that have helped a lot!
+							</p>
+							<p>
+								M3rchant <br>
+								prototypal
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- tab-content -->
+<!-- Template tab
+
+		<div class="tab-pane" id="">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+ -->
+
+
+	<div id="getOauthModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">X</button>
+					<h4 class="modal-title">Get OAuth</h4>
+				</div>
+				<div class="modal-body">
+					<div style="height: 70vh; width: 100%;">
+						<iframe src="https://api.twitch.tv/kraken/oauth2/authorize?
+						response_type=token&
+						client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
+						redirect_uri=http://skhmt.github.io/bot/oauth.html&
+						scope=channel_editor+chat_login+channel_subscriptions&
+						force_verify=true"
+						style="outline: none; width: 100%; height: 100%; margin: 0;
+						padding: 0; border: 0; float: left;"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 </body>

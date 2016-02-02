@@ -46,7 +46,7 @@ function msgNotice( args ) {
 
 	// reconstructing the string after it was split by " "
 	for ( var i = 4; i < args.length; i++ ) {
-		output += " " + args[i];
+		output += ` ${args[i]}`;
 	}
 
 	log( output );
@@ -101,7 +101,7 @@ function msgPriv( command, args ) {
 	if ( text === "\001ACTION" ) {
 		text = `<span style='color: ${color};'>`; // remove the word "ACTION" from the action
 		for ( var i = 4; i < args.length; i++ ) { // construct "text"
-			text += " " + args[i];
+			text += " " + args[i].replace(/</g,"&lt;").replace(/>/g,"&gt;");
 		}
 		text += "</span>"; // close the bold tag
 		
@@ -112,13 +112,13 @@ function msgPriv( command, args ) {
 	// not an action 
 	output += "<b>:</b> "; // close the bold tag for the first half
 	for ( var i = 4; i < args.length; i++ ) { // continue constructing "text" as normal
-		text += " " + args[i];
+		text += " " + args[i].replace(/</g,"&lt;").replace(/>/g,"&gt;");
 	}
 
 	log( output + text );
 	
 	// if it's a command, send to parseCommand
-	if ( text.substring(0,1) === cmds.symbol ) {
+	if ( text.substring(0,1) === cmdSettings.symbol ) {
 		parseCommand( text, from, mod, subscriber );
 	}
 	
@@ -138,7 +138,7 @@ function msgRoom( command, args ) {
 	var subsOnly = commands[3].substring(10);
 	
 	if ( r9k === 0 && slow === 0 && subsOnly === 0 ) {
-		log(`* No roomstate options set for ${args[2]}`);
+		log( `* No roomstate options set for ${args[2]}` );
 	} else {
 		var output = `* Roomstate options for ${args[2]}:`;
 		if ( r9k === 1 ) output += " r9k";

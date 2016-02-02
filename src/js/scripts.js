@@ -19,6 +19,7 @@ var clientid = "3y2ofy4qcsvnaybw9ogdzwmwfode8y0"; /* this is the (public) client
 var bot;
 var server = "irc.twitch.tv";
 var fs;
+var win;
 var logFile;
 var execPath;
 var hosts = [];
@@ -35,127 +36,47 @@ var settings = {
 	access_token: "",
 	username: "",
 	channel: "",
-	id: ""
+	id: "",
+	theme: "default"
 };
 
 
 $(document).ready( function() {
 	
-	// Setting up jQuery elements
-	var gui = require( "nw.gui" )
-	var win = gui.Window.get();
-
-	
-	$("#tabs").tabs();
-	
-	$("#getOauthDialog").dialog( {
-		autoOpen: false,
-		modal: true,
-		height: 580,
-		width: 700	
-	} );
-	
-	$("#graphDialog").dialog( {
-		autoOpen: false,
-		modal: true,
-		height: 580,
-		width: 750	
-	} );
-
-	$("#getOauthLink")
-		.button()
-		.click( function() {
-			$("#getOauthDialog").dialog( "open" );
-	} );
-
-	$("#saveOauth")
-		.button()
-		.click( function() {
-			var newoauth = $("#getOauthField").val();
-			if ( settings.access_token !== newoauth ) { // if you're changing user
-				settings.access_token = newoauth;
-				getUsername();
-			}
-	} );
-
-	$("#changeChannel")
-		.button()
-		.click( function() {
-			var newchan = $("#getChannelField").val();
-			if ( newchan.substring(0,1) !== "#" ) { // if the user forgot the #, add it
-				newchan = `#${newchan}`;
-				$("#getChannelField").val(newchan);
-			}
-
-			if ( newchan !== settings.channel ) { // if the channel is actually different
-				bot.part( settings.channel, function(){
-					log( `* Parting ${settings.channel}` );
-				} );
-				bot.join( newchan, function() {
-					log( `* Joining ${newchan}` );
-					settings.channel = newchan;
-					onChannelEnter();
-				} );
-			}
-	} );
-	
-	// window control jQuery elements
-	$("#devTools").button( {
-		text: false,
-		icons: {
-			primary: "ui-icon-wrench"
-		}
-	} ).click( function(event) {
-		win.showDevTools();
-	} );
-	$("#exit").button( {
-		text: false,
-		icons: {
-			primary: "ui-icon-close"
-		}
-	} ).click( function(event) {
-		win.close();
-	} );
-	$("#minimize").button( {
-		text: false,
-		icons: {
-			primary: "ui-icon-minusthick"
-		}
-	} ).click( function(event) {
-		win.minimize();
-	} );
-	$("#maximize").button( {
-		text: false,
-		icons: {
-			primary: "ui-icon-arrowthick-1-ne"
-		}
-	} ).click( function(event) {
-		var options;
-		if ( $( this ).text() === "maximize" ) {
-			options = {
-				label: "unmaximize",
-				icons: {
-					primary: "ui-icon-arrowthick-1-sw"
-				}
-			};
-			win.maximize();
-		} else {
-			options = {
-				label: "maximize",
-				icons: {
-					primary: "ui-icon-arrowthick-1-ne"
-				}
-			};
-			win.unmaximize();
-		}
-		$( this ).button( "option", options );
-	} );
-
-	// Setting up file read stuff and variables
-	fs = require( "fs" );
+	var gui = require( "nw.gui" );
 	var path = require( "path" );
+	win = gui.Window.get();
+	fs = require( "fs" );
 	
 	execPath = path.dirname( process.execPath );
+
+	$("#saveOauth").click( function() {
+		var newoauth = $("#getOauthField").val();
+		if ( settings.access_token !== newoauth ) { // if you're changing user
+			settings.access_token = newoauth;
+			getUsername();
+		}
+		return false;
+	} );
+
+	$("#changeChannel").click( function() {
+		var newchan = $("#getChannelField").val();
+		if ( newchan.substring(0,1) !== "#" ) { // if the user forgot the #, add it
+			newchan = `#${newchan}`;
+			$("#getChannelField").val(newchan);
+		}
+
+		if ( newchan !== settings.channel ) { // if the channel is actually different
+			bot.part( settings.channel, function(){
+				log( `* Parting ${settings.channel}` );
+			} );
+			bot.join( newchan, function() {
+				log( `* Joining ${newchan}` );
+				settings.channel = newchan;
+				onChannelEnter();
+			} );
+		}
+	} );
 	
 	// making logs and settings directories
 	try { fs.accessSync( `${execPath}\\logs` ); }
@@ -166,6 +87,7 @@ $(document).ready( function() {
 	
 	
 	hostFile = `${execPath}\\logs\\hosts.log`;
+
 
 	// Setting up the chat log
 	var d = new Date();
@@ -216,6 +138,22 @@ $(document).ready( function() {
 		$("#getChannelField").val( settings.channel );
 		$("#displayName").html( settings.username );
 
+		// Setting up theme
+		try {
+			fs.readFileSync( `${execPath}\\themes\\${settings.theme}` );
+			if ( settings.theme === "default" ) {
+				$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
+				$("#botThemeCurrent").html("Default");
+			} else {
+				$("#botTheme").attr( "href", `${execPath}\\themes\\${settings.theme}` );
+				$("#botThemeCurrent").html( settings.theme.split(".")[0] );
+			}
+		} catch (e) {
+			$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
+			$("#botThemeCurrent").html("Default");
+			settings.theme = "default";
+		}
+
 		// Running tabs
 		runChat();
 		onChannelEnter();
@@ -224,6 +162,36 @@ $(document).ready( function() {
 		$("#getOauthField").val("");
 		save();
 	}
+
+	//	populate the #botThemeList
+	fs.readdir(`${execPath}\\themes`, function(err, files){
+
+		for ( var f = 0; f < files.length; f++ ) {
+			var splitName = files[f].split(".");
+			if ( splitName[1] == "css" ) {
+				$("#botThemeList").append(`
+					<option value="${files[f]}">
+						${splitName[0]}
+					</option>`);
+			}
+		}
+	} );
+
+	$("#botThemeChange").click(function() {
+		var tempTheme = $("#botThemeList").val();
+		if ( tempTheme === "default" ) {
+			$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
+			$("#botThemeCurrent").html("Default");
+		} else {
+			$("#botTheme").attr( "href", `${execPath}\\themes\\${tempTheme}` );
+			$("#botThemeCurrent").html(tempTheme.split(".")[0]);
+		}
+		settings.theme = tempTheme;
+		save();
+		return false;
+	} );
+
+
 });
 
 function getUsername() {
@@ -325,7 +293,7 @@ function onChannelEnter() {
 			"api_version" : 3
 		},
 		function( response ) {
-			if ( response.subscriber !== null ) {
+			if ( response.subscriber != null ) {
 				subBadgeUrl = response.subscriber.image;
 			}
 		}
@@ -340,6 +308,7 @@ function onChannelEnter() {
 		},
 		function( response ) {
 			settings.id = response._id;
+			eventSettings.isPartnered = response.partner;
 			save();
 			$("#gameField").val( response.game );
 			$("#statusField").val( response.status );
@@ -348,6 +317,7 @@ function onChannelEnter() {
 }
 
 function updateUserlist() {
+	if ( settings.channel.substring(1) == "" || settings.channel.substring(1) == null ) return;
 	$.getJSON(
 		`https://tmi.twitch.tv/group/user/${settings.channel.substring(1)}/chatters`,
 		{
@@ -515,11 +485,11 @@ function chat() {
 	var text = $("#chatText").val();
 	
 	// output it to the console
-	log( `${getTimeStamp()} <b>&gt;</b> ${text}` );
+	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}` );
 	
 	// check if it was a command...
-	if ( text.substring(0,1) === cmds.symbol ) {
-		parseCommand( text, settings.username, "mod", true );
+	if ( text.substring(0, 1) === cmdSettings.symbol ) {
+		parseCommand( text, settings.username, true, true);
 	} 
 	else {
 		// send the data to the irc server
@@ -560,7 +530,7 @@ function save() {
 	} );
 
 	// saving cmdSettings.ini
-	fs.writeFile( `${execPath}\\settings\\cmdSettings.ini`, JSON.stringify( cmds ), function ( err ) {
+	fs.writeFile( `${execPath}\\settings\\cmdSettings.ini`, JSON.stringify( cmdSettings ), function ( err ) {
 		if ( err ) log( "* Error saving cmdSettings" );
 	} );
 

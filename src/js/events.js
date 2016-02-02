@@ -19,10 +19,6 @@ var followers = [];
 var subs = [];
 
 function eventSetup() {
-    $("#followerChatRadioSet").buttonset();
-    $("#hostChatRadioSet").buttonset();
-    $("#subChatRadioSet").buttonset();
-
     try {
         var readFile = fs.readFileSync( `${execPath}\\settings\\eventSettings.ini` );
         eventSettings = $.parseJSON( readFile );
@@ -40,27 +36,30 @@ function eventSetup() {
 
     // follower chat radio state
     if ( eventSettings.followerChat ) {
-        $("#followerChatOn").attr( "checked", true );
+        $("#followerChatOn").prop( "checked", true );
+        $("#followerChatOn").parent().addClass("active");
     } else {
-        $("#followerChatOff").attr( "checked", true );
+        $("#followerChatOff").prop( "checked", true );
+        $("#followerChatOff").parent().addClass("active");
     }
-    $("#followerChatRadioSet").buttonset( "refresh" );
 
     // event chat radio state
     if ( eventSettings.hostChat ) {
-        $("#hostChatOn").attr( "checked", true );
+        $("#hostChatOn").prop( "checked", true );
+        $("#hostChatOn").parent().addClass("active");
     } else {
-        $("#hostChatOff").attr( "checked", true );
+        $("#hostChatOff").prop( "checked", true );
+        $("#hostChatOff").parent().addClass("active");
     }
-    $("#hostChatRadioSet").buttonset( "refresh" );
 
     // sub chat radio state
     if ( eventSettings.subChat ) {
-        $("#subChatOn").attr( "checked", true );
+        $("#subChatOn").prop( "checked", true );
+        $("#subChatOn").parent().addClass("active");
     } else {
-        $("#subChatOff").attr( "checked", true );
+        $("#subChatOff").prop( "checked", true );
+        $("#subChatOff").parent().addClass("active");
     }
-    $("#subChatRadioSet").buttonset( "refresh" );
 
     // follower chat click listener
     $("#followerChatRadioSet input[type=radio]").change( function() {
@@ -116,7 +115,7 @@ function eventSetup() {
 
 function updateHosts() {
     // get hosts into json
-    if ( settings.id == null ) return;
+    if ( settings.id == null || settings.id == "" ) return;
 
     $.getJSON(
         "http://tmi.twitch.tv/hosts",
@@ -151,7 +150,9 @@ function updateHosts() {
                 }
             }
         }
-    );
+    ).fail(function( jqxhr, textStatus, error) {
+        console.log(`Request Failed: ${textStatus}, ${error}`);
+    } );
 }
 
 function getFollowers() {
@@ -162,6 +163,9 @@ function getFollowers() {
             "limit": 100
         },
         function ( response ) {
+            if ( !("follows" in response) ) {
+                return;
+            }
             for ( var i = 0; i < response.follows.length; i++ ) {
                 followers.push( response.follows[i].user.display_name );
             }
@@ -178,9 +182,6 @@ function updateFollowers() {
             "api_version" : 3
         },
         function ( response ) {
-            if ( !("follows" in response) ) {
-                return;
-            }
             for ( var i = 0; i < response.follows.length; i++ ) {
                 var tempUser = response.follows[i].user.display_name;
                 // if not a current follower...
@@ -201,10 +202,14 @@ function updateFollowers() {
                 }
             }
         }
-    );
+    ).fail(function() {});
 }
 
 function getSubs() {
+    if ( !eventSettings.isPartnered ) {
+        return false;
+    }
+
     subs = [];
     $.getJSON(
         `https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}/subscriptions`,
@@ -215,11 +220,6 @@ function getSubs() {
             "oauth_token" : settings.access_token.substring(6)
         },
         function ( response ) {
-            if ( response.status === 422 ) {
-                eventSettings.isPartnered = false;
-                return ;
-            }
-            eventSettings.isPartnered = true;
             for ( var i = 0; i < response.subscriptions.length; i++ ) {
                 subs.push( response.subscriptions[i].user.display_name );
             }
@@ -241,6 +241,7 @@ function updateSubs() {
             "oauth_token" : settings.access_token.substring(6)
         },
         function ( response ) {
+            
             if ( !("subscriptions" in response) ) {
                 return;
             }

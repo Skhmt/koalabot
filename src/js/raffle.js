@@ -19,19 +19,9 @@ var raffleTimeout = "";
 var raffleEntrants = [];
 
 function raffleSetup() {
-	$("#raffleStart").button().click(startRaffle);
-	$("#raffleStop").button().click(stopRaffle); // for now
-	$("#raffleWinner").button().click(pickRaffle);
-	$("#raffleAnnounceSet").buttonset();
-
-	$("#raffleAnnounceOn").attr( "checked", true );
-	$("#raffleAnnounceSet").buttonset( "refresh" );
-
-	// linkPro button click listener
-	$("#raffleAnnounceSet input[type=radio]").change( function() {
-		raffleAnnounceRadio = this.value;
-	} );
-
+	$("#raffleStart").click(startRaffle);
+	$("#raffleStop").click(stopRaffle); // for now
+	$("#raffleWinner").click(pickRaffle);
 
 	// settings
 	try {
@@ -50,15 +40,17 @@ function raffleSetup() {
 
 	if ( raffleSettings.announce === "on" ) {
 		$("#raffleAnnounceOn").attr( "checked", true );
+		$("#raffleAnnounceOn").parent().addClass("active");
 	} else if ( raffleSettings.announce === "ten" ) {
 		$("#raffleAnnounceTen").attr( "checked", true );
+		$("#raffleAnnounceTen").parent().addClass("active");
 	} else {
 		$("#raffleAnnounceOff").attr( "checked", true );
+		$("#raffleAnnounceOff").parent().addClass("active");
 	}
-	$("#raffleAnnounceSet").buttonset( "refresh" );
 
 	// raffleAnnounce listener
-	$("#raffleAnnounceSet input[type=radio]").change( function() {
+	$("input[name='raffleAnnounceRadio']").change( function() {
 		raffleSettings.announce = this.value;
 		save();
 	} );
