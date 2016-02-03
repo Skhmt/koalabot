@@ -66,6 +66,12 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 * Click "Save Token"
 * If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
 
+#### Making modules:
+Modules are javascript (ES6) + jQuery (2.2.0) + Boostrap (3.3.6). See example.js in the mods folder for a working example of a module.
+
+#### Making themes:
+Themes are just Bootstrap 3.3.6 .css files. Put them in the themes folder and restart the bot.
+
 #### License:
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -78,8 +84,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 
 
 #### Libs used:
-* [nw.js](https://github.com/nwjs/nw.js/)
-* [jQuery](https://jquery.com/)
-* [jQueryUI](https://jqueryui.com/)
-* [node-irc](https://github.com/martynsmith/node-irc/)
-* [plotly.js](https://github.com/plotly/plotly.js/)
+* [nw.js 0.12.3](https://github.com/nwjs/nw.js/)
+* [jQuery 2.2.0](https://jquery.com/)
+* [Bootstrap 3.2.2](http://getbootstrap.com/)
+* [node-irc 0.4.0](https://github.com/martynsmith/node-irc/)
+* [plotly.js 1.1.1](https://github.com/plotly/plotly.js/)
