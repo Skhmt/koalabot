@@ -22,8 +22,8 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Song requests
 - [x] Follower logging
 - [x] Sub notifications
-- [ ] Update backend to allow plugins
-- [ ] Loyalty points / Regulars
+- [x] Update backend to allow plugins
+- [x] Loyalty points / Regulars
 - [ ] User ranks
 - [ ] More variables for custom commands
 - [ ] Greetings / etc for all or certain users when they enter (like a fighter's entrance song!)
@@ -55,6 +55,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!volume**|[volume 0-100]|Mod-only. *Sets the song volume to this.*|
 |**!mute**||Mod-only. *Mutes/unmutes the song, does not change the volume level.*|
 |**!songrequest**|[youtube id or youtube url]|*Adds a song to the queue.*|
+|**!points**||*Displays your points.*|
 
 #### How to use:
 * Run bot.exe
