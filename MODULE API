@@ -1,0 +1,143 @@
+# Global
+
+
+
+
+
+* * *
+
+### apiAddCmd(keyword, functionName) 
+
+Adds a command, makes it lower case. It will call the function name you send it.
+The function will be given these parameters: params (array), from (string), mod (boolean), subscriber (boolean)
+
+**Parameters**
+
+**keyword**: `String`, The !command a user types in
+
+**functionName**: `String`, What function to call.
+
+**Returns**: `Boolean`, True if success, false if fail
+
+
+### apiAddTab(moduleName) 
+
+Adds a module to the dropdown and creates a page.
+If the module only adds commands and doesn't require a user interface, this doesn't need to be used.
+
+**Parameters**
+
+**moduleName**: `String`, the name of the module
+
+**Returns**: `String`, the id of the page to $(id).prepend / $(id).html / $(id).append
+
+
+### apiSay(text) 
+
+Writes to the chat. It outputs as [+] to show it's a module rather than [!] that the base bot uses.
+
+**Parameters**
+
+**text**: `String`, The text to say in the chat
+
+
+
+### apiGetPath() 
+
+Gets the path to the mods folder, ex:  C:\bot\mods\
+
+**Returns**: `String`, path to the mods folder, including trailing slash
+
+
+### apiGetChannelName() 
+
+Gets the channel name, which is likely also the streamer's name.
+
+**Returns**: `String`, the channel name
+
+
+### apiGetBotName() 
+
+Gets the bot name.
+
+**Returns**: `String`, the bot name
+
+
+### apiGetPoints(username) 
+
+Gets the number of points a user has.
+
+**Parameters**
+
+**username**: `String`, Gets the number of points a user has.
+
+**Returns**: `integer`, -1 if not found, otherwise the amount of points of the user
+
+
+### apiSetPoints(username, points) 
+
+Sets the points a user has.
+
+**Parameters**
+
+**username**: `String`, Sets the points a user has.
+
+**points**: `integer`, Sets the points a user has.
+
+**Returns**: `integer`, -1 if not found, otherwise the amount of points of the user
+
+
+### apiOpenFile(filename) 
+
+Opens a file in the \mods\ directory.
+To load an object, do something like:  $.parseJSON( apiOpenFile("modExampleSettings.ini") );
+
+**Parameters**
+
+**filename**: `String`, Opens a file in the \mods\ directory.
+To load an object, do something like:  $.parseJSON( apiOpenFile("modExampleSettings.ini") );
+
+**Returns**: `String`, the file contents, null if it doesn't exist
+
+
+### apiAppendFile(filename, text) 
+
+Appends a new line of text to the end a file in the \mods\ directory.
+If a file isn't found, it will automatically be created, then appended to.
+
+**Parameters**
+
+**filename**: `String`, Appends a new line of text to the end a file in the \mods\ directory.
+If a file isn't found, it will automatically be created, then appended to.
+
+**text**: `String`, what to add to the contents of the file
+
+**Returns**: `string`, true if success, false if fail
+
+
+### apiWriteFile(filename, text) 
+
+Writes a file in the \mods\ directory. This will completely over-write an existing file.
+To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", JSON.stringify( modExampleSettings ) );
+
+**Parameters**
+
+**filename**: `String`, Writes a file in the \mods\ directory. This will completely over-write an existing file.
+To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", JSON.stringify( modExampleSettings ) );
+
+**text**: `String`, what to make the contents of the file
+
+**Returns**: `Boolean`, true if success, false if fail
+
+
+
+* * *
+
+
+
+**Author:** skhmt
+
+**License:** GPLv3 
+
+**Overview:** The API for use with KoalaBot modules
+
