@@ -66,6 +66,10 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 * Click "Save Token"
 * If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
 
+#### Known issues:
+* Some youtube videos won't play. I can't fix this, it's a nw.js problem.
+* Dev Console is full of errors related to cast_sender.js. This is another youtube-related problem out of my hands. 
+
 #### Making modules:
 Modules are javascript (ES6) + jQuery (2.2.0) + Boostrap (3.3.6). See example.js in the mods folder for a working example of a module.
 
