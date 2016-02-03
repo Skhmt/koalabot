@@ -69,9 +69,9 @@ Gets the number of points a user has.
 
 **Parameters**
 
-**username**: `String`, Gets the number of points a user has.
+**username**: `String`, case insensitive
 
-**Returns**: `integer`, -1 if not found, otherwise the amount of points of the user
+**Returns**: `integer`, null if not found, otherwise the amount of points of the user
 
 
 ### apiSetPoints(username, points) 
@@ -80,11 +80,24 @@ Sets the points a user has.
 
 **Parameters**
 
-**username**: `String`, Sets the points a user has.
+**username**: `String`, case insensitive
 
-**points**: `integer`, Sets the points a user has.
+**points**: `integer`, what to set the user's points to
 
-**Returns**: `integer`, -1 if not found, otherwise the amount of points of the user
+**Returns**: `integer`, null if not found, otherwise the amount of points of the user
+
+
+### apiModPoints(username, points) 
+
+Modifies the points a user has.
+
+**Parameters**
+
+**username**: `String`, case insensitive
+
+**points**: `integer`, what to add to the uesr's points. To subtract, send a negative number
+
+**Returns**: `integer`, null if not found, otherwise the amount of points of the user
 
 
 ### apiOpenFile(filename) 
@@ -94,8 +107,7 @@ To load an object, do something like:  $.parseJSON( apiOpenFile("modExampleSetti
 
 **Parameters**
 
-**filename**: `String`, Opens a file in the \mods\ directory.
-To load an object, do something like:  $.parseJSON( apiOpenFile("modExampleSettings.ini") );
+**filename**: `String`, case sensitive, the path to the \mods\ directory is included
 
 **Returns**: `String`, the file contents, null if it doesn't exist
 
@@ -107,8 +119,7 @@ If a file isn't found, it will automatically be created, then appended to.
 
 **Parameters**
 
-**filename**: `String`, Appends a new line of text to the end a file in the \mods\ directory.
-If a file isn't found, it will automatically be created, then appended to.
+**filename**: `String`, case sensitive, the path to the \mods\ directory is included
 
 **text**: `String`, what to add to the contents of the file
 
@@ -122,8 +133,7 @@ To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", J
 
 **Parameters**
 
-**filename**: `String`, Writes a file in the \mods\ directory. This will completely over-write an existing file.
-To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", JSON.stringify( modExampleSettings ) );
+**filename**: `String`, case sensitive, the path to the \mods\ directory is included
 
 **text**: `String`, what to make the contents of the file
 
