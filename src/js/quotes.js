@@ -65,7 +65,7 @@ function cmdAddQuote( params, from, mod, subscriber ) {
 	tempQuote.date = ( new Date().toDateString() ).substring(4);
 	tempQuote.message = params.join(" ");
 	
-	cmdSay( `Quote added to id: ${cmdSettings.quotes.push( tempQuote )}` );
+	cmdSay( `Quote added to id: ${cmdSettings.quotes.push( tempQuote )-1}` );
 	
 	save();
 	refreshQuotes();
