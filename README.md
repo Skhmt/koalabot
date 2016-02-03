@@ -25,9 +25,10 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Update backend to allow plugins
 - [x] Loyalty points
 - [ ] User ranks
+- [ ] More text file outputs
 - [ ] More variables for custom commands (custom api)
 - [ ] Option to have song requests cost points
-- [ ] Add "regular" rank
+- [ ] Add "regular" rank (between viewer and sub)
 
 #### Commands:
 |Command|Parameters|Description|
