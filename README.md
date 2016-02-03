@@ -68,7 +68,6 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 
 #### Known issues:
 * Some youtube videos won't play. I can't fix this, it's a nw.js problem.
-* Dev Console is full of errors related to cast_sender.js. This is another youtube-related problem out of my hands. 
 
 #### Making modules:
 Modules are HTML5 + javascript (ES6) + jQuery (2.2.0) + Boostrap (3.3.6). See my [example module](https://gist.github.com/Skhmt/5b2f4300c0e7a82e654e) for working example. To install it, save it as a .js file and place it in the \mods\ folder, then restart the bot. Also see the [API](https://github.com/Skhmt/twitch-bot/blob/master/MODULE%20API.md) for more details and some functionality not used in example.js. Share modules via [JSFiddle](http://jsfiddle.net) or [Gist](http://gist.github.com).
