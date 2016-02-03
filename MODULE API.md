@@ -138,16 +138,3 @@ To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", J
 **text**: `String`, what to make the contents of the file
 
 **Returns**: `Boolean`, true if success, false if fail
-
-
-
-* * *
-
-
-
-**Author:** skhmt
-
-**License:** GPLv3 
-
-**Overview:** The API for use with KoalaBot modules
-
