@@ -1,11 +1,3 @@
-# Global
-
-
-
-
-
-* * *
-
 ### apiAddCmd(keyword, functionName) 
 
 Adds a command, makes it lower case. It will call the function name you send it.
@@ -40,6 +32,14 @@ Writes to the chat. It outputs as [+] to show it's a module rather than [!] that
 
 **text**: `String`, The text to say in the chat
 
+
+### apiLog(text) 
+
+Only outputs to the chatlog and your chat window, but does not send a chat message for others to see. It is used to notify the streamer of things.
+
+**Parameters**
+
+**text**: `String`, The text to log
 
 
 ### apiGetPath() 
