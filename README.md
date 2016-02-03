@@ -59,12 +59,10 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!points**||*Displays your points.*|
 
 #### How to use:
-* Run bot.exe
-* Go to the "Settings" Tab
+* Run koalaBot.exe
+* Go to Settings > Bot Config
 * Click "Get Token"
-* Follow the instructions
-* Paste your oauth (ctrl-v) into the box
-* Click "Save Token"
+* Log in to the Twitch account you want the bot to be
 * If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
 
 #### Known issues:
