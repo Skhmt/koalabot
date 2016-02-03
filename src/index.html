@@ -18,7 +18,7 @@
 <html>
 <head>
 	<title>
-		KoalaBot 0.8
+		KoalaBot 0.8.3
 	</title>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -279,8 +279,14 @@
 		<div class="tab-pane" id="tab-points">
 			<div class="row-fluid">
 				<div class="col-sm-7">
-					<div class="panel panel-default scroll" style="height: calc(100vh - 75px);" id="pointsList">
-						Username, total, curr
+					<div class="panel panel-default scroll" style="height: calc(100vh - 75px);" >
+						<table class="table table-striped" id="pointsList">
+							<tr>
+								<th>Username</th>
+								<th>Points</th>
+								<th>Actions</th>
+							</tr>
+						</table>
 					</div>
 				</div>
 				<div class="col-sm-5">
@@ -549,9 +555,7 @@
 								<form class="form-inline" onsubmit="return false;">
 									<label class="control-label">Access token:</label>&nbsp;
 									<input type="password" id="getOauthField" class="form-control input-sm" size="30">
-									<button id="saveOauth" class="btn btn-primary btn-sm">Save token</button>
-									<button id="getOauthLink" class="btn btn-primary btn-sm"
-											data-toggle="modal" data-target="#getOauthModal" onclick="return false;">Get token</button>
+									<button id="getOauthLink" class="btn btn-primary btn-sm">Get token</button>
 								</form>
 							</li>
 							<li class="list-group-item">
@@ -600,7 +604,7 @@
 							<li class="list-group-item">
 								<form class="form-inline" onsubmit="return false;">
 									<label class="control-label">Theme: </label> &nbsp;
-									<span id="botThemeCurrent"></span>
+									<span id="botThemeCurrent">Default</span>
 									<br>
 									<select id="botThemeList" class="form-control input-sm">
 										<option value="default">Default</option>
@@ -669,41 +673,18 @@
 		</div>
  -->
 
+<!-- Modals -->
 
-	<div id="getOauthModal" class="modal fade">
+	<div id="getOauthModal" class="modal fade" style="top: -5px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">X</button>
-					<h4 class="modal-title">Get OAuth</h4>
-				</div>
-				<div class="modal-body">
-					<div style="height: 70vh; width: 100%;">
-						<iframe src="https://api.twitch.tv/kraken/oauth2/authorize?
-						response_type=token&
-						client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
-						redirect_uri=http://skhmt.github.io/bot/oauth.html&
-						scope=channel_editor+chat_login+channel_subscriptions&
-						force_verify=true"
-						style="outline: none; width: 100%; height: 100%; margin: 0;
-						padding: 0; border: 0; float: left;" nwdisable nwfaketop></iframe>
-					</div>
+				<div class="modal-body" style="min-height: 540px; padding: 0;">
+						<iframe id="oauthFrame" src="" style="outline: none; width: 100%; 
+						height: 540px; margin: 0; padding: 0; border: 0; float: left;" nwfaketop></iframe>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<div id="setPointsModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-				</div>
-				<div class="modal-body">
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 </body>
 </html>

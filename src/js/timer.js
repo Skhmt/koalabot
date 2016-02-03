@@ -28,13 +28,13 @@ function timerSetup() {
 	timerSettings = {
 		refreshInterval: 100,
 		hostInterval: 10*1000,
-		viewerInterval: 10*1000,
-		followerInterval: 10*1000,
-		subInterval: 10*1000,
+		viewerInterval: 20*1000,
+		followerInterval: 15*1000,
+		subInterval: 15*1000,
 		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
-		followerPlayTIme: now,
+		followerPlayTime: now,
 		subPlayTime: now,
 		pointsPlayTime: now
 	};

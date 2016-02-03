@@ -51,14 +51,7 @@ $(document).ready( function() {
 	
 	execPath = path.dirname( process.execPath );
 
-	$("#saveOauth").click( function() {
-		var newoauth = $("#getOauthField").val();
-		if ( settings.access_token !== newoauth ) { // if you're changing user
-			settings.access_token = newoauth;
-			getUsername();
-		}
-		return false;
-	} );
+	$("#getOauthLink").click( setupOauth );
 
 	$("#changeChannel").click( function() {
 		var newchan = $("#getChannelField").val();
@@ -152,15 +145,14 @@ $(document).ready( function() {
 		// Setting up theme
 		try {
 			fs.readFileSync( `${execPath}\\themes\\${settings.theme}` );
-			if ( settings.theme === "default" ) {
-				$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
-				$("#botThemeCurrent").html( "Default" );
-			} else {
+			if ( settings.theme != "default" ) {
 				$("#botTheme").attr( "href", `${execPath}\\themes\\${settings.theme}` );
 				$("#botThemeCurrent").html( settings.theme.split(".")[0] );
+				
+			} else {
+				$("#botThemeCurrent").html( "Default" );
 			}
 		} catch (e) {
-			$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
 			$("#botThemeCurrent").html( "Default" );
 			settings.theme = "default";
 		}
@@ -271,13 +263,15 @@ function runChat() {
 	bot.addListener( "raw", function( message ) {
 		var args = message.args[0].split(" ");
 		var command = message.command;
+		var user = message.user;
 		
 		if (false) { // logging all raw commands
-			log( `<b>${message.rawCommand}</b>` );
-			log( ` args: ${args}` );
+			log( `<b>${message.rawCommand}</b> 
+				<em>${message.user}</em>
+				args: ${JSON.stringify(args)}` );
 		}
 		
-		parseMsg(command, args);
+		parseMsg(command, args, user);
 	} );
 }
 
@@ -570,4 +564,28 @@ function save() {
 	fs.writeFile( `${execPath}\\settings\\pointsSettings.ini`, JSON.stringify( pointsSettings ), function ( err ) {
 		if ( err ) log( "* Error saving pointsSettings" );
 	} );
+}
+
+function setupOauth() {
+	var iframeurl = `https://api.twitch.tv/kraken/oauth2/authorize?
+		response_type=token&
+		client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
+		redirect_uri=http://localhost:3000/oauth.html&
+		scope=channel_editor+chat_login+channel_subscriptions&
+		force_verify=true"`;
+	$("#oauthFrame").attr( "src", iframeurl );
+
+	var express = require( "express" );
+	var app = express();
+	app.use( express.static( "public" ) );
+	app.get( "/oauth", function(req, res) {
+		$("#getOauthField").val( req.query.token );
+		$("#getOauthModal").modal( "hide" );
+		settings.access_token = req.query.token;
+		getUsername();
+	} );
+	app.listen( 3000 );
+
+	$("#getOauthModal").modal("show");
+	return false;
 }

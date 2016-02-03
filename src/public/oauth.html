@@ -1,0 +1,18 @@
+<html>
+<head>
+	<script src="jquery-2.2.0.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			var access_token = "oauth:" + document.location.hash.substring( 14, 44 );
+			$.get( "oauth", { "token": access_token } );
+		});
+	</script>
+</head>
+<body>
+
+<div style="text-align: center; width: 98vw;">
+	<p>You probably shouldn't be on this page.</p>
+</div>
+
+</body>
+</html>

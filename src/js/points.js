@@ -120,7 +120,7 @@ function updatePoints() {
 
 function drawList() {
 	var output = "";
-	output += `<table class="table table-striped">
+	output += `
 		<tr>
 			<th>Username</th>
 			<th>${pointsSettings.unit}</th>
@@ -140,7 +140,6 @@ function drawList() {
 			</tr>`;
 		// <button class="btn btn-info btn-xs">_</button>
 	}
-	output += `</table>`;
 	$("#pointsList").html( output );
 }
 

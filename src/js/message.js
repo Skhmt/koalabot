@@ -19,7 +19,12 @@
 */
 
 // gets a message object
-function parseMsg( command, args ) {
+function parseMsg( command, args, user ) {
+	if ( command == "JOIN" ) {
+		msgJoin( user, args );
+		return;
+	}
+
 	switch( args[1] ) {
 		case "NOTICE":
 			msgNotice( args );
@@ -137,7 +142,7 @@ function msgRoom( command, args ) {
 	var slow = commands[2].substring(5);
 	var subsOnly = commands[3].substring(10);
 	
-	if ( r9k === 0 && slow === 0 && subsOnly === 0 ) {
+	if ( r9k == 0 && slow == 0 && subsOnly == 0 ) {
 		log( `* No roomstate options set for ${args[2]}` );
 	} else {
 		var output = `* Roomstate options for ${args[2]}:`;
@@ -150,12 +155,14 @@ function msgRoom( command, args ) {
 }
 
 
-
 /* JOIN:
 	Command: JOIN
 	User: nightbot
 	Args 0: #m3rchant
 */
+function msgJoin( user, args ) {
+	log( `* ${user} has joined ${args[0]}` );
+}
 
 /* MODE:
 	Command: MODE

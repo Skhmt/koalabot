@@ -1,7 +1,7 @@
 {
 	"name": "KoalaBot",
 	"description": "blah",
-	"version": "0.8",
+	"version": "0.8.2",
 	"main": "index.html",
 	"dependencies": {
 		"node-irc": "latest"
@@ -10,7 +10,7 @@
 		"width": 800,
 		"min_width": 800,
 		"height": 600,
-		"title": "KoalaBot 0.8",
+		"title": "KoalaBot",
 		"toolbar": false,
 		"icon": "koala.png",
 		"frame": true

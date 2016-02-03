@@ -182,6 +182,7 @@ function updateFollowers() {
             "api_version" : 3
         },
         function ( response ) {
+            if ( !("follows" in response) ) return;
             for ( var i = 0; i < response.follows.length; i++ ) {
                 var tempUser = response.follows[i].user.display_name;
                 // if not a current follower...

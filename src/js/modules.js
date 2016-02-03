@@ -14,9 +14,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * Modules
- * Contains the entire module API
+/**
+ * @title Modules API
+ * @author skhmt
+ * @license GPLv3
+ * @overview The API for use with KoalaBot modules
  */
 
 function apiSetup() {
@@ -31,6 +33,7 @@ function apiSetup() {
         for ( var f = 0; f < files.length; f++ ) {
             if ( files[f].split(".")[1] == "js" ) {
                 output += `<script type="text/javascript" src="${apiGetPath() + files[f]}"></script>`;
+                log(`* Loaded module: ${files[f]}`);
             }
         }
         $("head").append( output );
@@ -38,9 +41,10 @@ function apiSetup() {
 }
 
 /**
- * Adds a command, makes it lower case
- * @param {string} keyword - The !command a user types in
- * @param {string} functionName - What function to call. It sends: params (array), from (string), mod (boolean), subscriber (boolean)
+ * Adds a command, makes it lower case. It will call the function name you send it.
+ * The function will be given these parameters: params (array), from (string), mod (boolean), subscriber (boolean)
+ * @param {String} keyword - The !command a user types in
+ * @param {String} functionName - What function to call.
  * @return {Boolean} True if success, false if fail
  */
 function apiAddCmd(keyword, functionName) {
@@ -53,9 +57,10 @@ function apiAddCmd(keyword, functionName) {
 }
 
 /**
- * Adds a module
- * @param {string} moduleName - the name of the module
- * @return {string} the id of the page to $().prepend/.html/.append
+ * Adds a module to the dropdown and creates a page.
+ * If the module only adds commands and doesn't require a user interface, this doesn't need to be used.
+ * @param {String} moduleName - the name of the module
+ * @return {String} the id of the page to $(id).prepend / $(id).html / $(id).append
  */
 function apiAddTab(moduleName) {
 
@@ -77,8 +82,8 @@ function apiAddTab(moduleName) {
 }
 
 /**
- * Writes to the chat
- * @param {string} text - The text to say in the chat
+ * Writes to the chat. It outputs as [+] to show it's a module rather than [!] that the base bot uses.
+ * @param {String} text - The text to say in the chat
  */
 function apiSay(text) {
     bot.say( settings.channel, text );
@@ -86,52 +91,61 @@ function apiSay(text) {
 }
 
 /**
- * Returns the path
- * @return {string} path to the mods folder, including trailing slash
+ * Only outputs to the chatlog and your chat window, but does not send a chat message for others to see.
+ * It is used to notify the streamer of things.
+ * @param {String} text - The text to log
+ */
+function apiLog(text) {
+    log( `<b>[-] ${text}</b>` );
+}
+
+/**
+ * Gets the path to the mods folder, ex:  C:\bot\mods\
+ * @return {String} path to the mods folder, including trailing slash
  */
 function apiGetPath() {
     return `${execPath}\\mods\\`;
 }
 
 /**
- * Returns the channel (and thus likely the streamer's) name
- * @return {string} the channel name
+ * Gets the channel name, which is likely also the streamer's name.
+ * @return {String} the channel name
  */
 function apiGetChannelName() {
     return settings.channel.substring(1);
 }
 
 /**
- * Returns the bot name
- * @return {string} the bot name
+ * Gets the bot name.
+ * @return {String} the bot name
  */
 function apiGetBotName() {
     return settings.username;
 }
 
 /**
- * Returns the number of points a user has
- * @param {string} username
- * @return {integer} -1 if not found, otherwise the amount of points of the user
+ * Gets the number of points a user has.
+ * @param {String} username - case insensitive
+ * @return {integer} null if not found, otherwise the amount of points of the user
  */
 function apiGetPoints(username) {
     var index = getPointIndex(username);
     if ( index == -1 ) {
-        return -1;
+        return null;
     }
     return pointsSettings.users[index].currentPoints;
 }
 
 /**
- * Sets the points a user has
- * @param {string} username
- * @param {integer} points
- * @return {integer} -1 if not found, otherwise the amount of points of the user
+ * Sets the points a user has.
+ * @param {String} username - case insensitive
+ * @param {integer} points - what to set the user's points to
+ * @return {integer} null if not found, otherwise the amount of points of the user
  */
 function apiSetPoints(username, points) {
     var index = getPointIndex(username);
     if ( index == -1 ) {
-        return -1;
+        return null;
     }
     pointsSettings.users[index].currentPoints = points;
     save();
@@ -139,3 +153,67 @@ function apiSetPoints(username, points) {
     return pointsSettings.users[index].currentPoints;
 }
 
+/**
+ * Modifies the points a user has.
+ * @param {String} username - case insensitive
+ * @param {integer} points - what to add to the uesr's points. To subtract, send a negative number
+ * @return {integer} null if not found, otherwise the amount of points of the user
+ */
+function apiModPoints(username, points) {
+    var index = getPointIndex(username);
+    if ( index == -1 ) {
+        return null;
+    }
+    pointsSettings.users[index].currentPoints += points;
+
+    save();
+    drawList();
+    return pointsSettings.users[index].currentPoints;
+}
+
+/**
+ * Opens a file in the \mods\ directory.
+ * To load an object, do something like:  $.parseJSON( apiOpenFile("modExampleSettings.ini") );
+ * @param {String} filename - case sensitive, the path to the \mods\ directory is included
+ * @return {String} the file contents, null if it doesn't exist
+ */
+function apiOpenFile(filename) {
+    try {
+        return fs.readFileSync( `${execPath}\\mods\\${filename}`, "utf8" );
+    }
+    catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Appends a new line of text to the end a file in the \mods\ directory.
+ * If a file isn't found, it will automatically be created, then appended to.
+ * @param {String} filename - case sensitive, the path to the \mods\ directory is included
+ * @param {String} text - what to add to the contents of the file
+ * @return {string} true if success, false if fail
+ */
+function apiAppendFile(filename, text) {
+    try {
+        fs.appendFileSync( `${execPath}\\mods\\${filename}`, `${text}\r\n`, "utf8" );
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+/**
+ * Writes a file in the \mods\ directory. This will completely over-write an existing file.
+ * To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", JSON.stringify( modExampleSettings ) );
+ * @param {String} filename - case sensitive, the path to the \mods\ directory is included
+ * @param {String} text - what to make the contents of the file
+ * @return {Boolean} true if success, false if fail
+ */
+function apiWriteFile(filename, text) {
+    try {
+        fs.writeFileSync( `${execPath}\\mods\\${filename}`, text, "utf8" );
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
