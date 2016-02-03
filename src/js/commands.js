@@ -272,11 +272,11 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 	// Variables!
 
 	var output = cmdSettings.custom[cmdIndex].text;
-	output = output.replace(/%1%/g, cmd[1])
-		.replace(/%2%/g, cmd[2])
-		.replace(/%3%/g, cmd[3])
-		.replace(/%4%/g, cmd[4])
-		.replace(/%5%/g, cmd[5]);
+	output = output.replace(/%1%/g, params[0])
+		.replace(/%2%/g, params[1])
+		.replace(/%3%/g, params[2])
+		.replace(/%4%/g, params[3])
+		.replace(/%5%/g, params[4]);
 	cmdSay(output);
 }
 
