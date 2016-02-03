@@ -53,13 +53,14 @@ function songsSetup() {
         }
         save();
     } );
+
 }
 
 
 function onYouTubeIframeAPIReady() {
     ytPlayer = new YT.Player('ytPlayer', {
         height: 250,
-        width: 400,
+        width: 405,
         videoId: 'JFYVcz7h3o0',
         playerVars: {
             fs: 0,

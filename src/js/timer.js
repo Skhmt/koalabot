@@ -18,31 +18,33 @@
 
 var timerList = [];
 // [{message: "", playTime: "", interval: ""}, ... ]
-
+var timerSettings;
 
 
 function timerSetup() {
 	
 	var now = new Date().getTime();
 
-	var timerSettings = {
+	timerSettings = {
 		refreshInterval: 100,
 		hostInterval: 10*1000,
-		viewerInterval: 15*1000,
+		viewerInterval: 10*1000,
 		followerInterval: 10*1000,
 		subInterval: 10*1000,
+		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
 		followerPlayTIme: now,
 		subPlayTime: now,
+		pointsPlayTime: now
 	};
 	
-	timerTick( timerSettings );
+	timerTick();
 }
 
 
 
-function timerTick( timerSettings ) {
+function timerTick() {
 	var now = new Date().getTime();
 	
 	for ( var i = 0; i < timerList.length; i++ ) {
@@ -72,10 +74,16 @@ function timerTick( timerSettings ) {
 		timerSettings.subPlayTime = now + timerSettings.subInterval;
 	}
 
+	if ( now >= timerSettings.pointsPlayTime && settings.channel !== null ) {
+		updatePoints();
+		timerSettings.pointsPlayTime = now + timerSettings.pointsInterval;
+	}
+
+
 	chatScroll();
 
 	setTimeout( function() {
-		timerTick( timerSettings );
+		timerTick();
 	}, timerSettings.refreshInterval );
 }
 

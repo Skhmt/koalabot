@@ -17,10 +17,7 @@
 var viewerData = [];
 
 function statsSetup() {
-	$("#openViewerGraph").click( function() {
-		drawGraph();
-		$("#graphDialog").dialog( "open" );
-	} );
+	$("#openStats").click(drawGraph);
 
 	$("#newViewers").click( function() {
 		var tempPath = `${execPath}\\logs\\viewerStats-${viewerData[0].d.substring(0,10)}_`;
@@ -32,7 +29,10 @@ function statsSetup() {
 		fs.writeFileSync( `${tempPath + tempdate}.log`, JSON.stringify( viewerData ) );
 
 		viewerData = [];
-			saveViewerData();
+		saveViewerData();
+
+		$("#graph").html("");
+		drawGraph();
 	} );
 	
 	try {
@@ -84,24 +84,24 @@ function drawGraph() {
 			x: tempX,
 			y: tempY,
 			type: "scatter",
-			fillcolor: "#000000",
+			fillcolor: "white",
 		}
 	];
 
 	var layout = {
-		width: 715,
-		height: 505,
+		width: 730,
+		height: 460,
 		margin: {
 			l: 60,
 			r: 60,
 			t: 60,
 			b: 60
 		},
-		paper_bgcolor: "black",
-		plot_bgcolor: "#111111",
+		paper_bgcolor: "white",
+		plot_bgcolor: "#DDDDDD",
 		yaxis: {title: "viewers"},
 		font: {
-			color: "white"
+			color: "black"
 		}
 	};
 	
@@ -109,5 +109,7 @@ function drawGraph() {
 }
 
 function saveViewerData() {
-	fs.writeFileSync( `${execPath}\\logs\\viewerStats.log`, JSON.stringify( viewerData ) );
+	fs.writeFile( `${execPath}\\logs\\viewerStats.log`, JSON.stringify( viewerData ), function ( err ) {
+		if ( err ) log( "* Error saving viewer data" );
+	} );
 }

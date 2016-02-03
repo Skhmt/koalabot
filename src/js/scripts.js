@@ -31,6 +31,7 @@ var permitted = [];
 var emoticonsTwitch = [];
 var emoticonsBTTV = [];
 var emoticonsBTTVall = [];
+var currentUsers = [];
 
 var settings = {
 	access_token: "",
@@ -42,7 +43,7 @@ var settings = {
 
 
 $(document).ready( function() {
-	
+
 	var gui = require( "nw.gui" );
 	var path = require( "path" );
 	win = gui.Window.get();
@@ -63,7 +64,7 @@ $(document).ready( function() {
 		var newchan = $("#getChannelField").val();
 		if ( newchan.substring(0,1) !== "#" ) { // if the user forgot the #, add it
 			newchan = `#${newchan}`;
-			$("#getChannelField").val(newchan);
+			$("#getChannelField").val( newchan );
 		}
 
 		if ( newchan !== settings.channel ) { // if the channel is actually different
@@ -84,6 +85,10 @@ $(document).ready( function() {
 	
 	try { fs.accessSync( `${execPath}\\settings` ); }
 	catch (e) { fs.mkdirSync( `${execPath}\\settings` ); }
+
+	// Making sure themes folder exists
+	try { fs.accessSync( `${execPath}\\themes` ); }
+	catch (e) { fs.mkdirSync( `${execPath}\\themes` ); }
 	
 	
 	hostFile = `${execPath}\\logs\\hosts.log`;
@@ -102,11 +107,14 @@ $(document).ready( function() {
 	logFile = `${execPath}\\logs\\${logname}`;
 	
 	// setting up moderation area
-	modSetup();
+	moderationSetup();
 	
 	// setting up the commands area
 	cmdSetup();
 	
+	// setting up the points
+	pointsSetup();
+
 	// getting twitch and bttv emoticons
 	getEmoticons();
 	
@@ -127,7 +135,10 @@ $(document).ready( function() {
 
 	// set up the events part
 	eventSetup();
-	
+
+	// set up mods
+	apiSetup();
+
 	// loading settings.ini
 	try {
 		var readFile = fs.readFileSync( `${execPath}\\settings\\settings.ini` );
@@ -143,14 +154,14 @@ $(document).ready( function() {
 			fs.readFileSync( `${execPath}\\themes\\${settings.theme}` );
 			if ( settings.theme === "default" ) {
 				$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
-				$("#botThemeCurrent").html("Default");
+				$("#botThemeCurrent").html( "Default" );
 			} else {
 				$("#botTheme").attr( "href", `${execPath}\\themes\\${settings.theme}` );
 				$("#botThemeCurrent").html( settings.theme.split(".")[0] );
 			}
 		} catch (e) {
 			$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
-			$("#botThemeCurrent").html("Default");
+			$("#botThemeCurrent").html( "Default" );
 			settings.theme = "default";
 		}
 
@@ -159,7 +170,7 @@ $(document).ready( function() {
 		onChannelEnter();
 		save();
 	} catch (e) {
-		$("#getOauthField").val("");
+		$("#getOauthField").val( "" );
 		save();
 	}
 
@@ -192,7 +203,7 @@ $(document).ready( function() {
 	} );
 
 
-});
+} );
 
 function getUsername() {
 	var token = settings.access_token.substring(6);
@@ -328,15 +339,18 @@ function updateUserlist() {
 			
 			if ( response.chatters == null || response.chatter_count === 0 ) return; // didn't load a user yet
 			
-			var output = `<b>Total viewers</b>: ${response.chatter_count}<br>`;
-			
 			exportViewers( response.chatter_count );
+			currentUsers = []; // {username: string, role: string}
+
+			var output = `<b>Total viewers</b>: ${response.chatter_count}<br>`;
 			
 			var staffLen = response.chatters.staff.length;
 			if ( staffLen > 0 ) {
 				output += `<p> <b style='color: #6d35ac;'>STAFF (${staffLen})</b> <br> `;
 				for ( var i = 0; i < staffLen; i++ ) {
-					output += `${response.chatters.staff[i]} <br> `;
+					var tempuser = response.chatters.staff[i];
+					output += `${tempuser} <br> `;
+					currentUsers.push({"username": tempuser, "role": "staff"});
 				}
 				output += "</p> ";
 			}
@@ -345,7 +359,9 @@ function updateUserlist() {
 			if ( modLen > 0 ) {
 				output += `<p> <b style='color: #34ae0a;'>MODERATORS (${modLen})</b> <br> `;
 				for ( var i = 0; i < modLen; i++ ) {
-					output += `${response.chatters.moderators[i]} <br> `;
+					var tempuser = response.chatters.moderators[i];
+					output += `${tempuser} <br> `;
+					currentUsers.push({"username": tempuser, "role": "moderator"});
 				}
 				output += "</p> ";
 			}
@@ -354,7 +370,9 @@ function updateUserlist() {
 			if ( adminLen > 0 ) {
 				output += `<p> <b style='color: #faaf19;'>ADMINS (${adminLen})</b> <br> `;
 				for ( var i = 0; i < adminLen; i++ ) {
-					output += `${response.chatters.admins[i]} <br> `;
+					var tempuser = response.chatters.admins[i];
+					output += `${tempuser} <br> `;
+					currentUsers.push({"username": tempuser, "role": "admin"});
 				}
 				output += "</p> ";
 			}
@@ -363,7 +381,9 @@ function updateUserlist() {
 			if ( globalLen > 0 ) {
 				output += `<p> <b style='color: #1a7026;'>GLOBAL MODS (${globalLen})</b> <br> `;
 				for ( var i = 0; i < globalLen; i++ ) {
-					output += `${response.chatters.global_mods[i]} <br> `;
+					var tempuser = response.chatters.global_mods[i];
+					output += `${tempuser} <br> `;
+					currentUsers.push({"username": tempuser, "role": "globalmod"});
 				}
 				output += "</p> ";
 			}
@@ -372,7 +392,9 @@ function updateUserlist() {
 			if ( viewLen > 0 ) {
 				output += `<p> <b style='color: #2e7db2;'>VIEWERS (${viewLen})</b> <br> `;
 				for ( var i = 0; i < viewLen; i++ ) {
-					output += `${response.chatters.viewers[i]} <br> `;
+					var tempuser = response.chatters.viewers[i];
+					output += `${tempuser} <br> `;
+					currentUsers.push({"username": tempuser, "role": "viewer"});
 				}
 				output += "</p> ";
 			}
@@ -542,5 +564,10 @@ function save() {
 	// saving eventSettings.ini
 	fs.writeFile( `${execPath}\\settings\\eventSettings.ini`, JSON.stringify( eventSettings ), function ( err ) {
 		if ( err ) log( "* Error saving eventSettings" );
+	} );
+
+	// saving pointsSettings.ini
+	fs.writeFile( `${execPath}\\settings\\pointsSettings.ini`, JSON.stringify( pointsSettings ), function ( err ) {
+		if ( err ) log( "* Error saving pointsSettings" );
 	} );
 }

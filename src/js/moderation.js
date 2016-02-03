@@ -18,7 +18,7 @@
 
 var modSettings;
 
-function modSetup(){
+function moderationSetup(){
 	
 	try {
 		var readFile = fs.readFileSync( `${execPath}\\settings\\modSettings.ini` );

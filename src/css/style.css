@@ -4,6 +4,8 @@
 	outline: none;
 }*/
 
+body { padding-top: 50px; }
+
 .navbar-nav > li > a {
 	padding: 5px 10px 0px 10px !important;
 	height: 30px !important;
@@ -29,6 +31,11 @@ blink, .blink {
 
 @-webkit-keyframes blink {
   67% { opacity: 0 }
+}
+
+.scroll {
+	overflow: auto;
+	word-wrap: break-word;
 }
 
 

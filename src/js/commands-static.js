@@ -39,6 +39,10 @@ function addStaticCommands() {
         { cmd: "mute", func: "cmdMute" },
         { cmd: "songrequest", func: "cmdAddSong" }
     );
+
+	// points
+	cmdList.push(
+		{ cmd: "points", func: "cmdPoints" });
 }
 
 /*

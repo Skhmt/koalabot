@@ -43,29 +43,33 @@
 	<script src="js/songs.js"></script>
 	<script src="js/quotes.js"></script>
 	<script src="js/events.js"></script>
+	<script src="js/modules.js"></script>
+	<script src="js/points.js"></script>
 	<script src="js/scripts.js"></script>
 </head>
 <body>
 	<!-- <div id="top" style="-webkit-app-region: drag;">  </div> or no-drag -->
 
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<!-- Nav bar -->
-			<span class="navbar-brand">kb</span>
+			<!-- <span class="navbar-brand">
+				<img src="koala.png" width="24" height="24">
+			</span> -->
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="#tab-chat" data-toggle="tab">Chat</a></li>
 				<li><a href="#tab-events" data-toggle="tab">Events</a></li>
 				<li><a href="#tab-music" data-toggle="tab">Music</a></li>
 				<li><a href="#tab-raffle" data-toggle="tab">Raffle</a></li>
+				<li><a href="#tab-points" data-toggle="tab">Points</a></li>
 				<li><a href="#tab-commands" data-toggle="tab">Commands</a></li>
 				<li><a href="#tab-timedMessages" data-toggle="tab">Timed Msgs</a></li>
 				<li><a href="#tab-quotes" data-toggle="tab">Quotes</a></li>
 
 				<li class="dropdown">
 					<a href="#" data-toggle="dropdown" class="dropdown-toggle">Modules <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="#" data-toggle="tab">Module 1</a></li>
-						<li><a href="#" data-toggle="tab">Module 2</a></li>
+					<ul class="dropdown-menu" id="moduleMenu">
+						<!-- Dynamically generated -->
 					</ul>
 				</li>
 
@@ -74,7 +78,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="#tab-botConfig" data-toggle="tab">Bot Config</a></li>
 						<li><a href="#tab-spam" data-toggle="tab">Spam</a></li>
-						<li><a href="#tab-statistics" data-toggle="tab">Statistics</a></li>
+						<li><a href="#tab-statistics" id="openStats" data-toggle="tab">Statistics</a></li>
 						<li class="divider"></li>
 						<li><a href="#" onclick="win.showDevTools();" data-toggle="tab">Dev Console</a></li>
 						<li><a href="#tab-about" data-toggle="tab">About</a></li>
@@ -86,18 +90,16 @@
 	</nav>
 
 
-	<div class="tab-content">
+	<div class="tab-content" id="pageContent">
 
 		<!-- CHAT -->
 		<div class="tab-pane active" id="tab-chat">
 			<div class="row-fluid">
 				<div class="col-sm-9">
-					<div class="well well-sm" id="console" style="height: calc(100vh - 125px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="console" style="height: calc(100vh - 125px);"></div>
 				</div>
 				<div class="col-sm-3">
-					<div class="well well-sm" id="userlist" style="height: calc(100vh - 125px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="userlist" style="height: calc(100vh - 125px);"></div>
 				</div>
 			</div>
 			<div class="row-fluid">
@@ -113,49 +115,54 @@
 		<div class="tab-pane" id="tab-events">
 			<div class="row-fluid">
 				<div class="col-sm-5">
-					<div class="well well-sm" style="height: calc(100vh - 75px); overflow: auto;
-	word-wrap: break-word;" id="hosts"></div>
+					<div class="well well-sm scroll" style="height: calc(100vh - 75px);" id="hosts"></div>
 				</div>
 				<div class="col-sm-7">
 					<div class="panel panel-default">
-						<div class="panel-body">
-							<div class="form-group">
-								<span class="btn-group" data-toggle="buttons">
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="followerChatRadio" type="button" id="followerChatOn">&#10004;</input>
-									</label>
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="followerChatRadio" type="button" id="followerChatOff">&#10008;</input>
-									</label>
-								</span>
-								<strong>&nbsp; Follower notifications in chat</strong>
-								<input type="text" id="followerChatText" class="form-control input-sm">
-							</div>
-							<div class="form-group">
-								<span class="btn-group" data-toggle="buttons">
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="hostChatRadio" type="button" id="hostChatOn">&#10004;</input>
-									</label>
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="hostChatRadio" type="button" id="hostChatOff">&#10008;</input>
-									</label>
-								</span>
-								<strong>&nbsp; Host notifications in chat</strong>
-								<input type="text" id="hostChatText" class="form-control input-sm">
-							</div>
-							<div class="form-group">
-								<span class="btn-group" data-toggle="buttons">
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="subChatRadio" type="button" id="subChatOn">&#10004;</input>
-									</label>
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="subChatRadio" type="button" id="subChatOff">&#10008;</input>
-									</label>
-								</span>
-								<strong>&nbsp; Subscriber notifications in chat</strong>
-								<input type="text" id="subChatText" class="form-control input-sm">
-							</div>
-						</div> 
+						<ul class="list-group">
+							<li class="list-group-item">
+								<div class="form-group">
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="followerChatRadio" type="button" id="followerChatOn">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="followerChatRadio" type="button" id="followerChatOff">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Follower notifications in chat</strong>
+									<input type="text" id="followerChatText" class="form-control input-sm">
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="form-group">
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="hostChatRadio" type="button" id="hostChatOn">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="hostChatRadio" type="button" id="hostChatOff">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Host notifications in chat</strong>
+									<input type="text" id="hostChatText" class="form-control input-sm">
+								</div>
+							</li>
+							<li class="list-group-item">
+								<div class="form-group">
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="subChatRadio" type="button" id="subChatOn">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="subChatRadio" type="button" id="subChatOff">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Subscriber notifications in chat</strong>
+									<input type="text" id="subChatText" class="form-control input-sm">
+								</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -165,8 +172,7 @@
 		<div class="tab-pane" id="tab-music">
 			<div class="row-fluid">
 				<div class="col-sm-5">
-					<div class="well well-sm" id="songList" style="height: calc(100vh - 75px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="songList" style="height: calc(100vh - 75px);"></div>
 				</div>
 				<div class="col-sm-7">
 					<div class="panel panel-default">
@@ -188,7 +194,7 @@
 							<button id="muteSongButton" class="btn btn-primary btn-sm">Mute</button>
 							<span id="muteSongStatus" class="blink"></span>
 							<br><br>
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<div class="form-group">
 									<div class="input-group input-group-sm">
 										<span class="input-group-addon">v=</span>
@@ -208,8 +214,7 @@
 		<div class="tab-pane" id="tab-raffle">
 			<div class="row-fluid">
 				<div class="col-sm-4">
-					<div class="well well-sm" id="raffleList" style="height: calc(100vh - 75px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="raffleList" style="height: calc(100vh - 75px);"></div>
 				</div>
 				<div class="col-sm-8">
 					<div class="panel panel-default">
@@ -220,7 +225,7 @@
 							<span class="labelText" id="raffleStatus"></span>
 						</div>
 						<div class="panel-body">
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<label class="control-label">Keyword:</label>&nbsp;
 								<div class="form-group">
 									<div class="input-group input-group-sm">
@@ -230,7 +235,7 @@
 								</div>
 							</form>
 							<br>
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<label class="control-label">Length of time to enter:</label>&nbsp;
 								<div class="form-group">
 									<div class="input-group input-group-sm">
@@ -240,7 +245,7 @@
 								</div>
 							</form>
 							<br>
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<label class="control-label">Announce winner in chat:</label>&nbsp;
 
 								<span class="btn-group" data-toggle="buttons">
@@ -270,13 +275,65 @@
 			</div>
 		</div>
 
+		<!-- POINTS -->
+		<div class="tab-pane" id="tab-points">
+			<div class="row-fluid">
+				<div class="col-sm-7">
+					<div class="panel panel-default scroll" style="height: calc(100vh - 75px);" id="pointsList">
+						Username, total, curr
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<span class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="pointsRadio" type="button" id="pointsOn" value="on">ON</input>
+								</label>
+								<label class="btn btn-primary btn-sm">
+									<input type="radio" name="pointsRadio" type="button" id="pointsOff" value="off">OFF</input>
+								</label>
+							</span>
+							&nbsp;
+							<label class="control-label">Points</label>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Units:</label>&nbsp;
+									<input type="text" id="pointUnits" class="form-control input-sm">
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<div class="form-group">
+										<div class="input-group input-group-sm">
+											<input type="text" id="pointsPointUpdate" class="form-control" size="1">
+											<span class="input-group-addon">points</span>
+										</div>
+										&nbsp;
+										<label class="control-label">per</label>
+										&nbsp;
+										<div class="input-group input-group-sm">
+											<input type="text" id="pointsMinuteUpdate" class="form-control" size="1">
+											<span class="input-group-addon">min</span>
+										</div>
+									</div>
+								</form>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- COMMANDS -->
 		<div class="tab-pane" id="tab-commands">
 			<div class="row-fluid">
 				<div class="col-sm-12">
 					<div class="panel panel-default">
 						<div class="panel-body">
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<div class="form-group">
 									<button id="addCmdButton" class="btn btn-primary btn-sm">Add Command</button>&nbsp;&nbsp; 
 									<label class="control-label">Name:</label>&nbsp;
@@ -300,8 +357,7 @@
 			</div>
 			<div class="row-fluid">
 				<div class="col-sm-12">
-					<div class="well well-sm" id="commands" style="height: calc(100vh - 220px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="commands" style="height: calc(100vh - 220px);"></div>
 				</div>
 			</div>
 		</div>
@@ -312,7 +368,7 @@
 				<div class="col-sm-12">
 					<div class="panel panel-default">
 						<div class="panel-body">
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<div class="form-group">
 									<button id="addMsgButton" class="btn btn-primary btn-sm">Add Message</button>
 									&nbsp; &nbsp;
@@ -332,8 +388,7 @@
 			</div>
 			<div class="row-fluid">
 				<div class="col-sm-12">
-					<div class="well well-sm" id="timedMsgs" style="height: calc(100vh - 220px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="timedMsgs" style="height: calc(100vh - 220px);"></div>
 				</div>
 			</div>
 		</div>
@@ -342,8 +397,7 @@
 		<div class="tab-pane" id="tab-quotes">
 			<div class="row-fluid">
 				<div class="col-sm-12">
-					<div class="well well-sm" id="quotes" style="height: calc(100vh - 75px); overflow: auto;
-	word-wrap: break-word;"></div>
+					<div class="well well-sm scroll" id="quotes" style="height: calc(100vh - 75px);"></div>
 				</div>
 			</div>
 		</div>
@@ -353,121 +407,129 @@
 			<div class="row-fluid">
 				<div class="col-sm-12">
 					<div class="panel panel-default">
-						<div class="panel-body">
-						<!-- Link Protection -->
-						<div class="form-group">
-							<span class="btn-group" data-toggle="buttons">
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="linkProRadio" type="button" id="linkProRadioOn" value="on">&#10004;</input>
-								</label>
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="linkProRadio" type="button" id="linkProRadioOff" value="off">&#10008;</input>
-								</label>
-							</span>
-							<strong>&nbsp; Link Protection</strong>
-							<form class="form-inline">
-								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-								<label class="control-label">Timeout:</label>&nbsp;
+						<ul class="list-group">
+							<li class="list-group-item">
+								<!-- Link Protection -->
 								<div class="form-group">
-									<div class="input-group input-group-sm">
-										<input type="text" id="linkProTimeoutField" class="form-control" size="2">
-										<span class="input-group-addon">s</span>
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="linkProRadio" type="button" id="linkProRadioOn" value="on">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="linkProRadio" type="button" id="linkProRadioOff" value="off">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Link Protection</strong>
+									<form class="form-inline" onsubmit="return false;">
+										&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<label class="control-label">Timeout:</label>&nbsp;
+										<div class="form-group">
+											<div class="input-group input-group-sm">
+												<input type="text" id="linkProTimeoutField" class="form-control" size="2">
+												<span class="input-group-addon">s</span>
+											</div>
+										</div>
+										&nbsp; &nbsp; 
+										<label class="control-label">Message:</label>&nbsp;
+										<input type="text" id="linkProTimeoutText" class="form-control input-sm" size="50">
+									</form>
+								</div>
+							</li>
+							<li class="list-group-item">
+								<!-- Word Protection -->
+								<div class="form-group">
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="wordProRadio" type="button" id="wordProRadioOn" value="on">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="wordProRadio" type="button" id="wordProRadioOff" value="off">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Word Protection</strong>
+									<form class="form-inline" onsubmit="return false;">
+										&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<label class="control-label">Timeout:</label>&nbsp;
+										<div class="form-group">
+											<div class="input-group input-group-sm">
+												<input type="text" id="wordProTimeoutField" class="form-control" size="2">
+												<span class="input-group-addon">s</span>
+											</div>
+										</div>
+										&nbsp; &nbsp; 
+										<label class="control-label">Message:</label>&nbsp;
+										<input type="text" id="wordProTimeoutText" class="form-control input-sm" size="50">
+									</form>
+									&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+									<div style="display: inline-block; width: calc(100% - 135px);">
+										<label class="control-label">Banned word list, separated by spaces:</label>&nbsp;
+										<textarea id="wordProArea" rows="2" class="form-control"></textarea>
 									</div>
 								</div>
-								&nbsp; &nbsp; 
-								<label class="control-label">Message:</label>&nbsp;
-								<input type="text" id="linkProTimeoutText" class="form-control input-sm" size="50">
-							</form>
-						</div>
-						<!-- Word Protection -->
-						<div class="form-group">
-							<span class="btn-group" data-toggle="buttons">
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="wordProRadio" type="button" id="wordProRadioOn" value="on">&#10004;</input>
-								</label>
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="wordProRadio" type="button" id="wordProRadioOff" value="off">&#10008;</input>
-								</label>
-							</span>
-							<strong>&nbsp; Word Protection</strong>
-							<form class="form-inline">
-								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-								<label class="control-label">Timeout:</label>&nbsp;
+							</li>
+							<li class="list-group-item">
+								<!-- Caps Protection -->
 								<div class="form-group">
-									<div class="input-group input-group-sm">
-										<input type="text" id="wordProTimeoutField" class="form-control" size="2">
-										<span class="input-group-addon">s</span>
-									</div>
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="capsProRadio" type="button" id="capsProRadioOn" value="on">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="capsProRadio" type="button" id="capsProRadioOff" value="off">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Capital Letter Protection</strong>
+									<form class="form-inline" onsubmit="return false;">
+										&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<label class="control-label">Timeout:</label>&nbsp;
+										<div class="form-group">
+											<div class="input-group input-group-sm">
+												<input type="text" id="capsProTimeoutField" class="form-control" size="2">
+												<span class="input-group-addon">s</span>
+											</div>
+										</div>
+										&nbsp; &nbsp; 
+										<label class="control-label">Message:</label>&nbsp;
+										<input type="text" id="capsProTimeoutText" class="form-control input-sm" size="50">
+										<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<label class="control-label">Caps per word:</label>&nbsp;
+										<input type="text" id="capsProPerWordField" class="form-control input-sm" size="3">
+										<label class="control-label">Caps per post:</label>&nbsp;
+										<input type="text" id="capsProPerPostField" class="form-control input-sm" size="3">
+									</form>
 								</div>
-								&nbsp; &nbsp; 
-								<label class="control-label">Message:</label>&nbsp;
-								<input type="text" id="wordProTimeoutText" class="form-control input-sm" size="50">
-							</form>
-							&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-							<div style="display: inline-block; width: calc(100% - 135px);">
-								<label class="control-label">Banned word list, separated by spaces:</label>&nbsp;
-								<textarea id="wordProArea" rows="3" class="form-control"></textarea>
-							</div>
-						</div>
-						<!-- Caps Protection -->
-						<div class="form-group">
-							<span class="btn-group" data-toggle="buttons">
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="capsProRadio" type="button" id="capsProRadioOn" value="on">&#10004;</input>
-								</label>
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="capsProRadio" type="button" id="capsProRadioOff" value="off">&#10008;</input>
-								</label>
-							</span>
-							<strong>&nbsp; Capital Letter Protection</strong>
-							<form class="form-inline">
-								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-								<label class="control-label">Timeout:</label>&nbsp;
+							</li>
+							<li class="list-group-item">
+								<!-- Symbols Protection -->
 								<div class="form-group">
-									<div class="input-group input-group-sm">
-										<input type="text" id="capsProTimeoutField" class="form-control" size="2">
-										<span class="input-group-addon">s</span>
-									</div>
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOn" value="on">&#10004;</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOff" value="off">&#10008;</input>
+										</label>
+									</span>
+									<strong>&nbsp; Symbols Protection</strong>
+									<form class="form-inline" onsubmit="return false;">
+										&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<label class="control-label">Timeout:</label>&nbsp;
+										<div class="form-group">
+											<div class="input-group input-group-sm">
+												<input type="text" id="symbolProTimeoutField" class="form-control" size="2">
+												<span class="input-group-addon">s</span>
+											</div>
+										</div>
+										&nbsp; &nbsp; 
+										<label class="control-label">Message:</label>&nbsp;
+										<input type="text" id="symbolProTimeoutText" class="form-control input-sm" size="50">
+										<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<label class="control-label">Symbols allowed per post:</label>&nbsp;
+										<input type="text" id="symbolProSymbolsField" class="form-control input-sm" size="3">
+									</form>
 								</div>
-								&nbsp; &nbsp; 
-								<label class="control-label">Message:</label>&nbsp;
-								<input type="text" id="capsProTimeoutText" class="form-control input-sm" size="50">
-								<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-								<label class="control-label">Caps per word:</label>&nbsp;
-								<input type="text" id="capsProPerWordField" class="form-control input-sm" size="3">
-								<label class="control-label">Caps per post:</label>&nbsp;
-								<input type="text" id="capsProPerPostField" class="form-control input-sm" size="3">
-							</form>
-						</div>
-						<!-- Symbols Protection -->
-						<div class="form-group">
-							<span class="btn-group" data-toggle="buttons">
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOn" value="on">&#10004;</input>
-								</label>
-								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOff" value="off">&#10008;</input>
-								</label>
-							</span>
-							<strong>&nbsp; Symbols Protection</strong>
-							<form class="form-inline">
-								&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-								<label class="control-label">Timeout:</label>&nbsp;
-								<div class="form-group">
-									<div class="input-group input-group-sm">
-										<input type="text" id="symbolProTimeoutField" class="form-control" size="2">
-										<span class="input-group-addon">s</span>
-									</div>
-								</div>
-								&nbsp; &nbsp; 
-								<label class="control-label">Message:</label>&nbsp;
-								<input type="text" id="symbolProTimeoutText" class="form-control input-sm" size="50">
-								<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-								<label class="control-label">Symbols allowed per post:</label>&nbsp;
-								<input type="text" id="symbolProSymbolsField" class="form-control input-sm" size="3">
-							</form>
-						</div>
-						</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -478,66 +540,76 @@
 			<div class="row-fluid">
 				<div class="col-sm-12">
 					<div class="panel panel-default">
-						<div class="panel-body">
+						<div class="panel-heading">
 							<label class="control-label">Bot name:</label>&nbsp;
 							<span id="displayName"></span>
-							<br>
-							<form class="form-inline">
-								<label class="control-label">Access token:</label>&nbsp;
-								<input type="password" id="getOauthField" class="form-control input-sm" size="30">
-								<button id="saveOauth" class="btn btn-primary btn-sm">Save token</button>
-								<button id="getOauthLink" class="btn btn-primary btn-sm"
-										data-toggle="modal" data-target="#getOauthModal" onclick="return false;">Get token</button>
-							</form>
-							<form class="form-inline">
-								<label class="control-label">Channel:</label> &nbsp;
-								<input type="text" id="getChannelField" class="form-control input-sm" size="20">
-								<button id="changeChannel" class="btn btn-primary btn-sm">Change channel</button>
-							</form>
-							<form class="form-inline">
-								<label class="control-label">Game:</label> &nbsp;
-								<input type="text" id="gameField" class="form-control input-sm" size="75">
-								<button id="updateGameButton" class="btn btn-primary btn-sm">Update</button>
-							</form>
-							<form class="form-inline">
-								<label class="control-label">Status:</label> &nbsp;
-								<input type="text" id="statusField" class="form-control input-sm" size="75">
-								<button id="updateStatusButton" class="btn btn-primary btn-sm">Update</button>
-							</form>
-							<br>
-							<label class="control-label">Lap time: </label>&nbsp;
-							<span id="lapTime"></span>
-							<br>
-							<button id="resetLap" class="btn btn-primary btn-sm">Lap</button>
-
-							<br><br>
-							<form class="form-inline">
-								<label class="control-label">!uptime display: </label>&nbsp;
-								<span class="btn-group" data-toggle="buttons">
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioBot" value="bot">bot time</input>
-									</label>
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioStream" value="stream">stream time</input>
-									</label>
-									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioLap" value="lap">lap time</input>
-									</label>
-								</span>
-							</form>
-
-							<br><br>
-							<form class="form-inline">
-								<label class="control-label">Theme: </label> &nbsp;
-								<span id="botThemeCurrent"></span>
-								<br>
-								<select id="botThemeList" class="form-control input-sm">
-									<option value="default">Default</option>
-									<!-- This is dynamically generated -->
-								</select>
-								<button class="btn btn-primary btn-sm" id="botThemeChange">Change Theme</button>
-							</form>
 						</div>
+						<ul class="list-group">
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Access token:</label>&nbsp;
+									<input type="password" id="getOauthField" class="form-control input-sm" size="30">
+									<button id="saveOauth" class="btn btn-primary btn-sm">Save token</button>
+									<button id="getOauthLink" class="btn btn-primary btn-sm"
+											data-toggle="modal" data-target="#getOauthModal" onclick="return false;">Get token</button>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Channel:</label> &nbsp;
+									<input type="text" id="getChannelField" class="form-control input-sm" size="20">
+									<button id="changeChannel" class="btn btn-primary btn-sm">Change channel</button>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Game:</label> &nbsp;
+									<input type="text" id="gameField" class="form-control input-sm" size="75">
+									<button id="updateGameButton" class="btn btn-primary btn-sm">Update</button>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Status:</label> &nbsp;
+									<input type="text" id="statusField" class="form-control input-sm" size="75">
+									<button id="updateStatusButton" class="btn btn-primary btn-sm">Update</button>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<label class="control-label">Lap time: </label>&nbsp;
+								<span id="lapTime"></span>&nbsp;&nbsp;&nbsp;
+								
+								<button id="resetLap" class="btn btn-primary btn-sm">Lap</button>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">!uptime display: </label>&nbsp;
+									<span class="btn-group" data-toggle="buttons">
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioBot" value="bot">bot time</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioStream" value="stream">stream time</input>
+										</label>
+										<label class="btn btn-primary btn-sm">
+											<input type="radio" name="uptimeRadio" type="button" id="uptimeRadioLap" value="lap">lap time</input>
+										</label>
+									</span>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Theme: </label> &nbsp;
+									<span id="botThemeCurrent"></span>
+									<br>
+									<select id="botThemeList" class="form-control input-sm">
+										<option value="default">Default</option>
+										<!-- This is dynamically generated -->
+									</select>
+									<button class="btn btn-primary btn-sm" id="botThemeChange">Change Theme</button>
+								</form>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -550,10 +622,7 @@
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<label class="control-label">Statistics:</label> &nbsp;
-							<button id="openViewerGraph" class="btn btn-primary btn-sm">View</button> &nbsp;
 							<button id="newViewers" class="btn btn-primary btn-sm">Reset &amp; backup</button>
-						</div>
-						<div class="panel-body">
 							<div id="graph"></div>
 						</div>
 					</div>
@@ -617,12 +686,24 @@
 						scope=channel_editor+chat_login+channel_subscriptions&
 						force_verify=true"
 						style="outline: none; width: 100%; height: 100%; margin: 0;
-						padding: 0; border: 0; float: left;"></iframe>
+						padding: 0; border: 0; float: left;" nwdisable nwfaketop></iframe>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
+	<div id="setPointsModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </body>
 </html>
