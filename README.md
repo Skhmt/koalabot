@@ -89,6 +89,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #### Libs used:
 * [nw.js 0.12.3](https://github.com/nwjs/nw.js/)
 * [jQuery 2.2.0](https://jquery.com/)
-* [Bootstrap 3.2.2](http://getbootstrap.com/)
+* [Bootstrap 3.3.6](http://getbootstrap.com/)
 * [node-irc 0.4.0](https://github.com/martynsmith/node-irc/)
 * [plotly.js 1.1.1](https://github.com/plotly/plotly.js/)
