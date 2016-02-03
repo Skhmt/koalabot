@@ -4,7 +4,8 @@
 	"version": "0.8.2",
 	"main": "index.html",
 	"dependencies": {
-		"node-irc": "latest"
+		"node-irc": "latest",
+		"express": "latest"
 	},
 	"window": {
 		"width": 800,
