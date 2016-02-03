@@ -72,7 +72,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 * Dev Console is full of errors related to cast_sender.js. This is another youtube-related problem out of my hands. 
 
 #### Making modules:
-Modules are javascript (ES6) + jQuery (2.2.0) + Boostrap (3.3.6). See example.js in the mods folder for a working example of a module. Example.js uses all the current api functions. If you want more, ask and I'll include them in future versions and likely tell you the "private" function names to hold you over.
+Modules are javascript (ES6) + jQuery (2.2.0) + Boostrap (3.3.6). See example.js in the mods folder for a working example of a module. Also see the [API](https://github.com/Skhmt/twitch-bot/blob/master/MODULE%20API.md) for more details and some functionality not used in example.js. 
 
 #### Making themes:
 Themes are just Bootstrap 3.3.6 .css files. Put them in the themes folder and restart the bot.
