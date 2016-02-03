@@ -23,11 +23,11 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Follower logging
 - [x] Sub notifications
 - [x] Update backend to allow plugins
-- [x] Loyalty points / Regulars
+- [x] Loyalty points
 - [ ] User ranks
-- [ ] More variables for custom commands
-- [ ] Greetings / etc for all or certain users when they enter (like a fighter's entrance song!)
-- [ ] Sound / video playing in response to a command or event
+- [ ] More variables for custom commands (custom api)
+- [ ] Option to have song requests cost points
+- [ ] Add "regular" rank
 
 #### Commands:
 |Command|Parameters|Description|
