@@ -92,3 +92,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * [Bootstrap 3.3.6](http://getbootstrap.com/)
 * [node-irc 0.4.0](https://github.com/martynsmith/node-irc/)
 * [plotly.js 1.1.1](https://github.com/plotly/plotly.js/)
+* [Express 4.13.3](http://expressjs.com/)
