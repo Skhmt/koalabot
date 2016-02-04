@@ -63,6 +63,13 @@ Gets the bot name.
 **Returns**: `String`, the bot name
 
 
+### apiGetPointsUnit() 
+
+Gets the unit for points.
+
+**Returns**: `String`, the points unit
+
+
 ### apiGetPoints(username) 
 
 Gets the number of points a user has.
