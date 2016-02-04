@@ -124,6 +124,14 @@ function apiGetBotName() {
 }
 
 /**
+ * Gets the unit for points.
+ * @return {String} the points unit
+ */
+function apiGetPointsUnit() {
+    return pointsSettings.unit;
+}
+
+/**
  * Gets the number of points a user has.
  * @param {String} username - case insensitive
  * @return {integer} null if not found, otherwise the amount of points of the user
@@ -147,7 +155,7 @@ function apiSetPoints(username, points) {
     if ( index == -1 ) {
         return null;
     }
-    pointsSettings.users[index].currentPoints = points;
+    pointsSettings.users[index].currentPoints = parseInt( points, 10 );
     save();
     drawList();
     return pointsSettings.users[index].currentPoints;
@@ -164,7 +172,7 @@ function apiModPoints(username, points) {
     if ( index == -1 ) {
         return null;
     }
-    pointsSettings.users[index].currentPoints += points;
+    pointsSettings.users[index].currentPoints += parseInt( points, 10 );
 
     save();
     drawList();
