@@ -24,6 +24,10 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Sub notifications
 - [x] Update backend to allow plugins
 - [x] Loyalty points
+- [ ] Streamer song queue that's overridden by user song requests
+- [ ] Change mod requirements for commands
+- [ ] Cooldowns for commands 
+- [ ] Look in to overriding existing commands via module
 - [ ] User ranks
 - [ ] More text file outputs
 - [ ] More variables for custom commands (custom api)
