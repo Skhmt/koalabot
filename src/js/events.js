@@ -62,7 +62,7 @@ function eventSetup() {
     }
 
     // follower chat click listener
-    $("#followerChatRadioSet input[type=radio]").change( function() {
+    $("input[name='followerChatRadio']").change( function() {
         if ( this.value === "on" ){
             eventSettings.followerChat = true;
         } else {
@@ -72,7 +72,7 @@ function eventSetup() {
     } );
 
     // host chat click listener
-    $("#hostChatRadioSet input[type=radio]").change( function() {
+    $("input[name='hostChatRadio']").change( function() {
         if ( this.value === "on" ){
             eventSettings.hostChat = true;
         } else {
@@ -82,7 +82,7 @@ function eventSetup() {
     } );
 
     // sub chat click listener
-    $("#subChatRadioSet input[type=radio]").change( function() {
+    $("input[name='subChatRadio']").change( function() {
         if ( this.value === "on" ){
             eventSettings.subChat = true;
         } else {
