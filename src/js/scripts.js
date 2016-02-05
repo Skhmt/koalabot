@@ -265,15 +265,44 @@ function runChat() {
 		var command = message.command;
 		var user = message.user;
 		
-		if (false) { // logging all raw commands
-			log( `<b>${message.rawCommand}</b> 
-				<em>${message.user}</em>
-				args: ${JSON.stringify(args)}` );
+		if (rawIrcOn) { // logging all raw commands
+			log( `<b>rawcmd: </b>${message.rawCommand} |
+				<b>user: </b>${message.user} |
+				<b>host: </b>${message.host} |
+				<b>args: </b> ${JSON.stringify(message.args)}` );
 		}
-		
-		parseMsg(command, args, user);
+
+		if ( message.user == "twitchnotify" ) { // if it's a sub notification
+			subNotify(message.args[1]);
+		} else {
+			parseMsg(command, args, user);
+		}
 	} );
 }
+
+var rawIrcOn = false;
+var commandsOn = true;
+
+function commandsToggle() {
+	if (!commandsOn) {
+		commandsOn = true;
+		$("#commandToggleStatus").html("Commands on");
+	} else {
+		commandsOn = false;
+		$("#commandToggleStatus").html("Commands off");
+	}
+}
+
+function rawIrcToggle() {
+	if (!rawIrcOn) {
+		rawIrcOn = true;
+		$("#rawIrcStatus").html("Raw IRC messages on");
+	} else {
+		rawIrcOn = false;
+		$("#rawIrcStatus").html("Raw IRC messages off");
+	}
+}
+
 
 // This is run every time a channel is entered
 function onChannelEnter() {
@@ -287,8 +316,6 @@ function onChannelEnter() {
 	getEmoticonsBTTV();
 
 	getFollowers();
-
-	getSubs();
 
 	// get subscriber image URL of the channel you're in
 	$.getJSON(

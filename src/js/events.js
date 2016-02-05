@@ -16,7 +16,6 @@
 
 var eventSettings = {};
 var followers = [];
-var subs = [];
 
 function eventSetup() {
     try {
@@ -30,6 +29,7 @@ function eventSetup() {
             followerChatText: "Thanks for the follow %user%!",
             hostChatText: "%user% is now hosting!",
             subChatText: "Thanks for the sub %user%!!",
+            subChatTextMonths: "WTF thanks for the %months% months of subs, %user%!!!",
             isPartnered: false
         };
     }
@@ -109,6 +109,13 @@ function eventSetup() {
     $("#subChatText").val( eventSettings.subChatText );
     $("#subChatText").on( "input", function() {
         eventSettings.subChatText = $("#subChatText").val();
+        save();
+    } );
+
+    // sub text months initial setup and listener
+    $("#subChatTextMonths").val( eventSettings.subChatTextMonths );
+    $("#subChatTextMonths").on( "input", function() {
+        eventSettings.subChatTextMonths = $("#subChatTextMonths").val();
         save();
     } );
 }
@@ -206,65 +213,35 @@ function updateFollowers() {
     ).fail(function() {});
 }
 
-function getSubs() {
-    if ( !eventSettings.isPartnered ) {
-        return false;
+function subNotify(message) {
+
+    var msgArray = message.split(" ");
+
+    if ( msgArray[1] === "just" ) { // "name just subscribed!"
+
+        if ( !eventSettings.subChat ) {
+            log( `* ${getTimeStamp()} ${msgArray.join(" ")}` );
+        } else {
+            var output = eventSettings.subChatText;
+            output = output.replace( /%user%/g, msgArray[0] );
+            cmdSay( output );
+        }
+        // writing to the host file
+        $("#hosts").append( `${getTimeStamp()} Sub: ${msgArray[0]}<br>` );
+
+    } else if ( msgArray[1] === "subscribed" ) { // "name subscribed for 13 months in a row!"
+
+        if ( !eventSettings.subChat ) {
+            log( `* ${getTimeStamp()} ${msgArray.join(" ")}` );
+        } else {
+            var output = eventSettings.subChatTextMonths;
+            output = output.replace( /%user%/g, msgArray[0] );
+            output = output.replace( /%months%/g, msgArray[3] );
+            cmdSay( output );
+        }
+
+    } else { // "13 viewers resubscribed while you were away!"
+        // nothing
     }
 
-    subs = [];
-    $.getJSON(
-        `https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}/subscriptions`,
-        {
-            "limit": 100,
-            "client_id" : clientid,
-            "api_version" : 3,
-            "oauth_token" : settings.access_token.substring(6)
-        },
-        function ( response ) {
-            for ( var i = 0; i < response.subscriptions.length; i++ ) {
-                subs.push( response.subscriptions[i].user.display_name );
-            }
-        }
-    );
-}
-
-function updateSubs() {
-    if ( !eventSettings.isPartnered ) {
-        return false;
-    }
-
-    $.getJSON(
-        `https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}/subscriptions`,
-        {
-            "limit": 100,
-            "client_id" : clientid,
-            "api_version" : 3,
-            "oauth_token" : settings.access_token.substring(6)
-        },
-        function ( response ) {
-            
-            if ( !("subscriptions" in response) ) {
-                return;
-            }
-            for ( var i = 0; i < response.subscriptions.length; i++ ) {
-                var tempUser = response.subscriptions[i].user.display_name;
-                // if not a current follower...
-                if ( followers.indexOf( tempUser ) == -1 ) {
-                    followers.unshift( tempUser );
-
-                    // writing to the host file
-                    $("#hosts").append( `${getTimeStamp()} Sub: ${tempUser}<br>` );
-
-                    // chatting or logging depending on user's settings
-                    if ( eventSettings.subChat ) {
-                        var output = eventSettings.subChatText;
-                        output = output.replace( /%user%/g, tempUser );
-                        cmdSay( output );
-                    } else {
-                        log( `* ${getTimeStamp()} ${tempUser} is subscribing` );
-                    }
-                }
-            }
-        }
-    );
 }

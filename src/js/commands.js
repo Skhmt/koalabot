@@ -91,7 +91,6 @@ function cmdSetup() {
 	refreshQuotes();
 }
 
-
 /**
  * @param {string} text - the full text string, including cmdSymbol
  * @param {string} from - the user
@@ -99,9 +98,8 @@ function cmdSetup() {
  * @param {boolean} subscriber - true if the user is a subscriber
  */
 function parseCommand(text, from, mod, subscriber) {
-	
-	// INSERT something here to check if commands are disabled
 
+	if (!commandsOn) return;
 	// there is an array cmdList: [ {cmd: "", func: ""}, ... ]
 	// it has been constructed of static and custom commands
 	// it can be added to by plugins

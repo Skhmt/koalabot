@@ -68,10 +68,10 @@ function msgPriv( command, args ) {
 	if ( color === "" ) color = "#d2691e";
 
 	var subscriber = false;
-	if ( commands[4].substring(11) === "1" ) subscriber = true;
+	if ( commands[5].substring(11) === "1" ) subscriber = true;
 	
 	var turbo = false;
-	if ( commands[5].substring(6) === "1" ) turbo = true;
+	if ( commands[6].substring(6) === "1" ) turbo = true;
 
 	var mod = false;
 	if ( commands[3].substring(4) === "1" ) mod = true;

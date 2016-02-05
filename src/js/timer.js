@@ -30,12 +30,10 @@ function timerSetup() {
 		hostInterval: 10*1000,
 		viewerInterval: 20*1000,
 		followerInterval: 15*1000,
-		subInterval: 15*1000,
 		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
 		followerPlayTime: now,
-		subPlayTime: now,
 		pointsPlayTime: now
 	};
 	
@@ -67,11 +65,6 @@ function timerTick() {
 	if ( now >= timerSettings.followerPlayTime && settings.channel !== null ) {
 		updateFollowers();
 		timerSettings.followerPlayTime = now + timerSettings.followerInterval;
-	}
-
-	if ( now >= timerSettings.subPlayTime && settings.channel !== null ) {
-		updateSubs();
-		timerSettings.subPlayTime = now + timerSettings.subInterval;
 	}
 
 	if ( now >= timerSettings.pointsPlayTime && settings.channel !== null ) {
