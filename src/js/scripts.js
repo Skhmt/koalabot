@@ -567,22 +567,22 @@ function save() {
 }
 
 function setupOauth() {
-	var iframeurl = `https://api.twitch.tv/kraken/oauth2/authorize?
-		response_type=token&
-		client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
-		redirect_uri=http://localhost:3000/oauth.html&
-		scope=channel_editor+chat_login+channel_subscriptions&
-		force_verify=true"`;
-	$("#oauthFrame").attr( "src", iframeurl );
-
+	$("#oauthFrame").attr("src", `https://api.twitch.tv/kraken/oauth2/authorize?
+	response_type=token&
+	client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
+	redirect_uri=http://localhost:3000/oauth.html&
+	scope=channel_editor+chat_login+channel_subscriptions&
+	force_verify=true`);
 	var express = require( "express" );
 	var app = express();
 	app.use( express.static( "public" ) );
 	app.get( "/oauth", function(req, res) {
-		$("#getOauthField").val( req.query.token );
 		$("#getOauthModal").modal( "hide" );
-		settings.access_token = req.query.token;
-		getUsername();
+		if ( req.query.token.length > 20 ) {
+			settings.access_token = req.query.token;
+			$("#getOauthField").val( req.query.token );
+			getUsername();
+		}
 	} );
 	app.listen( 3000 );
 
