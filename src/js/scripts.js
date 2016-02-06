@@ -92,8 +92,11 @@ $(document).ready( function() {
 		var defaultcss = fs.readFileSync("default.css", "utf8");
 		fs.writeFileSync(`${execPath}\\themes\\default.css`, defaultcss, "utf8");
 	}
+	$("#botTheme").attr( "href", `${execPath}\\themes\\default.css` );
 
 	hostFile = `${execPath}\\logs\\hosts.log`;
+	$("#botThemeCurrent").html( "default" );
+	settings.theme = "default";
 
 
 	// Setting up the chat log
@@ -154,17 +157,9 @@ $(document).ready( function() {
 		// Setting up theme
 		try {
 			fs.readFileSync( `${execPath}\\themes\\${settings.theme}` );
-			if ( settings.theme != "default" ) {
-				$("#botTheme").attr( "href", `${execPath}\\themes\\${settings.theme}` );
-				$("#botThemeCurrent").html( settings.theme.split(".")[0] );
-				
-			} else {
-				$("#botThemeCurrent").html( "default" );
-			}
-		} catch (e) {
-			$("#botThemeCurrent").html( "default" );
-			settings.theme = "default";
-		}
+			$("#botTheme").attr( "href", `${execPath}\\themes\\${settings.theme}` );
+			$("#botThemeCurrent").html( settings.theme.split(".")[0] );
+		} catch (e) {}
 
 		// Running tabs
 		runChat();
