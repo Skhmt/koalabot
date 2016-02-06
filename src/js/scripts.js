@@ -33,6 +33,9 @@ var emoticonsBTTV = [];
 var emoticonsBTTVall = [];
 var currentUsers = [];
 
+var rawIrcOn = false;
+var commandsOn = true;
+
 var settings = {
 	access_token: "",
 	username: "",
@@ -82,8 +85,14 @@ $(document).ready( function() {
 	// Making sure themes folder exists
 	try { fs.accessSync( `${execPath}\\themes` ); }
 	catch (e) { fs.mkdirSync( `${execPath}\\themes` ); }
-	
-	
+
+	// Checking if default.css exists in \themes\
+	try { fs.accessSync( `${execPath}\\themes\\default.css` ); }
+	catch (e) { // if it doesn't exist, basically copy+paste it
+		var defaultcss = fs.readFileSync("default.css", "utf8");
+		fs.writeFileSync(`${execPath}\\themes\\default.css`, defaultcss, "utf8");
+	}
+
 	hostFile = `${execPath}\\logs\\hosts.log`;
 
 
@@ -150,10 +159,10 @@ $(document).ready( function() {
 				$("#botThemeCurrent").html( settings.theme.split(".")[0] );
 				
 			} else {
-				$("#botThemeCurrent").html( "Default" );
+				$("#botThemeCurrent").html( "default" );
 			}
 		} catch (e) {
-			$("#botThemeCurrent").html( "Default" );
+			$("#botThemeCurrent").html( "default" );
 			settings.theme = "default";
 		}
 
@@ -182,13 +191,8 @@ $(document).ready( function() {
 
 	$("#botThemeChange").click(function() {
 		var tempTheme = $("#botThemeList").val();
-		if ( tempTheme === "default" ) {
-			$("#botTheme").attr( "href", `css\\bootstrap.min.css` );
-			$("#botThemeCurrent").html("Default");
-		} else {
-			$("#botTheme").attr( "href", `${execPath}\\themes\\${tempTheme}` );
-			$("#botThemeCurrent").html(tempTheme.split(".")[0]);
-		}
+		$("#botTheme").attr( "href", `${execPath}\\themes\\${tempTheme}` );
+		$("#botThemeCurrent").html(tempTheme.split(".")[0]);
 		settings.theme = tempTheme;
 		save();
 		return false;
@@ -278,29 +282,6 @@ function runChat() {
 			parseMsg(command, args, user);
 		}
 	} );
-}
-
-var rawIrcOn = false;
-var commandsOn = true;
-
-function commandsToggle() {
-	if (!commandsOn) {
-		commandsOn = true;
-		$("#commandToggleStatus").html("Commands on");
-	} else {
-		commandsOn = false;
-		$("#commandToggleStatus").html("Commands off");
-	}
-}
-
-function rawIrcToggle() {
-	if (!rawIrcOn) {
-		rawIrcOn = true;
-		$("#rawIrcStatus").html("Raw IRC messages on");
-	} else {
-		rawIrcOn = false;
-		$("#rawIrcStatus").html("Raw IRC messages off");
-	}
 }
 
 

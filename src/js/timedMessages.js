@@ -46,7 +46,7 @@ function refreshMessages() {
 		var output = "";
 		// build a message... [X] [Time] [Message]
 		output += `<button id='msg${i}' onclick='deleteMessage(${i})'
-			class='btn btn-primary btn-sm'>X</button>
+			class='btn btn-primary btn-sm'><span class="glyphicon glyphicon-remove"></span></button>
 			<span class='timedMessageSpan'>${timedMessages[i].time}s</span> &nbsp; &nbsp; &nbsp;
 			${timedMessages[i].text}<br> `;
 		

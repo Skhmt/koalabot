@@ -107,7 +107,8 @@ function refreshQuotes() {
 		if ( cmdSettings.quotes[i].active ) {
 			var output = "";
 			output += `<button id='quote${i}' onclick='delQuoteButton(${i})'
-				class='btn btn-primary btn-sm'>X</button>&nbsp;<strong>${i}</strong> :
+				class='btn btn-primary btn-sm'><span class="glyphicon glyphicon-remove"></span>
+				</button>&nbsp;<strong>${i}</strong> :
 				"<i>${cmdSettings.quotes[i].message}</i>"
 				- <b>${cmdSettings.quotes[i].who}</b>, ${cmdSettings.quotes[i].date}
 				<br>`;

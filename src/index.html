@@ -18,7 +18,7 @@
 <html>
 <head>
 	<title>
-		KoalaBot 0.8.6
+		KoalaBot 0.8.7
 	</title>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +27,7 @@
 	<script src="js/plotly-latest.min.js"></script>
 	<script src="js/jquery-2.2.0.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<link rel="stylesheet" id="botTheme" href="css/bootstrap.min.css" type="text/css" />
+	<link rel="stylesheet" id="botTheme" href="default.css" type="text/css" />
 
 	<script src="https://www.youtube.com/iframe_api"></script>
 	
@@ -80,7 +80,6 @@
 						<li><a href="#tab-spam" data-toggle="tab">Spam</a></li>
 						<li><a href="#tab-statistics" id="openStats" data-toggle="tab">Statistics</a></li>
 						<li class="divider"></li>
-						<li><a href="#" onclick="win.showDevTools();" data-toggle="tab">Dev Console</a></li>
 						<li><a href="#tab-about" data-toggle="tab">About</a></li>
 					</ul>
 				</li>
@@ -123,10 +122,14 @@
 							<li class="list-group-item">
 								<span class="btn-group" data-toggle="buttons">
 									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="followerChatRadio" type="button" id="followerChatOn" value="on">ON</input>
+										<input type="radio" name="followerChatRadio" type="button" id="followerChatOn" value="on">
+											<span class="glyphicon glyphicon-ok"></span>
+										</input>
 									</label>
 									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="followerChatRadio" type="button" id="followerChatOff" value="off">OFF</input>
+										<input type="radio" name="followerChatRadio" type="button" id="followerChatOff" value="off">
+											<span class="glyphicon glyphicon-remove"></span>
+										</input>
 									</label>
 								</span>
 								<strong>&nbsp; Follower notifications in chat</strong>
@@ -135,10 +138,14 @@
 							<li class="list-group-item">
 								<span class="btn-group" data-toggle="buttons">
 									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="hostChatRadio" type="button" id="hostChatOn" value="on">ON</input>
+										<input type="radio" name="hostChatRadio" type="button" id="hostChatOn" value="on">
+											<span class="glyphicon glyphicon-ok"></span>
+										</input>
 									</label>
 									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="hostChatRadio" type="button" id="hostChatOff" value="off">OFF</input>
+										<input type="radio" name="hostChatRadio" type="button" id="hostChatOff" value="off">
+											<span class="glyphicon glyphicon-remove"></span>
+										</input>
 									</label>
 								</span>
 								<strong>&nbsp; Host notifications in chat</strong>
@@ -147,10 +154,14 @@
 							<li class="list-group-item">
 								<span class="btn-group" data-toggle="buttons">
 									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="subChatRadio" type="button" id="subChatOn" value="on">ON</input>
+										<input type="radio" name="subChatRadio" type="button" id="subChatOn" value="on">
+											<span class="glyphicon glyphicon-ok"></span>
+										</input>
 									</label>
 									<label class="btn btn-primary btn-sm">
-										<input type="radio" name="subChatRadio" type="button" id="subChatOff" value="off">OFF</input>
+										<input type="radio" name="subChatRadio" type="button" id="subChatOff" value="off">
+											<span class="glyphicon glyphicon-remove"></span>
+										</input>
 									</label>
 								</span>
 								<strong>&nbsp; Subscriber notifications in chat</strong>
@@ -179,15 +190,23 @@
 							<label class="control-label">Song requests:</label>&nbsp;
 							<span class="btn-group" data-toggle="buttons">
 								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="songsRadio" type="button" id="songsOn" value="on">ON</input>
+									<input type="radio" name="songsRadio" type="button" id="songsOn" value="on">
+										<span class="glyphicon glyphicon-ok"></span>
+									</input>
 								</label>
 								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="songsRadio" type="button" id="songsOff" value="off">OFF</input>
+									<input type="radio" name="songsRadio" type="button" id="songsOff" value="off">
+										<span class="glyphicon glyphicon-remove"></span>
+									</input>
 								</label>
 							</span>
 							<br><br>
-							<button id="nextSongButton" class="btn btn-primary btn-sm">Next Song</button> 
-							<button id="muteSongButton" class="btn btn-primary btn-sm">Mute</button>
+							<button id="nextSongButton" class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-step-forward"></span>
+							</button>
+							<button id="muteSongButton" class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-volume-off"></span>
+							</button>
 							<span id="muteSongStatus" class="blink"></span>
 							<br><br>
 							<form class="form-inline" onsubmit="return false;">
@@ -215,8 +234,12 @@
 				<div class="col-sm-8">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<button id="raffleStart" class="btn btn-primary btn-sm">start</button>
-							<button id="raffleStop" class="btn btn-primary btn-sm">stop</button>
+							<button id="raffleStart" class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-play"></span>
+							</button>
+							<button id="raffleStop" class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-stop"></span>
+							</button>
 							<button id="raffleWinner" class="btn btn-primary btn-sm">pick winner</button>
 							<span class="labelText" id="raffleStatus"></span>
 						</div>
@@ -246,13 +269,17 @@
 
 								<span class="btn-group" data-toggle="buttons">
 									<label class="btn btn-primary btn-xs">
-										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceOn" value="on">ON</input>
+										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceOn" value="on">
+											<span class="glyphicon glyphicon-ok"></span>
+										</input>
 									</label>
 									<label class="btn btn-primary btn-xs">
 										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceTen" value="ten">10s delay</input>
 									</label>
 									<label class="btn btn-primary btn-xs">
-										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceOff" value="off">OFF</input>
+										<input type="radio" name="raffleAnnounceRadio" type="button" id="raffleAnnounceOff" value="off">
+											<span class="glyphicon glyphicon-remove"></span>
+										</input>
 									</label>
 								</span>
 							</form>
@@ -275,8 +302,8 @@
 		<div class="tab-pane" id="tab-points">
 			<div class="row-fluid">
 				<div class="col-sm-7">
-					<div class="panel panel-default scroll" style="height: calc(100vh - 75px);" >
-						<table class="table table-striped" id="pointsList">
+					<div class="panel panel-default scroll" style="height: calc(100vh - 75px);" id="pointsList">
+						<table class="table table-striped table-hover pointTable" id="pointsList">
 							<tr>
 								<th>Username</th>
 								<th>Points</th>
@@ -290,10 +317,14 @@
 						<div class="panel-heading">
 							<span class="btn-group" data-toggle="buttons">
 								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="pointsRadio" type="button" id="pointsOn" value="on">ON</input>
+									<input type="radio" name="pointsRadio" type="button" id="pointsOn" value="on">
+										<span class="glyphicon glyphicon-ok"></span>
+									</input>
 								</label>
 								<label class="btn btn-primary btn-sm">
-									<input type="radio" name="pointsRadio" type="button" id="pointsOff" value="off">OFF</input>
+									<input type="radio" name="pointsRadio" type="button" id="pointsOff" value="off">
+										<span class="glyphicon glyphicon-remove"></span>
+									</input>
 								</label>
 							</span>
 							&nbsp;
@@ -415,10 +446,14 @@
 								<div class="form-group">
 									<span class="btn-group" data-toggle="buttons">
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="linkProRadio" type="button" id="linkProRadioOn" value="on">&#10004;</input>
+											<input type="radio" name="linkProRadio" type="button" id="linkProRadioOn" value="on">
+												<span class="glyphicon glyphicon-ok"></span>
+											</input>
 										</label>
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="linkProRadio" type="button" id="linkProRadioOff" value="off">&#10008;</input>
+											<input type="radio" name="linkProRadio" type="button" id="linkProRadioOff" value="off">
+												<span class="glyphicon glyphicon-remove"></span>
+											</input>
 										</label>
 									</span>
 									<strong>&nbsp; Link Protection</strong>
@@ -442,10 +477,14 @@
 								<div class="form-group">
 									<span class="btn-group" data-toggle="buttons">
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="wordProRadio" type="button" id="wordProRadioOn" value="on">&#10004;</input>
+											<input type="radio" name="wordProRadio" type="button" id="wordProRadioOn" value="on">
+												<span class="glyphicon glyphicon-ok"></span>
+											</input>
 										</label>
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="wordProRadio" type="button" id="wordProRadioOff" value="off">&#10008;</input>
+											<input type="radio" name="wordProRadio" type="button" id="wordProRadioOff" value="off">
+												<span class="glyphicon glyphicon-remove"></span>
+											</input>
 										</label>
 									</span>
 									<strong>&nbsp; Word Protection</strong>
@@ -474,10 +513,14 @@
 								<div class="form-group">
 									<span class="btn-group" data-toggle="buttons">
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="capsProRadio" type="button" id="capsProRadioOn" value="on">&#10004;</input>
+											<input type="radio" name="capsProRadio" type="button" id="capsProRadioOn" value="on">
+												<span class="glyphicon glyphicon-ok"></span>
+											</input>
 										</label>
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="capsProRadio" type="button" id="capsProRadioOff" value="off">&#10008;</input>
+											<input type="radio" name="capsProRadio" type="button" id="capsProRadioOff" value="off">
+												<span class="glyphicon glyphicon-remove"></span>
+											</input>
 										</label>
 									</span>
 									<strong>&nbsp; Capital Letter Protection</strong>
@@ -506,10 +549,14 @@
 								<div class="form-group">
 									<span class="btn-group" data-toggle="buttons">
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOn" value="on">&#10004;</input>
+											<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOn" value="on">
+												<span class="glyphicon glyphicon-ok"></span>
+											</input>
 										</label>
 										<label class="btn btn-primary btn-sm">
-											<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOff" value="off">&#10008;</input>
+											<input type="radio" name="symbolProRadio" type="button" id="symbolProRadioOff" value="off">
+												<span class="glyphicon glyphicon-remove"></span>
+											</input>
 										</label>
 									</span>
 									<strong>&nbsp; Symbols Protection</strong>
@@ -603,7 +650,6 @@
 									<span id="botThemeCurrent">Default</span>
 									<br>
 									<select id="botThemeList" class="form-control input-sm">
-										<option value="default">Default</option>
 										<!-- This is dynamically generated -->
 									</select>
 									<button class="btn btn-primary btn-sm" id="botThemeChange">Change Theme</button>
@@ -649,14 +695,6 @@
 							<p>
 								M3rchant <br>
 								prototypal
-							</p>
-							<p>
-								<button class="btn btn-danger btn-xs" onclick="commandsToggle();">Turn off/on commands</button>
-								<span id="commandToggleStatus">Commands on</span>
-							</p>
-							<p>
-								<button class="btn btn-danger btn-xs" onclick="rawIrcToggle();">Turn off/on raw IRC messages</button>
-								<span id="rawIrcStatus">Raw IRC messages off</span>
 							</p>
 						</div>
 					</div>
