@@ -1,11 +1,11 @@
 # KoalaBot, a chat bot for Twitch
 
-![version 0.8.6](https://img.shields.io/badge/version-0.8.6-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
+![version 0.8.7](https://img.shields.io/badge/version-0.8.7-blue.svg?style=flat-square) ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 #### What is this?
 It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop and although I only provide a Windows version, it's possible to make an OS X or Linux version fairly easily - you'll have to do that on your own, but I can point you in the right direction. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
 
-#### Latest [Windows](https://github.com/Skhmt/twitch-bot/releases/) releases.
+#### Get the latest releases: [0.8.7 - 5 Feb 2016 - Windows 32-bit](https://github.com/Skhmt/twitch-bot/releases/)
 
 #### Features / to-do list:
 - [x] Chat window with emoticons and viewer list
