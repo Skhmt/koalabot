@@ -67,7 +67,8 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!points**||*Displays your points.*|
 
 #### How to use:
-* Run koalaBot.exe
+* For Windows: Run koalaBot.exe
+* For OS X: Get nwjs 0.12.3 from the app store or their website. Download the Koalabot osx .zip and unzip it into the same directory as nwjs.app. Run nwjs.app.
 * Go to Settings > Bot Config
 * Click "Get Token"
 * If Windows pops up something about the firewall, click OK. 
