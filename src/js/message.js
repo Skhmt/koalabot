@@ -162,6 +162,10 @@ function msgRoom( command, args ) {
 */
 function msgJoin( user, args ) {
 	log( `* ${user} has joined ${args[0]}` );
+
+	// pushing to recent events
+	var td = new Date();
+	recentEvents.unshift({"time": td.getTime(), "type": "JOIN", "text": user});
 }
 
 /* MODE:
