@@ -19,7 +19,6 @@ var clientid = "3y2ofy4qcsvnaybw9ogdzwmwfode8y0"; /* this is the (public) client
 var bot;
 var server = "irc.twitch.tv";
 var fs;
-var win;
 var logFile;
 var execPath;
 var hosts = [];
@@ -32,6 +31,7 @@ var emoticonsTwitch = [];
 var emoticonsBTTV = [];
 var emoticonsBTTVall = [];
 var currentUsers = [];
+var recentEvents = [];
 
 var rawIrcOn = false;
 var commandsOn = true;
@@ -47,12 +47,15 @@ var settings = {
 
 $(document).ready( function() {
 
-	var gui = require( "nw.gui" );
 	var path = require( "path" );
-	win = gui.Window.get();
 	fs = require( "fs" );
-	
-	execPath = path.dirname( process.execPath );
+
+	if ( process.platform == "win32" ) {
+		execPath = `${path.dirname( process.execPath )}/`;
+	}
+	else {
+		execPath = "";
+	}
 
 	$("#getOauthLink").click( setupOauth );
 
@@ -74,27 +77,27 @@ $(document).ready( function() {
 			} );
 		}
 	} );
-	
+
 	// making logs and settings directories
-	try { fs.accessSync( `${execPath}\\logs` ); }
-	catch (e) { fs.mkdirSync( `${execPath}\\logs` ); }
+	try { fs.accessSync( `${execPath}logs` ); }
+	catch (e) { fs.mkdirSync( `${execPath}logs` ); }
 	
-	try { fs.accessSync( `${execPath}\\settings` ); }
-	catch (e) { fs.mkdirSync( `${execPath}\\settings` ); }
+	try { fs.accessSync( `${execPath}settings` ); }
+	catch (e) { fs.mkdirSync( `${execPath}settings` ); }
 
 	// Making sure themes folder exists
-	try { fs.accessSync( `${execPath}\\themes` ); }
-	catch (e) { fs.mkdirSync( `${execPath}\\themes` ); }
+	try { fs.accessSync( `${execPath}themes` ); }
+	catch (e) { fs.mkdirSync( `${execPath}themes` ); }
 
 	// Checking if default.css exists in \themes\
-	try { fs.accessSync( `${execPath}\\themes\\default.css` ); }
+	try { fs.accessSync( `${execPath}themes/default.css` ); }
 	catch (e) { // if it doesn't exist, basically copy+paste it
 		var defaultcss = fs.readFileSync("default.css", "utf8");
-		fs.writeFileSync(`${execPath}\\themes\\default.css`, defaultcss, "utf8");
+		fs.writeFileSync(`${execPath}themes/default.css`, defaultcss, "utf8");
 	}
-	$("#botTheme").attr( "href", `${execPath}\\themes\\default.css` );
+	$("#botTheme").attr( "href", `${execPath}themes/default.css` );
 
-	hostFile = `${execPath}\\logs\\hosts.log`;
+	hostFile = `${execPath}logs/hosts.log`;
 	$("#botThemeCurrent").html( "default" );
 	settings.theme = "default";
 
@@ -109,7 +112,7 @@ $(document).ready( function() {
 	var dsec = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
 	var logname = `chatlog_${d.getFullYear()}-${dmonth}-${dday}_${dhour}-${dmin}-${dsec}.log`;
 
-	logFile = `${execPath}\\logs\\${logname}`;
+	logFile = `${execPath}logs/${logname}`;
 	
 	// setting up moderation area
 	moderationSetup();
@@ -146,7 +149,7 @@ $(document).ready( function() {
 
 	// loading settings.ini
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\settings\\settings.ini` );
+		var readFile = fs.readFileSync( `${execPath}settings/settings.ini` );
 		settings = $.parseJSON( readFile );
 
 		// Setting up config area
@@ -156,8 +159,8 @@ $(document).ready( function() {
 
 		// Setting up theme
 		try {
-			fs.readFileSync( `${execPath}\\themes\\${settings.theme}` );
-			$("#botTheme").attr( "href", `${execPath}\\themes\\${settings.theme}` );
+			fs.readFileSync( `${execPath}themes/${settings.theme}` );
+			$("#botTheme").attr( "href", `${execPath}themes/${settings.theme}` );
 			$("#botThemeCurrent").html( settings.theme.split(".")[0] );
 		} catch (e) {}
 
@@ -171,7 +174,7 @@ $(document).ready( function() {
 	}
 
 	//	populate the #botThemeList
-	fs.readdir(`${execPath}\\themes`, function(err, files){
+	fs.readdir(`${execPath}themes`, function(err, files){
 
 		for ( var f = 0; f < files.length; f++ ) {
 			var splitName = files[f].split(".");
@@ -186,7 +189,7 @@ $(document).ready( function() {
 
 	$("#botThemeChange").click(function() {
 		var tempTheme = $("#botThemeList").val();
-		$("#botTheme").attr( "href", `${execPath}\\themes\\${tempTheme}` );
+		$("#botTheme").attr( "href", `${execPath}themes/${tempTheme}` );
 		$("#botThemeCurrent").html(tempTheme.split(".")[0]);
 		settings.theme = tempTheme;
 		save();
@@ -534,37 +537,37 @@ function getTimeStamp() {
 
 function save() {
 	// saving settings.ini
-	fs.writeFile( `${execPath}\\settings\\settings.ini`, JSON.stringify( settings ), function ( err ) {
+	fs.writeFile( `${execPath}settings/settings.ini`, JSON.stringify( settings ), function ( err ) {
 		if ( err ) log( "* Error saving settings" );
 	} );
 
 	// saving modSettings.ini
-	fs.writeFile( `${execPath}\\settings\\modSettings.ini`, JSON.stringify( modSettings ), function ( err ) {
+	fs.writeFile( `${execPath}settings/modSettings.ini`, JSON.stringify( modSettings ), function ( err ) {
 		if ( err ) log( "* Error saving modSettings" );
 	} );
 
 	// saving timedMessages.ini
-	fs.writeFile( `${execPath}\\settings\\timedMessages.ini`, JSON.stringify( timedMessages ), function ( err ) {
+	fs.writeFile( `${execPath}settings/timedMessages.ini`, JSON.stringify( timedMessages ), function ( err ) {
 		if ( err ) log( "* Error saving timedMessages" );
 	} );
 
 	// saving cmdSettings.ini
-	fs.writeFile( `${execPath}\\settings\\cmdSettings.ini`, JSON.stringify( cmdSettings ), function ( err ) {
+	fs.writeFile( `${execPath}settings/cmdSettings.ini`, JSON.stringify( cmdSettings ), function ( err ) {
 		if ( err ) log( "* Error saving cmdSettings" );
 	} );
 
 	// saving raffleSettings.ini
-	fs.writeFile( `${execPath}\\settings\\raffleSettings.ini`, JSON.stringify( raffleSettings ), function ( err ) {
+	fs.writeFile( `${execPath}settings/raffleSettings.ini`, JSON.stringify( raffleSettings ), function ( err ) {
 		if ( err ) log( "* Error saving raffleSettings" );
 	} );
 
 	// saving eventSettings.ini
-	fs.writeFile( `${execPath}\\settings\\eventSettings.ini`, JSON.stringify( eventSettings ), function ( err ) {
+	fs.writeFile( `${execPath}settings/eventSettings.ini`, JSON.stringify( eventSettings ), function ( err ) {
 		if ( err ) log( "* Error saving eventSettings" );
 	} );
 
 	// saving pointsSettings.ini
-	fs.writeFile( `${execPath}\\settings\\pointsSettings.ini`, JSON.stringify( pointsSettings ), function ( err ) {
+	fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( pointsSettings ), function ( err ) {
 		if ( err ) log( "* Error saving pointsSettings" );
 	} );
 }

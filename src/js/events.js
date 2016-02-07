@@ -19,7 +19,7 @@ var followers = [];
 
 function eventSetup() {
     try {
-        var readFile = fs.readFileSync( `${execPath}\\settings\\eventSettings.ini` );
+        var readFile = fs.readFileSync( `${execPath}settings/eventSettings.ini` );
         eventSettings = $.parseJSON( readFile );
     } catch(e) { // if there isn't a modSettings.ini, just use the default settings
         eventSettings = {
@@ -141,6 +141,10 @@ function updateHosts() {
                     // add to the hosts tab
                     $("#hosts").append( `${getTimeStamp()} Host: ${tempHost} <br>` );
 
+                    // add to recentEvents
+                    var td = new Date();
+                    recentEvents.unshift({"time": td.getTime(), "type": "HOST", "text": tempHost});
+
                     // log or chat the host
                     if ( eventSettings.hostChat ) {
                         var output = eventSettings.hostChatText;
@@ -199,6 +203,10 @@ function updateFollowers() {
                     // writing to the host file
                     $("#hosts").append( `${getTimeStamp()} Follow: ${tempUser}<br>` );
 
+                    // add to recentEvents
+                    var td = new Date();
+                    recentEvents.unshift({"time": td.getTime(), "type": "FOLLOW", "text": tempUser});
+
                     // chatting or logging depending on user's settings
                     if ( eventSettings.followerChat ) {
                         var output = eventSettings.followerChatText;
@@ -218,6 +226,10 @@ function subNotify(message) {
     var msgArray = message.split(" ");
 
     if ( msgArray[1] === "just" ) { // "name just subscribed!"
+
+        // add to recentEvents
+        var td = new Date();
+        recentEvents.unshift({"time": td.getTime(), "type": "SUB", "text": msgArray[0]});
 
         if ( !eventSettings.subChat ) {
             log( `* ${getTimeStamp()} ${msgArray.join(" ")}` );

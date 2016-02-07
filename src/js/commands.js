@@ -45,7 +45,7 @@ function cmdSetup() {
 	} );
 
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\settings\\cmdSettings.ini` );
+		var readFile = fs.readFileSync( `${execPath}settings/cmdSettings.ini` );
 		cmdSettings = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
 		cmdSettings = {
@@ -59,7 +59,7 @@ function cmdSetup() {
 	
 	// loading lap info
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\logs\\lap.log`, "utf8" );
+		var readFile = fs.readFileSync( `${execPath}logs/lap.log`, "utf8" );
 		lap = new Date( parseInt(readFile,10) );
 		$("#lapTime").html( `${lap.toDateString()} ${lap.toLocaleTimeString()}` );
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
@@ -110,7 +110,6 @@ function parseCommand(text, from, mod, subscriber) {
 
 	for ( var i = 0; i < cmdList.length; i++ ) {
 		if ( cmdList[i].cmd === cmd ) {
-			//win.window[cmdList[i].func]( params, from, mod, subscriber );
 			eval(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
 			return;
 		}

@@ -19,7 +19,7 @@ var pointsSettings;
 function pointsSetup() {
 
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\settings\\pointsSettings.ini` );
+		var readFile = fs.readFileSync( `${execPath}settings/pointsSettings.ini` );
 		pointsSettings = $.parseJSON( readFile );
 		drawList();
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
@@ -136,7 +136,7 @@ function drawList() {
 					<button class="btn btn-info btn-xs" onclick="addPoint(${i}, 1)">+1</button>
 					<button class="btn btn-warning btn-xs" onclick="subtractPoint(${i}, 1)">&ndash;1</button>
 					<button class="btn btn-danger btn-xs" onclick="subtractPoint(${i}, 5)">&ndash;5</button>
-					&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;
 					<button class="btn btn-danger btn-xs" onclick="deletePoints(${i})">
 						<span class="glyphicon glyphicon-remove"></span>
 					</button>

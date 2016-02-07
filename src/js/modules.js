@@ -23,12 +23,12 @@
 
 function apiSetup() {
     // Checking for mods folder, creating if not found
-    try { fs.accessSync( `${execPath}\\mods` ); }
-    catch (e) { fs.mkdirSync( `${execPath}\\mods` ); }
+    try { fs.accessSync( `${execPath}mods` ); }
+    catch (e) { fs.mkdirSync( `${execPath}mods` ); }
 
     // Adding mods to the program
     
-    fs.readdir(`${execPath}\\mods`, function(err, files){
+    fs.readdir(`${execPath}mods`, function(err, files){
         var output = "";
         for ( var f = 0; f < files.length; f++ ) {
             if ( files[f].split(".")[1] == "js" ) {
@@ -63,22 +63,23 @@ function apiAddCmd(keyword, functionName) {
  * @return {String} the id of the page to $(id).prepend / $(id).html / $(id).append
  */
 function apiAddTab(moduleName) {
-
-    moduleName.replace(/"/g, ""); // removes quotation marks to prevent breaking
+    var newName = moduleName;
+    newName = newName.replace(/"/g, ""); // removes quotation marks to prevent breaking
+    newName = newName.replace(/\s/g, "-"); // removes spaces
 
     // creates a new tab in the modules dropdown
     $("#moduleMenu").append(`
-        <li><a href="#tab-module-${moduleName}" data-toggle="tab">
+        <li><a href="#tab-module-${newName}" data-toggle="tab">
         ${moduleName}
         </a></li>`);
 
     // creates the pane
     $("#pageContent").append(`
-        <div class="tab-pane" id="tab-module-${moduleName}">
+        <div class="tab-pane" id="tab-module-${newName}">
         </div>
     `);
 
-    return `#tab-module-${moduleName}`;
+    return `#tab-module-${newName}`;
 }
 
 /**
@@ -104,7 +105,7 @@ function apiLog(text) {
  * @return {String} path to the mods folder, including trailing slash
  */
 function apiGetPath() {
-    return `${execPath}\\mods\\`;
+    return `${execPath}mods/`;
 }
 
 /**
@@ -187,7 +188,7 @@ function apiModPoints(username, points) {
  */
 function apiOpenFile(filename) {
     try {
-        return fs.readFileSync( `${execPath}\\mods\\${filename}`, "utf8" );
+        return fs.readFileSync( `${execPath}mods/${filename}`, "utf8" );
     }
     catch (e) {
         return null;
@@ -203,7 +204,7 @@ function apiOpenFile(filename) {
  */
 function apiAppendFile(filename, text) {
     try {
-        fs.appendFileSync( `${execPath}\\mods\\${filename}`, `${text}\r\n`, "utf8" );
+        fs.appendFileSync( `${execPath}mods/${filename}`, `${text}\r\n`, "utf8" );
         return true;
     } catch (e) {
         return false;
@@ -219,9 +220,29 @@ function apiAppendFile(filename, text) {
  */
 function apiWriteFile(filename, text) {
     try {
-        fs.writeFileSync( `${execPath}\\mods\\${filename}`, text, "utf8" );
+        fs.writeFileSync( `${execPath}mods/${filename}`, text, "utf8" );
         return true;
     } catch (e) {
         return false;
     }
+}
+
+/**
+ * Gets an array of the recent events, in format:
+ * { "time": (integer milliseconds since midnight of January 1, 1970), "type": (string), "text": (string) }
+ * Type will be "SUB", "HOST", "FOLLOW", or anything that a module adds
+ * @return {Array}
+ */
+function apiGetRecentEvents() {
+    return recentEvents;
+}
+
+/**
+ * Adds to the recent events array. Recent events is used to send to a page via ajax, most likely.
+ * @param {String} type - can be anything, the bot uses SUB, HOST, and FOLLOW for those events
+ * @param {String} text - the data. For SUB, HOST, and FOLLOW, it's only the username.
+ */
+function apiAddRecentEvent(type, text) {
+    var td = new Date();
+    recentEvents.unshift({"time": td.getTime(), "type": type, "text": text});
 }

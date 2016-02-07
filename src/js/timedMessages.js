@@ -21,7 +21,7 @@ var timedMessages = [];
 function timedMessagesSetup() {
 	
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\settings\\timedMessages.ini` );
+		var readFile = fs.readFileSync( `${execPath}settings/timedMessages.ini` );
 		timedMessages = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a timedMessages.ini, just use the default settings
 		timedMessages = [];

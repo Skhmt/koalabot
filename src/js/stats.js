@@ -20,7 +20,7 @@ function statsSetup() {
 	$("#openStats").click(drawGraph);
 
 	$("#newViewers").click( function() {
-		var tempPath = `${execPath}\\logs\\viewerStats-${viewerData[0].d.substring(0,10)}_`;
+		var tempPath = `${execPath}logs/viewerStats-${viewerData[0].d.substring(0,10)}_`;
 
 		var tempdate = viewerData[0].d.substring(11); // 22:23:00
 		tempdate = tempdate.split( ":" );
@@ -36,7 +36,7 @@ function statsSetup() {
 	} );
 	
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\logs\\viewerStats.log` );
+		var readFile = fs.readFileSync( `${execPath}logs/viewerStats.log` );
 		var data = $.parseJSON( readFile );
 		viewerData = data;
 	} catch (e) {
@@ -109,7 +109,7 @@ function drawGraph() {
 }
 
 function saveViewerData() {
-	fs.writeFile( `${execPath}\\logs\\viewerStats.log`, JSON.stringify( viewerData ), function ( err ) {
+	fs.writeFile( `${execPath}logs/viewerStats.log`, JSON.stringify( viewerData ), function ( err ) {
 		if ( err ) log( "* Error saving viewer data" );
 	} );
 }

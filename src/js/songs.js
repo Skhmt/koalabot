@@ -75,7 +75,7 @@ function onYouTubeIframeAPIReady() {
         }
     } );
 
-    fs.writeFile( `${execPath}\\logs\\song.log`, "", function ( err ) {
+    fs.writeFile( `${execPath}logs/song.log`, "", function ( err ) {
         if ( err ) log( "* Error saving song log" );
     } );
 }
@@ -107,7 +107,7 @@ function nextSong() {
         ytPlayer.playVideo();
         currentSong = tempSong;
         updateSongList();
-        fs.writeFile( `${execPath}\\logs\\song.log`, currentSong.title, function ( err ) {
+        fs.writeFile( `${execPath}logs/song.log`, currentSong.title, function ( err ) {
             if ( err ) log( "* Error saving song log" );
         } );
     }   

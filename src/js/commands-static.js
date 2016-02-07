@@ -91,7 +91,7 @@ function cmdHighlight( params, from, mod, subscriber ) {
 			}
 			output += "\r\n";
 
-			fs.appendFile( `${execPath}\\logs\\highlights.log`, output, function(err) {
+			fs.appendFile( `${execPath}logs/highlights.log`, output, function(err) {
 				if (err) log( "* Error writing to highlights" );
 			} );
 		}
@@ -164,7 +164,7 @@ function timeDifference(oldtime) {
 function resetLap() {
 	lap = new Date();
 
-	fs.writeFile( `${execPath}\\logs\\lap.log`, lap.getTime(), function(err) {
+	fs.writeFile( `${execPath}logs/lap.log`, lap.getTime(), function(err) {
 		if (err) log( "* Error saving lap time" );
 	} );
 

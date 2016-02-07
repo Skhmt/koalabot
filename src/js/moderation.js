@@ -21,7 +21,7 @@ var modSettings;
 function moderationSetup(){
 	
 	try {
-		var readFile = fs.readFileSync( `${execPath}\\settings\\modSettings.ini` );
+		var readFile = fs.readFileSync( `${execPath}settings/modSettings.ini` );
 		modSettings = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
 		modSettings = {

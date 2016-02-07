@@ -25,7 +25,7 @@ function raffleSetup() {
 
 	// settings
 	try {
-		var readFile = fs.readFileSync( execPath + "\\settings\\raffleSettings.ini" );
+		var readFile = fs.readFileSync( `${execPath}settings/raffleSettings.ini` );
 		raffleSettings = $.parseJSON( readFile );
 	} catch(e) { // if there isn't a raffleSettings.ini, just use the default settings
 		raffleSettings = {
