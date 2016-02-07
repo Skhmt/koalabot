@@ -145,3 +145,27 @@ To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", J
 **text**: `String`, what to make the contents of the file
 
 **Returns**: `Boolean`, true if success, false if fail
+
+
+### apiGetRecentEvents() 
+
+Gets an array of the recent events, in format:
+
+{ "time": (integer milliseconds since midnight of January 1, 1970), "type": (string), "text": (string) }
+
+Type will be "SUB", "HOST", "FOLLOW", or anything that a module adds
+
+**Parameters**
+
+**Returns**: `Array`
+
+
+### apiAddRecentEvent(type, text)
+
+Adds to the recent events array. Recent events is used to send to a page via ajax, most likely.
+
+**Parameters**
+
+**type**: `String`, can be anything, the bot uses SUB, HOST, and FOLLOW for those events. Use your own type if you need to.
+
+**text**: `String`, the data. For SUB, HOST, and FOLLOW, it's only the username.
