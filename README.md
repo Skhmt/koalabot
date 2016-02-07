@@ -24,10 +24,14 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Sub notifications
 - [x] Update backend to allow plugins
 - [x] Loyalty points
+- [ ] OS X compatibility
+- [ ] API command for recent events (to allow server notifications)
 - [ ] Streamer song queue that's overridden by user song requests
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
 - [ ] Look in to overriding existing commands via module
+- [ ] Save song lists
+- [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
 - [ ] More text file outputs
 - [ ] More variables for custom commands (custom api)
