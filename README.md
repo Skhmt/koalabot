@@ -39,6 +39,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] More variables for custom commands (custom api)
 - [ ] Option to have song requests cost points
 - [ ] Add "regular" rank (between viewer and sub)
+- [ ] Open/view old statistics
 
 #### Commands:
 |Command|Parameters|Description|
