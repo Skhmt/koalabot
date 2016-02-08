@@ -29,6 +29,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] Streamer song queue that's overridden by user song requests
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
+- [ ] Add a user to points even if that user is not in the chat
 - [ ] Look in to overriding existing commands via module
 - [ ] Save song lists
 - [ ] Edit timed messages, commands, and quotes
