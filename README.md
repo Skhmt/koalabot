@@ -26,7 +26,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Loyalty points
 - [x] OS X compatibility
 - [x] API command for recent events (to allow server notifications)
-- [ ] Enable/Disable subscriber months text
+- [x] Enable/Disable subscriber months text
 - [ ] Streamer song queue that's overridden by user song requests
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
