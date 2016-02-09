@@ -5,7 +5,7 @@
 #### What is this?
 It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop and although I only provide a Windows version, it's possible to make an OS X or Linux version fairly easily - you'll have to do that on your own, but I can point you in the right direction. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
 
-#### Get the latest releases: [v0.8.8 - 7 Feb 2016 - Windows and Mac OS X](https://github.com/Skhmt/twitch-bot/releases/)
+#### Get the latest releases: [v0.8.9 - 8 Feb 2016 - Windows and Mac OS X](https://github.com/Skhmt/twitch-bot/releases/)
 
 #### Features / to-do list:
 - [x] Chat window with emoticons and viewer list
@@ -78,7 +78,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 * If you're using the bot on an account other than the one you stream on, make sure the bot is both a mod and an editor for your channel. To make the bot an editor, go to your Twitch Dashboard on your main account.
 
 #### Known issues:
-* Some youtube videos won't play. I can't fix this, it's a nw.js problem. https://github.com/nwjs/nw.js/issues/2856
+* ~~Some youtube videos won't play. I can't fix this, it's a nw.js problem.~~ I fixed it!! https://github.com/nwjs/nw.js/issues/2856
 
 #### Making modules:
 Modules are HTML5 + javascript (ES6) + jQuery (2.2.0) + Boostrap (3.3.6). See my [example module](https://gist.github.com/Skhmt/5b2f4300c0e7a82e654e) for working example. To install it, save it as a .js file and place it in the \mods\ folder, then restart the bot. Also see the [API](https://github.com/Skhmt/twitch-bot/blob/master/MODULE%20API.md) for more details and some functionality not used in example.js. Share modules via [JSFiddle](http://jsfiddle.net) or [Gist](http://gist.github.com).
