@@ -28,15 +28,15 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] API command for recent events (to allow server notifications)
 - [x] Enable/Disable subscriber months text
 - [x] Streamer song queue that's overridden by user song requests
+- [x] Option to have song requests cost points
+- [x] Save song lists
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
 - [ ] Add a user to points list even if that user is not in the chat
 - [ ] Look in to overriding existing commands via module
-- [x] Save song lists
 - [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
 - [ ] More text file outputs
-- [ ] Option to have song requests cost points
 - [ ] Add "regular" rank (between viewer and sub)
 - [ ] Open/view old statistics
 
