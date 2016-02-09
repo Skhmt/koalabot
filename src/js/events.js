@@ -26,6 +26,7 @@ function eventSetup() {
             followerChat: true,
             hostChat: true,
             subChat: true,
+            subChatMonths: true,
             followerChatText: "Thanks for the follow %user%!",
             hostChatText: "%user% is now hosting!",
             subChatText: "Thanks for the sub %user%!!",
@@ -61,6 +62,15 @@ function eventSetup() {
         $("#subChatOff").parent().addClass("active");
     }
 
+    // sub chat months radio state
+    if ( eventSettings.subChatMonths ) {
+        $("#subChatOnMonths").prop( "checked", true );
+        $("#subChatOnMonths").parent().addClass("active");
+    } else {
+        $("#subChatOffMonths").prop( "checked", true );
+        $("#subChatOffMonths").parent().addClass("active");
+    }
+
     // follower chat click listener
     $("input[name='followerChatRadio']").change( function() {
         if ( this.value === "on" ){
@@ -90,6 +100,17 @@ function eventSetup() {
         }
         save();
     } );
+
+    // sub chat months click listener
+    $("input[name='subChatRadioMonths']").change( function() {
+        if ( this.value === "on" ){
+            eventSettings.subChatMonths = true;
+        } else {
+            eventSettings.subChatMonths = false;
+        }
+        save();
+    } );
+
 
     // follower text initial setup and listener
     $("#followerChatText").val( eventSettings.followerChatText );
@@ -243,7 +264,7 @@ function subNotify(message) {
 
     } else if ( msgArray[1] === "subscribed" ) { // "name subscribed for 13 months in a row!"
 
-        if ( !eventSettings.subChat ) {
+        if ( !eventSettings.subChatMonths ) {
             log( `* ${getTimeStamp()} ${msgArray.join(" ")}` );
         } else {
             var output = eventSettings.subChatTextMonths;

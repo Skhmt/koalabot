@@ -81,7 +81,16 @@ function pointsSetup() {
 		save();
 	} );
 
-	pointsPointUpdate
+	$("#addUserPointsButton").click(function(){
+		pointsSettings.users.push( {
+			username: $("#addUserPointsText").val(),
+			totalPoints: 0,
+			currentPoints: 0
+		} );
+		$("#addUserPointsText").val("")
+		save();
+		drawList();
+	} );
 }
 
 // currentUsers = []; {"username": tempuser, "role": staff/moderator/admin/globalmod/viewer}

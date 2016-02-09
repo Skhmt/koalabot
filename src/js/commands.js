@@ -130,7 +130,7 @@ function refreshCommands() {
 	// rewrite commands div
 	for ( var i = 0; i < cmdSettings.custom.length; i++ ) {
 		var output = `<button id='cmdDel${i}' onclick='delCmdButton(${i})'
-			class='btn btn-primary btn-sm'><span class="glyphicon glyphicon-remove"></span></button>
+			class='btn btn-danger btn-sm'><span class="glyphicon glyphicon-remove"></span></button>
 			<span style='display: inline-block; width: 140px;'><b>${cmdSettings.symbol + cmdSettings.custom[i].name}</b></span>
 			<span style='display: inline-block; width: 75px;'><i>`;
 

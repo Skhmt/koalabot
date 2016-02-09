@@ -18,7 +18,7 @@
 <html>
 <head>
 	<title>
-		KoalaBot 0.8.8
+		KoalaBot 0.8.9
 	</title>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -166,6 +166,21 @@
 								</span>
 								<strong>&nbsp; Subscriber notifications in chat</strong>
 								<input type="text" id="subChatText" class="form-control input-sm">
+
+							</li>
+							<li class="list-group-item">
+								<span class="btn-group" data-toggle="buttons">
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="subChatRadioMonths" type="button" id="subChatOnMonths" value="on">
+										<span class="glyphicon glyphicon-ok"></span>
+										</input>
+									</label>
+									<label class="btn btn-primary btn-sm">
+										<input type="radio" name="subChatRadioMonths" type="button" id="subChatOffMonths" value="off">
+										<span class="glyphicon glyphicon-remove"></span>
+										</input>
+									</label>
+								</span>
 								<strong>Subscriber months text</strong>
 								<input type="text" id="subChatTextMonths" class="form-control input-sm">
 							</li>
@@ -179,7 +194,10 @@
 		<div class="tab-pane" id="tab-music">
 			<div class="row-fluid">
 				<div class="col-sm-5">
-					<div class="well well-sm scroll" id="songList" style="height: calc(100vh - 75px);"></div>
+					<label class="control-label">Viewer Song Queue:</label>
+					<div class="well well-sm scroll" id="songList" style="height: calc(50vh - 75px);"></div>
+					<label class="control-label">Streamer Song Queue:</label>
+					<div class="well well-sm scroll" id="songListStreamer" style="height: calc(50vh - 75px);"></div>
 				</div>
 				<div class="col-sm-7">
 					<div class="panel panel-default">
@@ -213,11 +231,22 @@
 								<div class="form-group">
 									<div class="input-group input-group-sm">
 										<span class="input-group-addon">v=</span>
-										<input type="text" class="form-control" id="addSongText">
+										<input type="text" class="form-control" id="addSongText" size="15">
 									</div>
 								</div> <!-- form group -->
+								&nbsp; &nbsp;
+								<button class="btn btn-primary btn-sm" id="addSongButton" type="button">
+									<span class="glyphicon glyphicon-plus"></span> &nbsp; Viewer
+								</button>
 								&nbsp;
-								<button class="btn btn-primary btn-sm" id="addSongButton" type="button">Add Song</button>
+								<button class="btn btn-primary btn-sm" id="addSongButtonStreamer" type="button">
+									<span class="glyphicon glyphicon-plus"></span> &nbsp; Streamer
+								</button>
+							</form>
+							<br>
+							<form class="form-inline" onsubmit="return false;">
+								<label class="control-label">!songrequest point cost:</label>&nbsp;
+								<input type="text" class="form-control input-sm" id="songPointCost" size="3">
 							</form>
 						</div> <!-- panel-body -->
 					</div> <!-- panel -->
@@ -352,6 +381,15 @@
 											<span class="input-group-addon">min</span>
 										</div>
 									</div>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">Add user:</label> &nbsp;
+									<input type="text" id="addUserPointsText" class="form-control input-sm" size="12">
+									<button class="btn btn-primary btn-sm" id="addUserPointsButton">
+										<span class="glyphicon glyphicon-plus"></span>
+									</button>
 								</form>
 							</li>
 						</ul>
@@ -687,7 +725,8 @@
 								<em>https://github.com/Skhmt/twitch-bot</em>
 							</p>
 							<p>
-								Made by: skhmt, 2016
+								Made by: skhmt, 2016.<br>
+								If you'd like to donate, give money to a charity instead. :)
 							</p>
 							<p>
 								Thanks to the people below that have helped a lot!

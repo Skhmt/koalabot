@@ -570,6 +570,11 @@ function save() {
 	fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( pointsSettings ), function ( err ) {
 		if ( err ) log( "* Error saving pointsSettings" );
 	} );
+
+	// saving songSettings.ini
+	fs.writeFile( `${execPath}settings/songSettings.ini`, JSON.stringify( songSettings ), function ( err ) {
+		if ( err ) log( "* Error saving songSettings" );
+	} );
 }
 
 function setupOauth() {
@@ -577,7 +582,7 @@ function setupOauth() {
 	response_type=token&
 	client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
 	redirect_uri=http://localhost:3000/oauth.html&
-	scope=channel_editor+chat_login+channel_subscriptions&
+	scope=channel_editor+chat_login&
 	force_verify=true`);
 	var express = require( "express" );
 	var app = express();
