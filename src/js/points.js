@@ -145,7 +145,7 @@ function drawList() {
 					<button class="btn btn-info btn-xs" onclick="addPoint(${i}, 1)">+1</button>
 					<button class="btn btn-warning btn-xs" onclick="subtractPoint(${i}, 1)">&ndash;1</button>
 					<button class="btn btn-danger btn-xs" onclick="subtractPoint(${i}, 5)">&ndash;5</button>
-					&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;
 					<button class="btn btn-danger btn-xs" onclick="deletePoints(${i})">
 						<span class="glyphicon glyphicon-remove"></span>
 					</button>
