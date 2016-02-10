@@ -18,21 +18,6 @@ body { padding-top: 50px; }
 	min-height: 30px !important;
 }
 
-blink, .blink {
-	color: #ff0000;
-	font-weight: bold;
-	-webkit-animation: blink 1s step-end infinite;
-	animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  67% { opacity: 0 }
-}
-
-@-webkit-keyframes blink {
-  67% { opacity: 0 }
-}
-
 .scroll {
 	overflow: auto;
 	word-wrap: break-word;

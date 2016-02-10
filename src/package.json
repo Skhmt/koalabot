@@ -1,7 +1,7 @@
 {
 	"name": "KoalaBot",
 	"description": "blah",
-	"version": "0.8.9",
+	"version": "0.8.10",
 	"main": "index.html",
 	"dependencies": {
 		"node-irc": "latest",

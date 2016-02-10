@@ -60,7 +60,7 @@ $(document).ready( function() {
 	$("#getOauthLink").click( setupOauth );
 
 	$("#changeChannel").click( function() {
-		var newchan = $("#getChannelField").val();
+		var newchan = $("#getChannelField").val().toLowerCase();
 		if ( newchan.substring(0,1) !== "#" ) { // if the user forgot the #, add it
 			newchan = `#${newchan}`;
 			$("#getChannelField").val( newchan );
@@ -143,6 +143,9 @@ $(document).ready( function() {
 
 	// set up the events part
 	eventSetup();
+
+	// set up the quotes
+	quoteSetup();
 
 	// set up mods
 	apiSetup();
@@ -342,7 +345,9 @@ function updateUserlist() {
 			exportViewers( response.chatter_count );
 			currentUsers = []; // {username: string, role: string}
 
-			var output = `<b>Total viewers</b>: ${response.chatter_count}<br>`;
+			updateViewerCount(response.chatter_count);
+
+			var output = "";
 			
 			var staffLen = response.chatters.staff.length;
 			if ( staffLen > 0 ) {
@@ -357,7 +362,7 @@ function updateUserlist() {
 
 			var modLen = response.chatters.moderators.length;
 			if ( modLen > 0 ) {
-				output += `<p> <b style='color: #34ae0a;'>MODERATORS (${modLen})</b> <br> `;
+				output += `<p> <b style='color: #34ae0a;'>MODS (${modLen})</b> <br> `;
 				for ( var i = 0; i < modLen; i++ ) {
 					var tempuser = response.chatters.moderators[i];
 					output += `${tempuser} <br> `;
@@ -400,6 +405,25 @@ function updateUserlist() {
 			}
 
 			$("#userlist").html( output );
+		}
+	);
+}
+
+function updateViewerCount( viewerCount ) {
+	$.getJSON(
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}/follows`,
+		{
+			"client_id" : clientid,
+			"api_version" : 3
+		},
+		function(response){
+			var followerCount = response._total;
+			$("#viewercount").html( `
+				<span class="glyphicon glyphicon-user text-info"></span>
+				&nbsp;&nbsp;&nbsp;${viewerCount.toLocaleString()}
+				<br> 
+				<span class="glyphicon glyphicon-heart text-danger"></span>
+				&nbsp;&nbsp;&nbsp;${followerCount.toLocaleString()}` );
 		}
 	);
 }

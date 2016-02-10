@@ -15,6 +15,21 @@
 */
 
 
+function quoteSetup() {
+	$("#addQuoteButton").click(function() {
+		var who = $("#addQuoteAuthor").val();
+		var date = $("#addQuoteDate").val();
+		var message = $("#addQuoteText").val();
+
+		$("#addQuoteAuthor").val("");
+		$("#addQuoteDate").val("");
+		$("#addQuoteText").val("");
+
+		addQuote(message, who, date);
+		return false;
+	} );
+}
+
 //cmdSettings.quotes[{active: true, message:"", who:"", date:""},...]
 function cmdQuote( params, from, mod, subscriber ) {
 	
@@ -48,6 +63,18 @@ function cmdQuote( params, from, mod, subscriber ) {
 	}
 	
 	return cmdSay( "Quote does not exist." );
+}
+
+function addQuote(message, who, date) {
+	var tempQuote = {
+		active: true,
+		message: message,
+		who: who,
+		date: date
+	};
+	cmdSettings.quotes.push( tempQuote );
+	save();
+	refreshQuotes();
 }
 
 // !addquote [user] [quote...]

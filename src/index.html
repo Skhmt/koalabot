@@ -18,7 +18,7 @@
 <html>
 <head>
 	<title>
-		KoalaBot 0.8.9
+		KoalaBot 0.8.10
 	</title>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,7 +29,6 @@
 	<script src="js/bootstrap.min.js"></script>
 	<link rel="stylesheet" id="botTheme" href="default.css" type="text/css" />
 
-	<script src="https://www.youtube.com/iframe_api"></script>
 	
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<script src="js/commands.js"></script>
@@ -98,13 +97,21 @@
 					<div class="well well-sm scroll" id="console" style="height: calc(100vh - 125px);"></div>
 				</div>
 				<div class="col-sm-3">
-					<div class="well well-sm scroll" id="userlist" style="height: calc(100vh - 125px);"></div>
+					<div class="well well-sm" id="viewercount" style="height: 60px; "></div>
+					<div class="well well-sm scroll" id="userlist" style="height: calc(100vh - 205px);"></div>
 				</div>
 			</div>
 			<div class="row-fluid">
 				<div class="col-sm-12">
 					<form class="form-group" id="chatForm" onsubmit="chat(); return false;">
-						<input type="text" class="form-control input-sm" id="chatText" value="" autocomplete="off" placeholder="chat...">
+						<div class="form-group">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">
+									<span class="glyphicon glyphicon-console"></span>
+								</span>
+								<input type="text" class="form-control input-sm" id="chatText" value="" autocomplete="off" placeholder="chat...">
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>
@@ -181,7 +188,7 @@
 										</input>
 									</label>
 								</span>
-								<strong>Subscriber months text</strong>
+								<strong>&nbsp; Subscriber months notifications in chat</strong>
 								<input type="text" id="subChatTextMonths" class="form-control input-sm">
 							</li>
 						</ul>
@@ -202,10 +209,6 @@
 				<div class="col-sm-7">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<div id="ytPlayer"></div>
-						</div>
-						<div class="panel-body">
-							<label class="control-label">Song requests:</label>&nbsp;
 							<span class="btn-group" data-toggle="buttons">
 								<label class="btn btn-primary btn-sm">
 									<input type="radio" name="songsRadio" type="button" id="songsOn" value="on">
@@ -218,37 +221,60 @@
 									</input>
 								</label>
 							</span>
-							<br><br>
-							<button id="nextSongButton" class="btn btn-primary btn-sm">
-								<span class="glyphicon glyphicon-step-forward"></span>
-							</button>
-							<button id="muteSongButton" class="btn btn-primary btn-sm">
-								<span class="glyphicon glyphicon-volume-off"></span>
-							</button>
-							<span id="muteSongStatus" class="blink"></span>
-							<br><br>
-							<form class="form-inline" onsubmit="return false;">
-								<div class="form-group">
-									<div class="input-group input-group-sm">
-										<span class="input-group-addon">v=</span>
-										<input type="text" class="form-control" id="addSongText" size="15">
+							&nbsp;
+							<label class="control-label">Song requests</label>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item">
+								<iframe id="ytPlayer" src="http://skhmt.github.io/bot/yt.html" 
+									style="width: 405px; height: 250px; border: 0; padding: 0; margin: 0;"></iframe>
+							</li>
+							<li class="list-group-item">
+								<button id="nextSongButton" class="btn btn-info btn-sm">
+									<span class="glyphicon glyphicon-step-forward"></span>
+								</button>
+								&nbsp; &nbsp; 
+								<button id="volDownSongButton" class="btn btn-primary btn-sm">
+									<span class="glyphicon glyphicon-volume-down"></span>
+								</button>
+								<button id="muteSongButton" class="btn btn-primary btn-sm">
+									<span class="glyphicon glyphicon-volume-off"></span>
+								</button>
+								<button id="volUpSongButton" class="btn btn-primary btn-sm">
+									<span class="glyphicon glyphicon-volume-up"></span>
+								</button>
+								&nbsp; &nbsp; 
+								<div style="display:inline-block; width: 200px;" id="songVolumeContainer">
+									<div class="progress progress-striped active" style="margin-bottom: -5px !important;">
+										<div class="progress-bar progress-bar-success" style="width: 100%;" id="songVolume"></div>
 									</div>
-								</div> <!-- form group -->
-								&nbsp; &nbsp;
-								<button class="btn btn-primary btn-sm" id="addSongButton" type="button">
-									<span class="glyphicon glyphicon-plus"></span> &nbsp; Viewer
-								</button>
-								&nbsp;
-								<button class="btn btn-primary btn-sm" id="addSongButtonStreamer" type="button">
-									<span class="glyphicon glyphicon-plus"></span> &nbsp; Streamer
-								</button>
-							</form>
-							<br>
-							<form class="form-inline" onsubmit="return false;">
-								<label class="control-label">!songrequest point cost:</label>&nbsp;
-								<input type="text" class="form-control input-sm" id="songPointCost" size="3">
-							</form>
-						</div> <!-- panel-body -->
+								</div>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<div class="form-group">
+										<div class="input-group input-group-sm">
+											<span class="input-group-addon">v=</span>
+											<input type="text" class="form-control" id="addSongText" size="15">
+										</div>
+									</div> <!-- form group -->
+									&nbsp; &nbsp;
+									<button class="btn btn-primary btn-sm" id="addSongButton" type="button">
+										<span class="glyphicon glyphicon-plus"></span> &nbsp; Viewer
+									</button>
+									&nbsp;
+									<button class="btn btn-primary btn-sm" id="addSongButtonStreamer" type="button">
+										<span class="glyphicon glyphicon-plus"></span> &nbsp; Streamer
+									</button>
+								</form>
+							</li>
+							<li class="list-group-item">
+								<form class="form-inline" onsubmit="return false;">
+									<label class="control-label">!songrequest point cost:</label>&nbsp;
+									<input type="text" class="form-control input-sm" id="songPointCost" size="3">
+								</form>
+							</li>
+						</ul>
 					</div> <!-- panel -->
 				</div> <!-- col -->
 			</div> <!-- row -->
@@ -406,7 +432,9 @@
 						<div class="panel-body">
 							<form class="form-inline" onsubmit="return false;">
 								<div class="form-group">
-									<button id="addCmdButton" class="btn btn-primary btn-sm">Add Command</button>&nbsp;&nbsp; 
+									<button id="addCmdButton" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-plus"></span> Command
+									</button>&nbsp;&nbsp; 
 									<label class="control-label">Name:</label>&nbsp;
 										<input type="text" id="addCmdName" class="form-control input-sm">&nbsp;&nbsp; 
 									&nbsp;&nbsp; 
@@ -441,7 +469,9 @@
 						<div class="panel-body">
 							<form class="form-inline" onsubmit="return false;">
 								<div class="form-group">
-									<button id="addMsgButton" class="btn btn-primary btn-sm">Add Message</button>
+									<button id="addMsgButton" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-plus"></span> Message
+									</button>
 									&nbsp; &nbsp;
 									<label class="control-label">Repeat interval:</label>&nbsp;
 									<div class="input-group input-group-sm">
@@ -468,7 +498,31 @@
 		<div class="tab-pane" id="tab-quotes">
 			<div class="row-fluid">
 				<div class="col-sm-12">
-					<div class="well well-sm scroll" id="quotes" style="height: calc(100vh - 75px);"></div>
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<form class="form-inline" onsubmit="return false;">
+								<div class="form-group">
+									<button id="addQuoteButton" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-plus"></span> Quote
+									</button>
+									&nbsp; &nbsp;
+									<label class="control-label">Quote author:</label>&nbsp;
+									<input type="text" id="addQuoteAuthor" value="" class="form-control input-sm" size="20">
+									&nbsp; &nbsp;
+									<label class="control-label">When:</label>&nbsp;
+									<input type="text" id="addQuoteDate" value="" class="form-control input-sm" size="20">
+									<br><br>
+									<label class="control-label">Text:</label>&nbsp;
+									<input type="text" id="addQuoteText" value="" class="form-control input-sm" size="95">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="well well-sm scroll" id="quotes" style="height: calc(100vh - 220px);"></div>
 				</div>
 			</div>
 		</div>
@@ -636,28 +690,36 @@
 								<form class="form-inline" onsubmit="return false;">
 									<label class="control-label">Access token:</label>&nbsp;
 									<input type="password" id="getOauthField" class="form-control input-sm" size="30">
-									<button id="getOauthLink" class="btn btn-primary btn-sm">Get token</button>
+									<button id="getOauthLink" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-log-in"></span>
+									</button>
 								</form>
 							</li>
 							<li class="list-group-item">
 								<form class="form-inline" onsubmit="return false;">
 									<label class="control-label">Channel:</label> &nbsp;
 									<input type="text" id="getChannelField" class="form-control input-sm" size="20">
-									<button id="changeChannel" class="btn btn-primary btn-sm">Change channel</button>
+									<button id="changeChannel" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-triangle-right"></span>
+									</button>
 								</form>
 							</li>
 							<li class="list-group-item">
 								<form class="form-inline" onsubmit="return false;">
 									<label class="control-label">Game:</label> &nbsp;
 									<input type="text" id="gameField" class="form-control input-sm" size="75">
-									<button id="updateGameButton" class="btn btn-primary btn-sm">Update</button>
+									<button id="updateGameButton" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-cloud-upload"></span>
+									</button>
 								</form>
 							</li>
 							<li class="list-group-item">
 								<form class="form-inline" onsubmit="return false;">
 									<label class="control-label">Status:</label> &nbsp;
 									<input type="text" id="statusField" class="form-control input-sm" size="75">
-									<button id="updateStatusButton" class="btn btn-primary btn-sm">Update</button>
+									<button id="updateStatusButton" class="btn btn-primary btn-sm">
+										<span class="glyphicon glyphicon-cloud-upload"></span>
+									</button>
 								</form>
 							</li>
 							<li class="list-group-item">
@@ -725,16 +787,14 @@
 								<em>https://github.com/Skhmt/twitch-bot</em>
 							</p>
 							<p>
-								Made by: skhmt, 2016.<br>
-								If you'd like to donate, give money to a charity instead. :)
+								Made by: skhmt, 2016.
 							</p>
 							<p>
 								Thanks to the people below that have helped a lot!
 							</p>
 							<p>
 								M3rchant <br>
-								Ashalle <br>
-								prototypal
+								Ashalle 
 							</p>
 						</div>
 					</div>

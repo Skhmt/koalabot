@@ -27,7 +27,7 @@ function songsSetup() {
     } );
 
     $("#muteSongButton").click( function() {
-        toggleMute();
+        toggleMute(false);
     } );
 
     $("#addSongButton").click( function() {
@@ -38,6 +38,31 @@ function songsSetup() {
     $("#addSongButtonStreamer").click( function() {
         addSongStreamer( $("#addSongText").val() );
         $("#addSongText").val("");
+    } );
+
+    $("#volDownSongButton").click( function() {
+        var vol = ytPlayer.getVolume();
+        vol -= 10;
+        if ( vol < 0 ) vol = 0;
+        ytPlayer.setVolume( vol );
+        $("#songVolume").css( "width", ( vol*0.01*$("#songVolumeContainer").width() ) + "px" );
+    } );
+
+    $("#volUpSongButton").click( function() {
+        var vol = ytPlayer.getVolume();
+        vol += 10;
+        if ( vol > 100 ) vol = 100;
+        ytPlayer.setVolume( vol );
+        $("#songVolume").css( "width", ( vol*0.01*$("#songVolumeContainer").width() ) + "px" );
+    } );
+
+    $("#songVolumeContainer").click( function(e) {
+        var offset = $(this).offset();
+        var pixelsFromLeft = e.pageX - offset.left;
+        var containerWidth = $("#songVolumeContainer").width();
+        var vol = Math.round( (pixelsFromLeft/containerWidth)*100 );
+        ytPlayer.setVolume( vol );
+        $("#songVolume").css( "width", ( vol*0.01*$("#songVolumeContainer").width() ) + "px" );
     } );
 
     try {
@@ -77,49 +102,39 @@ function songsSetup() {
         save();
     } );
 
-    updateStreamerSongList()
-}
-
-
-function onYouTubeIframeAPIReady() {
-    ytPlayer = new YT.Player('ytPlayer', {
-        height: 250,
-        width: 405,
-        videoId: 'vxIOUJ7by6U',
-        playerVars: {
-            fs: 0,
-            rel: 0,
-            modestbranding: 1,
-            iv_load_policy: 3
-        },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange,
-            'onError': onError
-        }
-    } );
-
     fs.writeFile( `${execPath}logs/song.log`, "", function ( err ) {
         if ( err ) log( "* Error saving song log" );
     } );
+
+    ytPlayer = document.getElementById("ytPlayer").contentWindow;
+    updateStreamerSongList();
+    songStateChecker();
 }
 
-function onPlayerReady(event) {
-    // event.target.playVideo();
-}
+function songStateChecker() {
+    var status;
+    try { status = ytPlayer.getPlayerState(); }
+    catch (e) {}
 
-function onPlayerStateChange(event) {
-    if ( event.data === YT.PlayerState.ENDED ) {
+    // YT.PlayerState.(unstarted?) == -1
+    // YT.PlayerState.ENDED == 0
+    // YT.PlayerState.PLAYING == 1
+    // YT.PlayerState.PAUSED == 2
+    // YT.PlayerState.BUFFERING == 3
+    // YT.PlayerState.CUED == 5
+
+    if ( status === 0 ) { // YT.PlayerState.ENDED == 0
         nextSong();
-    }
+    } 
+    setTimeout( songStateChecker, 500 );
 }
 
 /*
  * If there's an error (video doesn't work on non-websites, restricted by country, etc), go to the next song
  */
-function onError(event) {
+/*function onError(event) {
     nextSong();
-}
+}*/
 
 function nextSong() {
     if ( !songSettings.songRequests ) return;
@@ -165,7 +180,7 @@ function addSongStreamer(videoid) {
         {
             "id": videoid,
             "part": "snippet",
-            "key": "AIzaSyDHIEtPmB3cOp2nHFA9T2LAz-xcfXyZJ2A"
+            "key": ytAPIkey
         },
         function( response ) {
             if ( response.pageInfo.totalResults == 0 ) {
@@ -180,7 +195,7 @@ function addSongStreamer(videoid) {
                 updateStreamerSongList();
 
                 // If after adding a song, the player isn't playing, start it
-                if ( ytPlayer.getPlayerState() != YT.PlayerState.PLAYING ) {
+                if ( ytPlayer.getPlayerState() != 1 ) { // YT.PlayerState.PLAYING == 1
                     nextSong();
                 }
                 save();
@@ -219,7 +234,7 @@ function addSong(videoid, username, mod) {
         {
             "id": videoid,
             "part": "snippet",
-            "key": "AIzaSyDHIEtPmB3cOp2nHFA9T2LAz-xcfXyZJ2A"
+            "key": ytAPIkey
         },
         function( response ) {
             if ( response.pageInfo.totalResults == 0 ) {
@@ -234,7 +249,7 @@ function addSong(videoid, username, mod) {
                 updateSongList();
 
                 // If after adding a song, the player isn't playing, start it
-                if ( ytPlayer.getPlayerState() != YT.PlayerState.PLAYING ) {
+                if ( ytPlayer.getPlayerState() != 1 ) { // YT.PlayerState.PLAYING == 1
                     nextSong();
                 }
             }
@@ -259,6 +274,7 @@ function cmdSetVolume(params, from, mod, subscriber) {
 
     if ( vol >= 0 && vol <= 100 ) {
         ytPlayer.setVolume( vol );
+        $("#songVolume").css( "width", ( vol*0.01*$("#songVolumeContainer").width() ) + "px" );
         cmdSay( `Volume set to ${vol}` );
     }
 }
@@ -286,7 +302,7 @@ function cmdSkipSong(params, from, mod, subscriber){
 
 function cmdMute(params, from, mod, subscriber){
     if ( mod ) {
-        toggleMute();
+        toggleMute(true);
     }
 }
 
@@ -314,16 +330,18 @@ function updateStreamerSongList() {
     $("#songListStreamer").html( output );
 }
 
-function toggleMute() {
+function toggleMute(chat) {
     if ( !songSettings.songRequests ) return;
     if ( ytPlayer.isMuted() ) {
         ytPlayer.unMute();
-        $("#muteSongStatus").html("");
-        cmdSay( "The song has been unmuted.");
+        $("#songVolume").addClass("progress-bar-success");
+        $("#songVolume").removeClass("progress-bar-warning");
+        if (chat) cmdSay( "The song has been unmuted.");
     }
     else {
         ytPlayer.mute();
-        $("#muteSongStatus").html("SONG IS MUTED!");
-        cmdSay( "The song has been muted.");
+        $("#songVolume").addClass("progress-bar-warning");
+        $("#songVolume").removeClass("progress-bar-success");
+        if (chat) cmdSay( "The song has been muted.");
     }
 }
