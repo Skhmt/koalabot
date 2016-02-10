@@ -69,7 +69,7 @@ function msgPriv( command, args ) {
 
 	var subscriber = false;
 	if ( commands[5].substring(11) === "1" ) subscriber = true;
-	
+
 	var turbo = false;
 	if ( commands[6].substring(6) === "1" ) turbo = true;
 
@@ -88,46 +88,55 @@ function msgPriv( command, args ) {
 	var output = getTimeStamp() + " ";
 
 	// output icons and such
-	if ( settings.channel.substring(1) === from.toLowerCase() ) output += "<img src='http://chat-badges.s3.amazonaws.com/broadcaster.png'>";
-	if ( mod ) output += "<img src='http://chat-badges.s3.amazonaws.com/mod.png'>";
-	if ( subscriber ) output += `<img src='${subBadgeUrl}' />`;
-	if ( turbo ) output += "<img src='http://chat-badges.s3.amazonaws.com/turbo.png'>";
+	if ( settings.channel.substring(1) === from.toLowerCase() ) {
+		output += "<img src='http://chat-badges.s3.amazonaws.com/broadcaster.png'>";
+	}
+	if ( mod ) {
+		output += "<img src='http://chat-badges.s3.amazonaws.com/mod.png'>";
+	}
+	if ( subscriber ) {
+		output += `<img src='${subBadgeUrl}' />`;
+	}
+	if ( turbo ) {
+		output += "<img src='http://chat-badges.s3.amazonaws.com/turbo.png'>";
+	}
 
 	// output FROM info
 	output += `<b style='color: ${color};'>${from}</b>`;
-	
+
 
 	// reconstructing the string after it was split by " "
-	var text = args[3].substring(1);
+	var text = args[3].substring(1); // first word, removed the colon
+
+	args.splice(0,4);
+	var lessargs = args.join(" "); // all other words
+
 	 // ACTION:
 		// Command: @color=#1E90FF;display-name=Skhmt;emotes=;subscriber=0;turbo=0;user-id=71619374;user-type=
 		// Args 0: skhmt!skhmt@skhmt.tmi.twitch.tv PRIVMSG #skhmt :ACTION does things
-	
-	if ( text === "\001ACTION" ) {
-		text = `<span style='color: ${color};'>`; // remove the word "ACTION" from the action
-		for ( var i = 4; i < args.length; i++ ) { // construct "text"
-			text += " " + args[i].replace(/</g,"&lt;").replace(/>/g,"&gt;");
-		}
-		text += "</span>"; // close the bold tag
-		
-		moderation( from, mod, text );
-		return log( output + text );
-	}
-	
-	// not an action 
-	output += "<b>:</b> "; // close the bold tag for the first half
-	for ( var i = 4; i < args.length; i++ ) { // continue constructing "text" as normal
-		text += " " + args[i].replace(/</g,"&lt;").replace(/>/g,"&gt;");
-	}
 
-	log( output + text );
-	
-	// if it's a command, send to parseCommand
-	if ( text.substring(0,1) === cmdSettings.symbol ) {
-		parseCommand( text, from, mod, subscriber );
+	if ( text === "\001ACTION" ) {
+		text = lessargs; // text is now all words after "ACTION"
+		output += `<span style='color: ${color};'>
+			${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+			</span>`;
+
+		moderation( from, mod, text );
+		return log( output );
 	}
-	
-	moderation( from, mod, text );
+	else { // not an action
+		text += " " + lessargs; // text is merged with lessargs to make up the entire text string
+		output += `<b>:</b> ${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}`;
+
+		// if it's a command, send to parseCommand
+		if ( text.substring(0,1) === cmdSettings.symbol ) {
+			parseCommand( text, from, mod, subscriber );
+		}
+
+		moderation( from, mod, text );
+
+		return log( output );
+	}
 }
 
 
@@ -141,7 +150,7 @@ function msgRoom( command, args ) {
 	var r9k = commands[1].substring(4);
 	var slow = commands[2].substring(5);
 	var subsOnly = commands[3].substring(10);
-	
+
 	if ( r9k == 0 && slow == 0 && subsOnly == 0 ) {
 		log( `* No roomstate options set for ${args[2]}` );
 	} else {
@@ -149,7 +158,7 @@ function msgRoom( command, args ) {
 		if ( r9k === 1 ) output += " r9k";
 		if ( slow > 0 ) output += ` slow(${slow})`;
 		if ( subsOnly === 1 ) output += " subscribers-only";
-		
+
 		log( output );
 	}
 }

@@ -133,6 +133,11 @@ function pickRaffle() {
 	clearTimeout( raffleTimeout );
 	raffleTimeout = "";
 
+	if ( raffleEntrants.length == 0 ) {
+		$("#raffleStatus").html( `No entrants.` );
+		return;
+	}
+
 	var winner = raffleEntrants[ Math.floor( Math.random() * raffleEntrants.length ) ];
 
 	$("#raffleStatus").html( `WINNER: ${winner}` );

@@ -19,7 +19,7 @@
 var timedMessages = [];
 
 function timedMessagesSetup() {
-	
+
 	try {
 		var readFile = fs.readFileSync( `${execPath}settings/timedMessages.ini` );
 		timedMessages = $.parseJSON( readFile );
@@ -31,31 +31,38 @@ function timedMessagesSetup() {
 		addMessage();
 		return false;
 	} );
-	
+
 	refreshMessages();
 }
 
 function refreshMessages() {
 	// clear the timedMsgs area
 	$("#timedMsgs").html("");
-	
+
 	// clear the timerList
 	timerList = [];
-	
+
 	for ( var i = 0; i < timedMessages.length; i++ ) {
 		var output = "";
 		// build a message... [X] [Time] [Message]
-		output += `<button id='msg${i}' onclick='deleteMessage(${i})'
-			class='btn btn-danger btn-sm'><span class="glyphicon glyphicon-remove"></span></button>
+		output += `
+			<button onclick='playMessage(${i})' class='btn btn-success btn-sm'>
+				<span class="glyphicon glyphicon-play"></span>
+			</button>
+			&nbsp;
+			<button onclick='deleteMessage(${i})' class='btn btn-danger btn-sm'>
+				<span class="glyphicon glyphicon-remove"></span>
+			</button>
+			&nbsp;
 			<span class='timedMessageSpan'>${timedMessages[i].time}s</span> &nbsp; &nbsp; &nbsp;
 			${timedMessages[i].text}<br> `;
-		
+
 		// add the message to the ui list of messages
 		$("#timedMsgs").append( output );
-		
+
 		// create an interval
 		//var intervalId = setInterval(playMessage(i), timedMessages[i].time * 1000);
-		
+
 		// add the message to timedMessagesIntervals
 		var now = new Date().getTime();
 		var tempInterval = timedMessages[i].time * 1000;
@@ -67,11 +74,15 @@ function refreshMessages() {
 	}
 }
 
+function playMessage(i) {
+	cmdSay( timedMessages[i].text );
+}
+
 function addMessage() {
 	// add the message
 	var tempText = $("#addMsgText").val();
 	var tempTime = $("#addMsgTime").val();
-	
+
 	if( tempText === "" ) {
 		alert( "Error: no text entered." );
 	} else if ( tempTime != parseInt( tempTime, 10 ) ) {
@@ -84,11 +95,11 @@ function addMessage() {
 			time: tempTime
 		} );
 		save();
-		
+
 		// clear the fields
 		$("#addMsgText").val("");
 		$("#addMsgTime").val("120");
-		
+
 		refreshMessages();
 	}
 }

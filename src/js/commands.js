@@ -23,7 +23,7 @@ var lap;
 var cmdList = [];
 
 function cmdSetup() {
-	
+
 	$("#addCmdButton").click(function() {
 		addCmdButton();
 		return false;
@@ -56,7 +56,7 @@ function cmdSetup() {
 			songRequests: true
 		};
 	}
-	
+
 	// loading lap info
 	try {
 		var readFile = fs.readFileSync( `${execPath}logs/lap.log`, "utf8" );
@@ -126,18 +126,20 @@ function parseCommand(text, from, mod, subscriber) {
 function refreshCommands() {
 	// clear the commands div
 	$("#commands").html("");
-	
+
 	// rewrite commands div
 	for ( var i = 0; i < cmdSettings.custom.length; i++ ) {
-		var output = `<button id='cmdDel${i}' onclick='delCmdButton(${i})'
+		var output = `<button onclick='delCmdButton(${i})'
 			class='btn btn-danger btn-sm'><span class="glyphicon glyphicon-remove"></span></button>
-			<span style='display: inline-block; width: 140px;'><b>${cmdSettings.symbol + cmdSettings.custom[i].name}</b></span>
+			<span style='display: inline-block; width: 140px;'>
+			&nbsp;
+			<b>${cmdSettings.symbol + cmdSettings.custom[i].name}</b></span>
 			<span style='display: inline-block; width: 75px;'><i>`;
 
 		if ( cmdSettings.custom[i].userType == "" ) output += "[All users]";
 		else output += `[${cmdSettings.custom[i].userType}]`;
 		output += `</i></span>${cmdSettings.custom[i].text}<br />`;
-		
+
 		$("#commands").append( output );
 	}
 }
@@ -150,17 +152,17 @@ function cmdAddCmd( params, from, mod, subscriber ) {
 	if ( params[0] == null ) {
 		return cmdSay( `Usage: ${cmdSettings.symbol}addcom (-ul=mod) [${cmdSettings.symbol}command] [text]` );
 	}
-	
+
 	// check if it exists as a fixed command
-	
+
 	// check if it exists as a custom command
-	
+
 	var tempCommand = {
 		name: "",
 		userType: "",
 		text: ""
 	};
-	
+
 	if ( params[0].substring(0,4) === "-ul=" ) {
 		var type = params[0].substring(4);
 		if ( type === "mod" ) tempCommand.userType = "mod";
@@ -168,11 +170,11 @@ function cmdAddCmd( params, from, mod, subscriber ) {
 		else if ( type === "streamer" ) tempCommand.userType = "streamer";
 		params.splice(0,1); // removing !addcom -ul=*
 	}
-	
+
 	if ( params[0] === null ) {
 		return cmdSay( `Usage: ${cmdSettings.symbol}addcom (-ul=mod) [${cmdSettings.symbol}command] [text]` );
 	}
-	
+
 	// get the command name
 	if ( params[0].charAt(0) === cmdSettings.symbol ) { // store it without the symbol
 		tempCommand.name = params[0].substring(1);
@@ -180,7 +182,7 @@ function cmdAddCmd( params, from, mod, subscriber ) {
 		tempCommand.name = params[0];
 	}
 	tempCommand.name = tempCommand.name.toLowerCase(); // making it lower case
-	
+
 	params.splice(0,1); // remove the command name
 	tempCommand.text = params.join(" ");
 
@@ -192,20 +194,20 @@ function cmdAddCmd( params, from, mod, subscriber ) {
 
 function addCmdButton() {
 	var tempName = $("#addCmdName").val();
-	
+
 	if ( tempName.charAt(0) === cmdSettings.symbol ) {
 		tempName = tempName.substring(1);
 	}
-	
+
 	var tempCommand = {
 		name: tempName.toLowerCase(),
 		userType: $("#addCmdUserType").val(),
 		text: $("#addCmdText").val()
 	};
-	
+
 	$("#addCmdName").val("");
 	$("#addCmdText").val("");
-	
+
 	cmdSettings.custom.push( tempCommand );
 	save();
 	refreshCommands();
@@ -223,7 +225,7 @@ function cmdDelCmd( params, from, mod, subscriber ) {
 		}
 	}
 	if ( cmdIndex === "" ) return cmdSay( "Error, could not find command." ); //not a valid command
-	
+
 	cmdSettings.custom.splice( cmdIndex, 1 );
 	cmdSay( `Deleted command: ${params[0]}` );
 	save();
@@ -251,7 +253,7 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 		}
 	}
 	if ( cmdIndex === "" ) return; //not a valid command
-	
+
 	var isStreamer = ( from == settings.channel.substring(1) );
 	var isBot = ( from == settings.username );
 
@@ -263,9 +265,9 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 		return;
 	}
 	else if ( cmdSettings.custom[cmdIndex].userType === "streamer" && !isStreamer && !isBot ) {
-		return; 
+		return;
 	}
-	
+
 	// Variables!
 
 	var output = cmdSettings.custom[cmdIndex].text;
@@ -281,4 +283,3 @@ function cmdSay( text ) {
 	bot.say( settings.channel, text );
 	log( `<b>[${cmdSettings.symbol}] ${text}</b>` );
 }
-

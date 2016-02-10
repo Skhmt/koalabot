@@ -32,7 +32,7 @@ function quoteSetup() {
 
 //cmdSettings.quotes[{active: true, message:"", who:"", date:""},...]
 function cmdQuote( params, from, mod, subscriber ) {
-	
+
 	var tempIndex = params[0];
 
 	// get an array of quotes that are enabled
@@ -42,12 +42,12 @@ function cmdQuote( params, from, mod, subscriber ) {
 			activeQuotes.push( cmdSettings.quotes[i] );
 		}
 	}
-	
+
 	if ( activeQuotes.length === 0 ) {
 		return cmdSay( "No quotes in database." );
 	}
-	
-	
+
+
 	if ( tempIndex == null ) {
 		var randIndex = Math.floor( Math.random() * activeQuotes.length );
 		var tempQuote = activeQuotes[randIndex];
@@ -61,7 +61,7 @@ function cmdQuote( params, from, mod, subscriber ) {
 				return cmdSay( `"${tempQuote.message}" - ${tempQuote.who}, ${tempQuote.date}` );
 			}
 	}
-	
+
 	return cmdSay( "Quote does not exist." );
 }
 
@@ -91,9 +91,9 @@ function cmdAddQuote( params, from, mod, subscriber ) {
 	tempQuote.who = params.shift();
 	tempQuote.date = ( new Date().toDateString() ).substring(4);
 	tempQuote.message = params.join(" ");
-	
+
 	cmdSay( `"${tempQuote.message}" - <em>${tempQuote.who}</em> added to id: ${cmdSettings.quotes.push( tempQuote )-1}` );
-	
+
 	save();
 	refreshQuotes();
 }
@@ -128,14 +128,26 @@ function delQuoteButton( i ) {
 	}
 }
 
+function playQuoteButton( i ) {
+	var tempQuote = cmdSettings.quotes[i];
+	return cmdSay( `"${tempQuote.message}" - ${tempQuote.who}, ${tempQuote.date}` );
+}
+
 function refreshQuotes() {
 	$("#quotes").html("");
 	for ( var i = 0; i < cmdSettings.quotes.length; i++ ) {
 		if ( cmdSettings.quotes[i].active ) {
 			var output = "";
-			output += `<button id='quote${i}' onclick='delQuoteButton(${i})'
-				class='btn btn-danger btn-sm'><span class="glyphicon glyphicon-remove"></span>
-				</button>&nbsp;<strong>${i}</strong> :
+			output += `
+				<button onclick='playQuoteButton(${i})' class='btn btn-success btn-sm'>
+					<span class="glyphicon glyphicon-play"></span>
+				</button>
+				&nbsp;
+				<button onclick='delQuoteButton(${i})' class='btn btn-danger btn-sm'>
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+				&nbsp;
+				<strong>${i}</strong> :
 				"<i>${cmdSettings.quotes[i].message}</i>"
 				- <b>${cmdSettings.quotes[i].who}</b>, ${cmdSettings.quotes[i].date}
 				<br>`;
@@ -144,5 +156,5 @@ function refreshQuotes() {
 
 		}
 	}
-	
+
 }
