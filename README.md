@@ -43,6 +43,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] Cooldowns for commands 
 - [ ] Look in to overriding existing commands via module
 - [ ] Edit timed messages, commands, and quotes
+- [ ] Button to sort point list alphabetically 
 - [ ] User ranks
 - [ ] Add "regular" rank (between viewer and sub)
 - [ ] Open/view old statistics (https://github.com/nwjs/nw.js/wiki/File-dialogs)
