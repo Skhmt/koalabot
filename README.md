@@ -31,13 +31,15 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Option to have song requests cost points
 - [x] Save song lists
 - [x] Add a user to points list even if that user is not in the chat
-- [ ] Add a "play" button to individual quotes and timed messages
+- [x] Add a "play" button to individual quotes and timed messages
+- [ ] More text file outputs
+- [ ] Put game and stream title in the window title
+- [ ] Reduce saving to every 5 seconds or so
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
 - [ ] Look in to overriding existing commands via module
 - [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
-- [ ] More text file outputs
 - [ ] Add "regular" rank (between viewer and sub)
 - [ ] Open/view old statistics
 
