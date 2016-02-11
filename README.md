@@ -41,7 +41,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
 - [ ] Add "regular" rank (between viewer and sub)
-- [ ] Open/view old statistics
+- [ ] Open/view old statistics (https://github.com/nwjs/nw.js/wiki/File-dialogs)
 
 #### Commands:
 |Command|Parameters|Description|
