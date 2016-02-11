@@ -35,6 +35,10 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] More text file outputs
 - [ ] Put game and stream title in the window title
 - [ ] Reduce saving to every 5 seconds or so
+- [ ] Generic Module status tab + api command for module description
+- [ ] Documentation on how obs-integration works
+- [ ] Points requirement for raffles
+- [ ] Global hotkeys
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
 - [ ] Look in to overriding existing commands via module
