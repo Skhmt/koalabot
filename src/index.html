@@ -18,7 +18,7 @@
 <html>
 <head>
 	<title>
-		KoalaBot 0.8.11
+		KoalaBot 0.8.12
 	</title>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -201,9 +201,13 @@
 		<div class="tab-pane" id="tab-music">
 			<div class="row-fluid">
 				<div class="col-sm-5">
-					<label class="control-label">Viewer Song Queue:</label>
+					<label class="control-label">Viewer Song Queue</label>
 					<div class="well well-sm scroll" id="songList" style="height: calc(50vh - 75px);"></div>
-					<label class="control-label">Streamer Song Queue:</label>
+					<label class="control-label">Streamer Song Queue</label>
+					&nbsp;
+					<button class="btn btn-default btn-xs" id="songShuffleStreamer">
+						<span class="glyphicon glyphicon-random"></span>
+					</button>
 					<div class="well well-sm scroll" id="songListStreamer" style="height: calc(50vh - 75px);"></div>
 				</div>
 				<div class="col-sm-7">

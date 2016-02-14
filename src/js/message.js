@@ -59,30 +59,45 @@ function msgNotice( args ) {
 
 /* MESSAGE:
 	Command: @color=#1E90FF;display-name=Skhmt;emotes=;mod=0;subscriber=0;turbo=0;user-id=71619374;user-type=mod
+ @color=#1E90FF;display-name=Skhmt;emotes=;mod=0;room-id=47520292;subscriber=1;turbo=0;user-id=71619374;user-type=
 	Args 0: skhmt!skhmt@skhmt.tmi.twitch.tv PRIVMSG #skhmt :test
 */
 function msgPriv( command, args ) {
-	var commands = command.split( ";" );
 
-	var color = commands[0].substring(7); // #1E90FF
-	if ( color === "" ) color = "#d2691e";
-
-	var subscriber = false;
-	if ( commands[5].substring(11) === "1" ) subscriber = true;
-
-	var turbo = false;
-	if ( commands[6].substring(6) === "1" ) turbo = true;
-
+	var commands = command.split( ";" ); console.log("commands: " + commands);
+	var color = "#d2691e";
 	var mod = false;
-	if ( commands[3].substring(4) === "1" ) mod = true;
+	var subscriber = false;
+	var turbo = false;
+	var from = "";
 
-	var from = commands[1].substring(13);
-	if ( from === "" ) { // some people don't have a display-name, so getting it from somewhere else as a backup
-		var tempArgs = args[0].split( "!" );
-		from = tempArgs[0];
+	for ( var i = 0; i < commands.length; i++ ) {
+		commands[i] = commands[i].split( "=" );
+		var tempParamName = commands[i][0];
+		var tempParamValue = commands[i][1];
+		if (tempParamName == "display-name") {
+			console.log("display-name: " + tempParamValue);
+			if (tempParamValue === "") { // some people don't have a display-name, so getting it from somewhere else as a backup
+				var tempArgs = args[0].split( "!" );
+				from = tempArgs[0];
+			} else {
+				from = tempParamValue;
+			}
+		}
+		if ( tempParamName == "@color" && tempParamValue != "" ) {
+			color = tempParamValue;
+		}
+		if ( tempParamName == "mod" && tempParamValue == "1" ) {
+			mod = true;
+		}
+		if ( tempParamName == "subscriber" && tempParamValue == "1" ) {
+			subscriber = true;
+		}
+		if ( tempParamName == "turbo" && tempParamValue == "1" ) {
+			turbo = true;
+		}
+
 	}
-
-	var userType = commands[7].substring(10);
 
 	// writing output and setting timestamp
 	var output = getTimeStamp() + " ";
@@ -170,7 +185,7 @@ function msgRoom( command, args ) {
 	Args 0: #m3rchant
 */
 function msgJoin( user, args ) {
-	log( `* ${user} has joined ${args[0]}` );
+	// log( `* ${user} has joined ${args[0]}` );
 
 	// pushing to recent events
 	var td = new Date();

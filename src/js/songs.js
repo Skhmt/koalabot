@@ -56,6 +56,12 @@ function songsSetup() {
         $("#songVolume").css( "width", ( vol*0.01*$("#songVolumeContainer").width() ) + "px" );
     } );
 
+    $("#songShuffleStreamer").click( function() {
+        songSettings.streamerQueue = shuffleArray( songSettings.streamerQueue );
+        updateStreamerSongList();
+        save();
+    } );
+
     $("#songVolumeContainer").click( function(e) {
         var offset = $(this).offset();
         var pixelsFromLeft = e.pageX - offset.left;
@@ -344,4 +350,10 @@ function toggleMute(chat) {
         $("#songVolume").removeClass("progress-bar-success");
         if (chat) cmdSay( "The song has been muted.");
     }
+}
+
+// http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
+function shuffleArray(o) {
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
 }

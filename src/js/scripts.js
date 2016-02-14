@@ -44,7 +44,6 @@ var settings = {
 	theme: "default"
 };
 
-
 $(document).ready( function() {
 
 	var path = require( "path" );
@@ -332,27 +331,28 @@ function onChannelEnter() {
 
 function updateUserlist() {
 	if ( settings.channel.substring(1) == "" || settings.channel.substring(1) == null ) return;
+
 	$.getJSON(
 		`https://tmi.twitch.tv/group/user/${settings.channel.substring(1)}/chatters`,
 		{
-			"client_id" : clientid,
-			"api_version" : 3
+			"client_id": clientid,
+			"api_version": 3
 		},
-		function( response ) {
-			
-			if ( response.chatters == null || response.chatter_count === 0 ) return; // didn't load a user yet
-			
-			exportViewers( response.chatter_count );
+		function (response) {
+
+			if (!response.chatters) return ; // didn't load a user yet
+
+			exportViewers(response.chatter_count);
 			currentUsers = []; // {username: string, role: string}
 
 			updateViewerCount(response.chatter_count);
 
 			var output = "";
-			
+
 			var staffLen = response.chatters.staff.length;
-			if ( staffLen > 0 ) {
+			if (staffLen > 0) {
 				output += `<p> <b style='color: #6d35ac;'>STAFF (${staffLen})</b> <br> `;
-				for ( var i = 0; i < staffLen; i++ ) {
+				for (var i = 0; i < staffLen; i++) {
 					var tempuser = response.chatters.staff[i];
 					output += `${tempuser} <br> `;
 					currentUsers.push({"username": tempuser, "role": "staff"});
@@ -361,9 +361,9 @@ function updateUserlist() {
 			}
 
 			var modLen = response.chatters.moderators.length;
-			if ( modLen > 0 ) {
+			if (modLen > 0) {
 				output += `<p> <b style='color: #34ae0a;'>MODS (${modLen})</b> <br> `;
-				for ( var i = 0; i < modLen; i++ ) {
+				for (var i = 0; i < modLen; i++) {
 					var tempuser = response.chatters.moderators[i];
 					output += `${tempuser} <br> `;
 					currentUsers.push({"username": tempuser, "role": "moderator"});
@@ -372,9 +372,9 @@ function updateUserlist() {
 			}
 
 			var adminLen = response.chatters.admins.length;
-			if ( adminLen > 0 ) {
+			if (adminLen > 0) {
 				output += `<p> <b style='color: #faaf19;'>ADMINS (${adminLen})</b> <br> `;
-				for ( var i = 0; i < adminLen; i++ ) {
+				for (var i = 0; i < adminLen; i++) {
 					var tempuser = response.chatters.admins[i];
 					output += `${tempuser} <br> `;
 					currentUsers.push({"username": tempuser, "role": "admin"});
@@ -383,9 +383,9 @@ function updateUserlist() {
 			}
 
 			var globalLen = response.chatters.global_mods.length;
-			if ( globalLen > 0 ) {
+			if (globalLen > 0) {
 				output += `<p> <b style='color: #1a7026;'>GLOBAL MODS (${globalLen})</b> <br> `;
-				for ( var i = 0; i < globalLen; i++ ) {
+				for (var i = 0; i < globalLen; i++) {
 					var tempuser = response.chatters.global_mods[i];
 					output += `${tempuser} <br> `;
 					currentUsers.push({"username": tempuser, "role": "globalmod"});
@@ -394,9 +394,9 @@ function updateUserlist() {
 			}
 
 			var viewLen = response.chatters.viewers.length;
-			if ( viewLen > 0 ) {
+			if (viewLen > 0) {
 				output += `<p> <b style='color: #2e7db2;'>VIEWERS (${viewLen})</b> <br> `;
-				for ( var i = 0; i < viewLen; i++ ) {
+				for (var i = 0; i < viewLen; i++) {
 					var tempuser = response.chatters.viewers[i];
 					output += `${tempuser} <br> `;
 					currentUsers.push({"username": tempuser, "role": "viewer"});
@@ -404,9 +404,11 @@ function updateUserlist() {
 				output += "</p> ";
 			}
 
-			$("#userlist").html( output );
+			$("#userlist").html(output);
 		}
-	);
+	).fail(function () {
+		return ;
+	});
 }
 
 function updateViewerCount( viewerCount ) {
