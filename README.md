@@ -33,17 +33,16 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Add a user to points list even if that user is not in the chat
 - [x] Add a "play" button to individual quotes and timed messages
 - [ ] More text file outputs
-- [ ] Put game and stream title in the window title
+- [x] Put game and stream title in the window title
 - [ ] Reduce saving to every 5 seconds or so
-- [ ] Generic Module status tab + api command for module description
-- [ ] Documentation on how obs-integration works
+- [x] Generic Module status tab + api command for module description
+- [x] Documentation on how obs-integration works
 - [ ] Points requirement for raffles
 - [x] Global hotkeys
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
 - [ ] Look in to overriding existing commands via module
 - [ ] Edit timed messages, commands, and quotes
-- [ ] Button to sort point list alphabetically 
 - [ ] User ranks
 - [ ] Add "regular" rank (between viewer and sub)
 - [ ] Open/view old statistics (https://github.com/nwjs/nw.js/wiki/File-dialogs)
