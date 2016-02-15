@@ -3,7 +3,7 @@
  ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 #### What is this?
-It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop and although I only provide a Windows version, it's possible to make an OS X or Linux version fairly easily - you'll have to do that on your own, but I can point you in the right direction. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
+It's a moderation bot for Twitch meant for roughly the same things as nightbot, moobot, ankhbot, deepbot, etc. This is and always will be free and open source. It runs off your desktop. I'm always open to feature requests, bug reports, and any constructive critique. Hit me up on [Twitch](http://www.twitch.tv/skhmt/profile) or [Twitter](https://twitter.com/SkTTV) or [Reddit](https://www.reddit.com/message/compose/?to=skhmt&subject=twitch%20bot).
 
 #### [Get the latest release for Windows and Mac OS X](https://github.com/Skhmt/twitch-bot/releases/)
 
@@ -38,7 +38,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] Generic Module status tab + api command for module description
 - [ ] Documentation on how obs-integration works
 - [ ] Points requirement for raffles
-- [ ] Global hotkeys
+- [x] Global hotkeys
 - [ ] Change mod requirements for commands
 - [ ] Cooldowns for commands 
 - [ ] Look in to overriding existing commands via module
