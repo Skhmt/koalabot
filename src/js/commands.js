@@ -127,21 +127,33 @@ function refreshCommands() {
 	// clear the commands div
 	$("#commands").html("");
 
+	var output = `<table class="table table-striped table-hover table-condensed">`;
 	// rewrite commands div
 	for ( var i = 0; i < cmdSettings.custom.length; i++ ) {
-		var output = `<button onclick='delCmdButton(${i})'
-			class='btn btn-danger btn-sm'><span class="glyphicon glyphicon-remove"></span></button>
-			<span style='display: inline-block; width: 140px;'>
-			&nbsp;
-			<b>${cmdSettings.symbol + cmdSettings.custom[i].name}</b></span>
-			<span style='display: inline-block; width: 75px;'><i>`;
+		var usertype = "";
+		if ( cmdSettings.custom[i].userType == "" ) usertype = "[All]";
+		else usertype = `[${cmdSettings.custom[i].userType}]`;
 
-		if ( cmdSettings.custom[i].userType == "" ) output += "[All users]";
-		else output += `[${cmdSettings.custom[i].userType}]`;
-		output += `</i></span>${cmdSettings.custom[i].text}<br />`;
+		output += `<tr>
+			<td class="col-sm-1">
+				<button onclick='delCmdButton(${i})' class='btn btn-danger btn-xs'>
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</td>
+			<td class="col-sm-2">
+				<b>${cmdSettings.symbol + cmdSettings.custom[i].name}</b>
+			</td>
+			<td class="col-sm-1">
+				<i>${usertype}</i>
+			</td>
+			<td class="col-sm-8">
+				${cmdSettings.custom[i].text}
+			</td>
+			</tr>`;
 
-		$("#commands").append( output );
 	}
+	output += `</table>`;
+	$("#commands").html( output );
 }
 
 // !addcom (-ul=userLevel) [!command]  [text]
@@ -282,4 +294,42 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 function cmdSay( text ) {
 	bot.say( settings.channel, text );
 	log( `<b>[${cmdSettings.symbol}] ${text}</b>` );
+}
+
+function changeGame( params, from, mod, subscriber ) {
+	if (!mod) return;
+	var game = params.join(" ");
+
+	$.get(
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
+		{
+			"channel[game]": game,
+			"_method": "put",
+			"oauth_token": settings.access_token.substring(6)
+		}
+	);
+
+	cmdSay( `${from} has changed the stream game to: ${game}` );
+	$("#gameField").val( game );
+
+	$("title").html(`${$("#statusField").val()} &mdash; ${game} &mdash; ${title}`);
+}
+
+function changeStatus( params, from, mod, subscriber ) {
+	if (!mod) return;
+	var status = params.join(" ");
+
+	$.get(
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
+		{
+			"channel[status]":status,
+			"_method": "put",
+			"oauth_token": settings.access_token.substring(6)
+		}
+	);
+
+	cmdSay( `${from} has changed the stream status to: ${status}` );
+	$("#statusField").val( status );
+
+	$("title").html(`${status} &mdash; ${$("#gameField").val()} &mdash; ${title}`);
 }

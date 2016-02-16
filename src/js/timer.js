@@ -22,7 +22,7 @@ var timerSettings;
 
 
 function timerSetup() {
-	
+
 	var now = new Date().getTime();
 
 	timerSettings = {
@@ -31,12 +31,14 @@ function timerSetup() {
 		viewerInterval: 20*1000,
 		followerInterval: 15*1000,
 		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
+		lifePointsInterval: 30*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
 		followerPlayTime: now,
-		pointsPlayTime: now
+		pointsPlayTime: now,
+		lifePointsPlayTime: now,
 	};
-	
+
 	timerTick();
 }
 
@@ -44,19 +46,19 @@ function timerSetup() {
 
 function timerTick() {
 	var now = new Date().getTime();
-	
+
 	for ( var i = 0; i < timerList.length; i++ ) {
 		if ( now >= timerList[i].playTime ) { // if it's at or past the time to play the message
 			cmdSay( timerList[i].message ); // play the message
 			timerList[i].playTime = now + timerList[i].interval; // set a new playTime
 		}
 	}
-	
+
 	if ( now >= timerSettings.hostPlayTime && settings.channel !== null ) {
 		updateHosts();
 		timerSettings.hostPlayTime = now + timerSettings.hostInterval;
 	}
-	
+
 	if ( now >= timerSettings.viewerPlayTime && settings.channel !== null ) {
 		updateUserlist();
 		timerSettings.viewerPlayTime = now + timerSettings.viewerInterval;
@@ -70,6 +72,11 @@ function timerTick() {
 	if ( now >= timerSettings.pointsPlayTime && settings.channel !== null ) {
 		updatePoints();
 		timerSettings.pointsPlayTime = now + timerSettings.pointsInterval;
+	}
+
+	if ( now >= timerSettings.lifePointsPlayTime && settings.channel !== null ) {
+		updateLifePoints();
+		timerSettings.lifePointsPlayTime = now + timerSettings.lifePointsInterval;
 	}
 
 

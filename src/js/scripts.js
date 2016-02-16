@@ -14,7 +14,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
- // vars 
+ // vars
 var clientid = "3y2ofy4qcsvnaybw9ogdzwmwfode8y0"; /* this is the (public) client_id of KoalaBot. */
 var bot;
 var server = "irc.twitch.tv";
@@ -44,7 +44,11 @@ var settings = {
 	theme: "default"
 };
 
+var title = "KoalaBot 0.8.13";
+
 $(document).ready( function() {
+
+	$("title").html(title);
 
 	var path = require( "path" );
 	fs = require( "fs" );
@@ -80,7 +84,7 @@ $(document).ready( function() {
 	// making logs and settings directories
 	try { fs.accessSync( `${execPath}logs` ); }
 	catch (e) { fs.mkdirSync( `${execPath}logs` ); }
-	
+
 	try { fs.accessSync( `${execPath}settings` ); }
 	catch (e) { fs.mkdirSync( `${execPath}settings` ); }
 
@@ -112,28 +116,28 @@ $(document).ready( function() {
 	var logname = `chatlog_${d.getFullYear()}-${dmonth}-${dday}_${dhour}-${dmin}-${dsec}.log`;
 
 	logFile = `${execPath}logs/${logname}`;
-	
+
 	// setting up moderation area
 	moderationSetup();
-	
+
 	// setting up the commands area
 	cmdSetup();
-	
+
 	// setting up the points
 	pointsSetup();
 
 	// getting twitch and bttv emoticons
 	getEmoticons();
-	
+
 	// setting up timed messages
 	timedMessagesSetup();
-	
+
 	// starting the timer
 	timerSetup();
-	
+
 	// setting up stats stuff
 	statsSetup();
-	
+
 	// setting up the raffle tab
 	raffleSetup();
 
@@ -208,16 +212,16 @@ function getUsername() {
 		{
 			"client_id" : clientid,
 			"api_version" : 3,
-			"oauth_token" : token	
+			"oauth_token" : token
 		},
 		function( response ) {
 			settings.username = response.token.user_name;
 			$("#displayName").html( settings.username );
-			
+
 			settings.channel = "#" + settings.username;
 			$("#getChannelField").val( settings.channel );
 
-			save();	
+			save();
 			runChat();
 			onChannelEnter();
 		}
@@ -226,7 +230,7 @@ function getUsername() {
 
 
 function runChat() {
-	
+
 	try {
 		bot.disconnect( function() {
 			log( `* Disconnected from ${server}` );
@@ -234,7 +238,7 @@ function runChat() {
 	} catch (e) {}
 
 	var irc = require( "irc" );
-	
+
 	var config = {
 		//channels: [settings.channel],
 		server: server,
@@ -250,7 +254,7 @@ function runChat() {
 	bot.connect(5, function() {
 		log( `* Connected to ${server}` );
 	} );
-	
+
 	bot.addListener( "registered", function( message ) {
 		bot.send( "CAP REQ", "twitch.tv/membership" );
 		bot.send( "CAP REQ", "twitch.tv/commands" );
@@ -259,16 +263,16 @@ function runChat() {
 			log( "* Joining " + settings.channel );
 		} );
 	} );
-	
+
 	bot.addListener( "error", function( message ) {
 		log( "* Error: " + message );
 	} );
-	
+
 	bot.addListener( "raw", function( message ) {
 		var args = message.args[0].split(" ");
 		var command = message.command;
 		var user = message.user;
-		
+
 		if (rawIrcOn) { // logging all raw commands
 			log( `<b>rawcmd: </b>${message.rawCommand} |
 				<b>user: </b>${message.user} |
@@ -292,7 +296,7 @@ function onChannelEnter() {
 	fs.writeFileSync( hostFile, "" );
 	$("#hosts").html("");
 	hosts = [];
-	
+
 	// getting when you change channel because it's channel-specific
 	getEmoticonsBTTV();
 
@@ -311,7 +315,7 @@ function onChannelEnter() {
 			}
 		}
 	);
-	
+
 	// get id of the channel you're in and current game and stream title
 	$.getJSON(
 		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
@@ -325,6 +329,8 @@ function onChannelEnter() {
 			save();
 			$("#gameField").val( response.game );
 			$("#statusField").val( response.status );
+
+			$("title").html(`${response.status} &mdash; ${response.game} &mdash; ${title}`);
 		}
 	);
 }
@@ -423,7 +429,7 @@ function updateViewerCount( viewerCount ) {
 			$("#viewercount").html( `
 				<span class="glyphicon glyphicon-user text-info"></span>
 				&nbsp;&nbsp;&nbsp;${viewerCount.toLocaleString()}
-				<br> 
+				<br>
 				<span class="glyphicon glyphicon-heart text-danger"></span>
 				&nbsp;&nbsp;&nbsp;${followerCount.toLocaleString()}` );
 		}
@@ -465,12 +471,12 @@ function getEmoticonsBTTV() {
 function writeEmoticons( message ) {
 	var output = "";
 	var text = message.split(" ");
-	
+
 	// for each word, check if it's an emoticon and if it is, output the url instead of the text
 	for( var i = 0; i < text.length; i++ ) {
 		output += checkEmote(text[i]);
 	}
-	
+
 	return output;
 }
 
@@ -495,7 +501,7 @@ function checkEmote( word ) {
 		if ( word === emoticonsTwitch[j].regex )
 			return `<img src="${emoticonsTwitch[j].images[0].url}"> `;
 	}
-	
+
 	// not an emote
 	return `${word} `;
 }
@@ -531,19 +537,19 @@ function log( message ) {
 function chat() {
 	// get the chat input box value
 	var text = $("#chatText").val();
-	
+
 	// output it to the console
 	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}` );
-	
+
 	// check if it was a command...
 	if ( text.substring(0, 1) === cmdSettings.symbol ) {
 		parseCommand( text, settings.username, true, true);
-	} 
+	}
 	else {
 		// send the data to the irc server
 		bot.say( settings.channel, text );
 	}
-	
+
 	// clear the chat input box
 	$("#chatText").val("");
 }

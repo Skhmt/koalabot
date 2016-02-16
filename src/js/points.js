@@ -36,29 +36,29 @@ function pointsSetup() {
 
 	$("#pointUnits").val( pointsSettings.unit );
 	$("#pointUnits").on( "input", function() {
-		pointsSettings.unit = $("#pointUnits").val();
+		pointsSettings.unit = this.value;
 		save();
 		drawList();
 	} );
 
 	$("#pointsPointUpdate").val( pointsSettings.pointsPerUpdate );
 	$("#pointsPointUpdate").on( "input", function() {
-		if ( $("#pointsPointUpdate").val() < 0 ) {
+		if ( this.value < 0 ) {
 			pointsSettings.pointsPerUpdate = 0;
 			$("#pointsPointUpdate").val( 0 );
 		} else {
-			pointsSettings.pointsPerUpdate = Number( $("#pointsPointUpdate").val() );
+			pointsSettings.pointsPerUpdate = Number( this.value );
 		}
 		save();
 	} );
 
 	$("#pointsMinuteUpdate").val( pointsSettings.minutesPerUpdate );
 	$("#pointsMinuteUpdate").on( "input", function() {
-		if ( $("#pointsMinuteUpdate").val() < 0 ) {
+		if ( this.value < 0 ) {
 			pointsSettings.minutesPerUpdate = 0;
 			$("#pointsMinuteUpdate").val( 0 );
 		} else {
-			pointsSettings.minutesPerUpdate = Number( $("#pointsMinuteUpdate").val() );
+			pointsSettings.minutesPerUpdate = Number( this.value );
 		}
 		timerSettings.pointsInterval = pointsSettings.minutesPerUpdate*60*1000;
 		save();
@@ -89,6 +89,10 @@ function pointsSetup() {
 		} );
 		$("#addUserPointsText").val("")
 		save();
+		drawList();
+	} );
+
+	$("#pointsListText").on( "input", function() {
 		drawList();
 	} );
 }
@@ -127,32 +131,76 @@ function updatePoints() {
 	drawList();
 }
 
+function updateLifePoints() {
+	if ( currentUsers.length == 0 || pointsSettings == null ) {
+		return;
+	}
+
+	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
+		var found = false;
+		for ( var p = 0; p < pointsSettings.users.length; p++ ) {
+			var currentLC = currentUsers[c].username.toLowerCase();
+			var savedLC = pointsSettings.users[p].username.toLowerCase();
+			if ( currentLC == savedLC ) {
+				pointsSettings.users[p].totalPoints ++;
+				found = true;
+				break;
+			}
+		}
+		if ( !found ) {
+			pointsSettings.users.push({
+				username: currentUsers[c].username,
+				totalPoints: 1,
+				currentPoints: 1
+			});
+		}
+	}
+
+	save();
+}
+
 function drawList() {
 	var output = "";
 	output += `
-		<table class="table table-striped table-hover">
+		<table class="table table-striped table-hover table-condensed">
 		<tr>
 			<th class="col-sm-5">Username</th>
 			<th class="col-sm-2">${pointsSettings.unit}</th>
-			<th class="col-sm-5">Actions</th>
+			<th class="col-sm-2">Hours</th>
+			<th class="col-sm-3">Actions</th>
 		</tr>`;
-	for ( var i = 0; i < pointsSettings.users.length; i++ ) {
-		output += `<tr>
-				<td>${pointsSettings.users[i].username}</td>
-				<td>${pointsSettings.users[i].currentPoints}</td>
-				<td>
-					<button class="btn btn-success btn-xs" onclick="addPoint(${i}, 5)">+5</button>
-					<button class="btn btn-info btn-xs" onclick="addPoint(${i}, 1)">+1</button>
-					<button class="btn btn-warning btn-xs" onclick="subtractPoint(${i}, 1)">&ndash;1</button>
-					<button class="btn btn-danger btn-xs" onclick="subtractPoint(${i}, 5)">&ndash;5</button>
-					&nbsp;&nbsp;
-					<button class="btn btn-danger btn-xs" onclick="deletePoints(${i})">
-						<span class="glyphicon glyphicon-remove"></span>
-					</button>
-				</td>
-			</tr>`;
+
+	var beginning = $("#pointsListText").val()
+	if (!beginning) {
+		output += `</table>`;
+		$("#pointsList").html( output );
+		return;
 	}
-	output += `<table class="table table-striped table-hover pointTable">`;
+
+	var regex = new RegExp("^" + beginning);
+
+	for ( var i = 0; i < pointsSettings.users.length; i++ ) {
+		var username = pointsSettings.users[i].username;
+		if ( regex.test(username) ) {
+			output += `<tr>
+					<td>${username}</td>
+					<td>${pointsSettings.users[i].currentPoints}</td>
+					<td>${(pointsSettings.users[i].totalPoints/60.0).toFixed(2)}</td>
+					<td>
+						<button class="btn btn-success btn-xs" onclick="addPoint(${i}, 5)">+5</button>
+						<button class="btn btn-info btn-xs" onclick="addPoint(${i}, 1)">+1</button>
+						<button class="btn btn-warning btn-xs" onclick="subtractPoint(${i}, 1)">&ndash;1</button>
+						<button class="btn btn-danger btn-xs" onclick="subtractPoint(${i}, 5)">&ndash;5</button>
+						&nbsp;&nbsp;
+						<button class="btn btn-danger btn-xs" onclick="deletePoints(${i})">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</td>
+				</tr>`;
+		}
+	}
+
+	output += `</table>`;
 	$("#pointsList").html( output );
 }
 

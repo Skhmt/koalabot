@@ -64,7 +64,7 @@ function msgNotice( args ) {
 */
 function msgPriv( command, args ) {
 
-	var commands = command.split( ";" ); console.log("commands: " + commands);
+	var commands = command.split( ";" );
 	var color = "#d2691e";
 	var mod = false;
 	var subscriber = false;
@@ -76,7 +76,6 @@ function msgPriv( command, args ) {
 		var tempParamName = commands[i][0];
 		var tempParamValue = commands[i][1];
 		if (tempParamName == "display-name") {
-			console.log("display-name: " + tempParamValue);
 			if (tempParamValue === "") { // some people don't have a display-name, so getting it from somewhere else as a backup
 				var tempArgs = args[0].split( "!" );
 				from = tempArgs[0];
@@ -84,16 +83,16 @@ function msgPriv( command, args ) {
 				from = tempParamValue;
 			}
 		}
-		if ( tempParamName == "@color" && tempParamValue != "" ) {
+		else if ( tempParamName == "@color" && tempParamValue != "" ) {
 			color = tempParamValue;
 		}
-		if ( tempParamName == "mod" && tempParamValue == "1" ) {
+		else if ( tempParamName == "mod" && tempParamValue == "1" ) {
 			mod = true;
 		}
-		if ( tempParamName == "subscriber" && tempParamValue == "1" ) {
+		else if ( tempParamName == "subscriber" && tempParamValue == "1" ) {
 			subscriber = true;
 		}
-		if ( tempParamName == "turbo" && tempParamValue == "1" ) {
+		else if ( tempParamName == "turbo" && tempParamValue == "1" ) {
 			turbo = true;
 		}
 

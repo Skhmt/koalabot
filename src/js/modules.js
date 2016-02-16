@@ -27,13 +27,16 @@ function apiSetup() {
     catch (e) { fs.mkdirSync( `${execPath}mods` ); }
 
     // Adding mods to the program
-    
+
     fs.readdir(`${execPath}mods`, function(err, files){
         var output = "";
         for ( var f = 0; f < files.length; f++ ) {
             if ( files[f].split(".")[1] == "js" ) {
                 output += `<script type="text/javascript" src="${apiGetPath() + files[f]}"></script>`;
-                log(`* Loaded module: ${files[f]}`);
+				$("#moduleListNames").append(`
+					<li class="list-group-item">
+						${files[f]}
+					</li>`);
             }
         }
         $("head").append( output );
@@ -50,6 +53,10 @@ function apiSetup() {
 function apiAddCmd(keyword, functionName) {
     try {
         cmdList.push({ cmd: keyword.toLowerCase(), func: functionName });
+		$("#moduleListCommands").append(`
+			<li class="list-group-item">
+				${cmdSettings.symbol} ${keyword.toLowerCase()}
+			</li>`);
         return true;
     } catch (e) {
         return false;
@@ -76,8 +83,7 @@ function apiAddTab(moduleName) {
     // creates the pane
     $("#pageContent").append(`
         <div class="tab-pane" id="tab-module-${newName}">
-        </div>
-    `);
+        </div>`);
 
     return `#tab-module-${newName}`;
 }
@@ -245,4 +251,36 @@ function apiGetRecentEvents() {
 function apiAddRecentEvent(type, text) {
     var td = new Date();
     recentEvents.unshift({"time": td.getTime(), "type": type, "text": text});
+}
+
+/**
+ * Adds a global hotkey. Supported keys: A-Z, 0-9, Comma, Period, Home, End, PageUp,
+ * PageDown, Insert, Delete, Arrow keys (Up, Down, Left, Right) and the Media Keys
+ * (MediaNextTrack, MediaPlayPause, MediaPrevTrack, MediaStop)
+ * Combine them with Ctrl, Alt, or Shift. Ex: "Ctrl+Alt+Comma"
+ * On OSX, Ctrl is command. These global hotkeys will block the normal function
+ * of those keys.
+ * @param {String} hotkey - See above comments on format
+ * @return {object} shortcut - use to set functionality of the hotkey: shortcut.on("active", function(){ });
+ */
+function apiHotkey(hotkey) {
+	// see: https://github.com/nwjs/nw.js/wiki/Shortcut
+	var gui = require("nw.gui");
+	var shortcut = new gui.Shortcut( {
+		key : hotkey,
+		active : function () {
+			console.log(`Hotkey used: ${hotkey}`);
+		},
+		failed : function(msg) {
+			console.log(msg);
+		}
+	} );
+	gui.App.registerGlobalHotKey(shortcut);
+
+	$("#moduleListHotkeys").append(`
+		<li class="list-group-item">
+			${hotkey}
+		</li>`);
+
+	return shortcut;
 }

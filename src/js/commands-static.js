@@ -2,7 +2,7 @@
 
 function addStaticCommands() {
 
-	cmdList.push( 
+	cmdList.push(
 		// { cmd: "", func: "" },
 		{ cmd: "bottime", func: "cmdBotTime" },
 		{ cmd: "streamtime", func: "cmdStreamTime" },
@@ -47,7 +47,7 @@ function addStaticCommands() {
 
 /*
 function cmd ( params, from, mod, subscriber ) {
-	
+
 }
 */
 
@@ -74,9 +74,9 @@ function cmdHighlight( params, from, mod, subscriber ) {
 			var created = response.stream.created_at; // ex: "2015-12-03T20:39:04Z"
 			var temp = new Date( created );
 			var highlight = timeDifference( temp.getTime() );
-			
+
 			cmdSay( `${from} highlighted ${highlight}.` );
-			
+
 			// write to log
 			var dateNow = new Date();
 			var output = `[${dateNow.toDateString()}, ${dateNow.toLocaleTimeString()}]`;
@@ -148,7 +148,7 @@ function timeDifference(oldtime) {
 	var diffSecs = difftime - (diffHrs * 3600) - (diffMins * 60);
 
 	var output = "";
-	
+
 	if ( diffHrs === 1 ) output += diffHrs + " hour, ";
 	else if ( diffHrs > 1 ) output += diffHrs + " hours, ";
 
@@ -190,38 +190,4 @@ function isFollower( from ) {
 	).error(function() {
 		cmdSay( `${from} is not a follower.` );
 	} );
-}
-
-function changeGame( params, from, mod, subscriber ) {
-	if (!mod) return;
-	var game = params.join(" ");
-
-	$.get(
-		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
-		{
-			"channel[game]": game,
-			"_method": "put",
-			"oauth_token": settings.access_token.substring(6)
-		}
-	);
-	
-	cmdSay( `${from} has changed the stream game to: ${game}` );
-	$("#gameField").val( game );	
-}
-
-function changeStatus( params, from, mod, subscriber ) {
-	if (!mod) return;
-	var status = params.join(" ");
-
-	$.get(
-		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
-		{
-			"channel[status]":status,
-			"_method": "put",
-			"oauth_token": settings.access_token.substring(6)
-		}
-	);
-	
-	cmdSay( `${from} has changed the stream status to: ${status}` );
-	$("#statusField").val( status );
 }

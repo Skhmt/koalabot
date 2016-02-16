@@ -131,7 +131,7 @@ function songStateChecker() {
 
     if ( status === 0 ) { // YT.PlayerState.ENDED == 0
         nextSong();
-    } 
+    }
     setTimeout( songStateChecker, 500 );
 }
 
@@ -143,7 +143,6 @@ function songStateChecker() {
 }*/
 
 function nextSong() {
-    if ( !songSettings.songRequests ) return;
 
     currentSong = null;
     if ( songQ.length > 0 ) {
@@ -193,7 +192,7 @@ function addSongStreamer(videoid) {
                 cmdSay( "Error, invalid youtube video." );
             } else {
                 var videotitle = response.items[0].snippet.title;
-                
+
                 var pushObj = { id: videoid, title: videotitle};
                 songSettings.streamerQueue.push( pushObj );
                 log( `* "${videotitle}" added to the streamer song queue.` );
@@ -211,7 +210,6 @@ function addSongStreamer(videoid) {
 }
 
 function addSong(videoid, username, mod) {
-    if ( !songSettings.songRequests ) return;
 
     var userpoints = apiGetPoints(username);
     if ( userpoints == null ) {
@@ -269,6 +267,7 @@ function deleteSongStreamer(index) {
 }
 
 function cmdAddSong(params, from, mod, subscriber) {
+	if ( !songSettings.songRequests ) return;
     addSong( params[0], from, mod );
 }
 
@@ -301,12 +300,14 @@ function cmdGetSong(params, from, mod, subscriber) {
 }
 
 function cmdSkipSong(params, from, mod, subscriber){
+	if ( !songSettings.songRequests ) return;
     if ( mod ) {
         nextSong();
     }
 }
 
 function cmdMute(params, from, mod, subscriber){
+	if ( !songSettings.songRequests ) return;
     if ( mod ) {
         toggleMute(true);
     }
@@ -337,7 +338,6 @@ function updateStreamerSongList() {
 }
 
 function toggleMute(chat) {
-    if ( !songSettings.songRequests ) return;
     if ( ytPlayer.isMuted() ) {
         ytPlayer.unMute();
         $("#songVolume").addClass("progress-bar-success");
@@ -352,8 +352,14 @@ function toggleMute(chat) {
     }
 }
 
-// http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
-function shuffleArray(o) {
-    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
+function shuffleArray(unshuffled) {
+	var i = unshuffled.length;
+	while ( i > 0 ) {
+		var selectindex = Math.floor(Math.random() * i);
+		i--;
+		var swap = unshuffled[i];
+		unshuffled[i] = unshuffled[selectindex];
+		unshuffled[selectindex] = swap;
+	}
+	return unshuffled;
 }

@@ -135,26 +135,34 @@ function playQuoteButton( i ) {
 
 function refreshQuotes() {
 	$("#quotes").html("");
+
+	var output = `<table class="table table-striped table-hover table-condensed">`;
+
 	for ( var i = 0; i < cmdSettings.quotes.length; i++ ) {
 		if ( cmdSettings.quotes[i].active ) {
-			var output = "";
-			output += `
-				<button onclick='playQuoteButton(${i})' class='btn btn-success btn-sm'>
-					<span class="glyphicon glyphicon-play"></span>
-				</button>
-				&nbsp;
-				<button onclick='delQuoteButton(${i})' class='btn btn-danger btn-sm'>
-					<span class="glyphicon glyphicon-remove"></span>
-				</button>
-				&nbsp;
-				<strong>${i}</strong> :
-				"<i>${cmdSettings.quotes[i].message}</i>"
-				- <b>${cmdSettings.quotes[i].who}</b>, ${cmdSettings.quotes[i].date}
-				<br>`;
-
-			$("#quotes").append( output );
-
+			output += `<tr>
+				<td class="col-sm-2">
+					<button onclick="playQuoteButton(${i})" class="btn btn-success btn-xs">
+						<span class="glyphicon glyphicon-play"></span>
+					</button>
+					&nbsp;
+					<button onclick="delQuoteButton(${i})" class="btn btn-danger btn-xs">
+						<span class="glyphicon glyphicon-remove"></span>
+					</button>
+				</td>
+				<td class="col-sm-10">
+					<strong>${i} :</strong> &nbsp; &nbsp;
+					"<i>${cmdSettings.quotes[i].message}</i>"
+					- <b>${cmdSettings.quotes[i].who}</b>, ${cmdSettings.quotes[i].date}
+				</td>
+			</tr>`;
+			// <button class="btn btn-warning btn-xs">
+			// 	<span class="glyphicon glyphicon-pencil"></span>
+			// </button>
+			// &nbsp;
 		}
 	}
+	output += `</table>`;
+	$("#quotes").html( output );
 
 }

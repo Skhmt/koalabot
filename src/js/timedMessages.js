@@ -42,26 +42,27 @@ function refreshMessages() {
 	// clear the timerList
 	timerList = [];
 
+	var output = `<table class="table table-striped table-hover table-condensed">`;
+
 	for ( var i = 0; i < timedMessages.length; i++ ) {
-		var output = "";
 		// build a message... [X] [Time] [Message]
-		output += `
-			<button onclick='playMessage(${i})' class='btn btn-success btn-sm'>
-				<span class="glyphicon glyphicon-play"></span>
-			</button>
-			&nbsp;
-			<button onclick='deleteMessage(${i})' class='btn btn-danger btn-sm'>
-				<span class="glyphicon glyphicon-remove"></span>
-			</button>
-			&nbsp;
-			<span class='timedMessageSpan'>${timedMessages[i].time}s</span> &nbsp; &nbsp; &nbsp;
-			${timedMessages[i].text}<br> `;
-
-		// add the message to the ui list of messages
-		$("#timedMsgs").append( output );
-
-		// create an interval
-		//var intervalId = setInterval(playMessage(i), timedMessages[i].time * 1000);
+		output += `<tr>
+			<td class="col-sm-2">
+				<button onclick='playMessage(${i})' class='btn btn-success btn-xs'>
+					<span class="glyphicon glyphicon-play"></span>
+				</button>
+				&nbsp;
+				<button onclick='deleteMessage(${i})' class='btn btn-danger btn-xs'>
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</td>
+			<td class="col-sm-1">
+				<span class='timedMessageSpan'>${timedMessages[i].time}s</span>
+			</td>
+			<td class="col-sm-9">
+				${timedMessages[i].text}
+			</td>
+		</tr>`;
 
 		// add the message to timedMessagesIntervals
 		var now = new Date().getTime();
@@ -72,6 +73,8 @@ function refreshMessages() {
 			interval: tempInterval
 		} );
 	}
+	output += `</table>`;
+	$("#timedMsgs").html( output );
 }
 
 function playMessage(i) {
