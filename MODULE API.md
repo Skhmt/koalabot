@@ -169,3 +169,18 @@ Adds to the recent events array. Recent events is used to send to a page via aja
 **type**: `String`, can be anything, the bot uses SUB, HOST, and FOLLOW for those events. Use your own type if you need to.
 
 **text**: `String`, the data. For SUB, HOST, and FOLLOW, it's only the username.
+
+
+### apiHotKey() 
+
+Adds a global hotkey. Supported keys: A-Z, 0-9, Comma, Period, Home, End, PageUp, PageDown, Insert, Delete, Arrow keys (Up, Down, Left, Right) and the Media Keys (MediaNextTrack, MediaPlayPause, MediaPrevTrack, MediaStop) 
+
+Combine them with Ctrl, Alt, or Shift. Ex: "Ctrl+Alt+Comma" 
+
+On OSX, Ctrl is command. These global hotkeys will block the normal function of those keys.
+
+**Parameters**
+
+**hotkey**: `String`, See above comments on format
+
+**Returns**: `Object`, use to set functionality of the hotkey: (object name).on("active", function(){ });
