@@ -171,7 +171,7 @@ Adds to the recent events array. Recent events is used to send to a page via aja
 **text**: `String`, the data. For SUB, HOST, and FOLLOW, it's only the username.
 
 
-### apiHotKey() 
+### apiHotKey(hotkey) 
 
 Adds a global hotkey. Supported keys: A-Z, 0-9, Comma, Period, Home, End, PageUp, PageDown, Insert, Delete, Arrow keys (Up, Down, Left, Right) and the Media Keys (MediaNextTrack, MediaPlayPause, MediaPrevTrack, MediaStop) 
 
