@@ -29,17 +29,15 @@ function apiSetup() {
     // Adding mods to the program
 
     fs.readdir(`${execPath}mods`, function(err, files){
-        var output = "";
         for ( var f = 0; f < files.length; f++ ) {
             if ( files[f].split(".")[1] == "js" ) {
-                output += `<script type="text/javascript" src="${apiGetPath() + files[f]}"></script>`;
+				$.getScript( apiGetPath() + files[f] );
 				$("#moduleListNames").append(`
 					<li class="list-group-item">
 						${files[f]}
 					</li>`);
             }
         }
-        $("head").append( output );
     } );
 }
 

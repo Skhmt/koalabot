@@ -76,6 +76,7 @@ $(document).ready( function() {
 			bot.join( newchan, function() {
 				log( `* Joining ${newchan}` );
 				settings.channel = newchan;
+				save();
 				onChannelEnter();
 			} );
 		}
@@ -338,13 +339,14 @@ function onChannelEnter() {
 function updateUserlist() {
 	if ( settings.channel.substring(1) == "" || settings.channel.substring(1) == null ) return;
 
-	$.getJSON(
-		`https://tmi.twitch.tv/group/user/${settings.channel.substring(1)}/chatters`,
-		{
+	$.ajax( {
+		dataType: "json",
+		url: `https://tmi.twitch.tv/group/user/${settings.channel.substring(1)}/chatters`,
+		data: {
 			"client_id": clientid,
 			"api_version": 3
 		},
-		function (response) {
+		success: function (response) {
 
 			if (!response.chatters) return ; // didn't load a user yet
 
@@ -411,10 +413,9 @@ function updateUserlist() {
 			}
 
 			$("#userlist").html(output);
-		}
-	).fail(function () {
-		return ;
-	});
+		},
+		timeout: 2000
+	} );
 }
 
 function updateViewerCount( viewerCount ) {

@@ -131,80 +131,80 @@ function moderationSetup(){
 	// wordProArea settings
 	$("#wordProArea").val( modSettings.wordPro.badwords.join(" ") );
 	$("#wordProArea").change( function() {
-		modSettings.wordPro.badwords = $("#wordProArea").val().split(" ");
+		modSettings.wordPro.badwords = this.val().split(" ");
 		save();
 	} );
 
 	// set up timeout states and listeners
 	$("#linkProTimeoutField").val( modSettings.linkPro.timeout );
 	$("#linkProTimeoutField").on( "input", function() {
-		var tempNum = $("#linkProTimeoutField").val();
+		var tempNum = this.val();
 		modSettings.linkPro.timeout = parseInt( tempNum, 10 );
 		save();
 	} );
 
 	$("#linkProTimeoutText").val( modSettings.linkPro.timeoutText );
 	$("#linkProTimeoutText").on( "input", function() {
-		modSettings.linkPro.timeoutText = $("#linkProTimeoutText").val();
+		modSettings.linkPro.timeoutText = this.val();
 		save();
 	} );
 
 	$("#wordProTimeoutField").val( modSettings.wordPro.timeout );
 	$("#wordProTimeoutField").on( "input", function() {
-		var tempNum = $("#wordProTimeoutField").val();
+		var tempNum = this.val();
 		modSettings.wordPro.timeout = parseInt( tempNum, 10 );
 		save();
 	} );
 
 	$("#wordProTimeoutText").val( modSettings.wordPro.timeoutText );
 	$("#wordProTimeoutText").on( "input", function() {
-		modSettings.wordPro.timeoutText = $("#wordProTimeoutText").val();
+		modSettings.wordPro.timeoutText = this.val();
 		save();
 	} );
 
 	$("#capsProTimeoutField").val( modSettings.capsPro.timeout );
 	$("#capsProTimeoutField").on( "input", function() {
-		var tempNum = $("#capsProTimeoutField").val();
+		var tempNum = this.val();
 		modSettings.capsPro.timeout = parseInt( tempNum, 10 );
 		save();
 	} );
 
 	$("#capsProTimeoutText").val( modSettings.capsPro.timeoutText );
 	$("#capsProTimeoutText").on( "input", function() {
-		modSettings.capsPro.timeoutText = $("#capsProTimeoutText").val();
+		modSettings.capsPro.timeoutText = this.val();
 		save();
 	} );
 
 	$("#capsProPerWordField").val( modSettings.capsPro.capsPerWord );
 	$("#capsProPerWordField").on( "input", function() {
-		var tempNum = $("#capsProPerWordField").val();
+		var tempNum = this.val();
 		modSettings.capsPro.capsPerWord = parseInt( tempNum, 10 );
 		save();
 	} );
 
 	$("#capsProPerPostField").val( modSettings.capsPro.capsTotal );
 	$("#capsProPerPostField").on( "input", function() {
-		var tempNum = $("#capsProPerPostField").val();
+		var tempNum = this.val();
 		modSettings.capsPro.capsTotal = parseInt( tempNum, 10 );
 		save();
 	} );
 
 	$("#symbolProTimeoutField").val( modSettings.symbolPro.timeout );
 	$("#symbolProTimeoutField").on( "input", function() {
-		var tempNum = $("#symbolProTimeoutField").val();
+		var tempNum = this.val();
 		modSettings.symbolPro.timeout = parseInt( tempNum, 10 );
 		save();
 	} );
 
 	$("#symbolProTimeoutText").val( modSettings.symbolPro.timeoutText );
 	$("#symbolProTimeoutText").on( "input", function() {
-		modSettings.symbolPro.timeoutText = $("#symbolProTimeoutText").val();
+		modSettings.symbolPro.timeoutText = this.val();
 		save();
 	} );
 
 	$("#symbolProSymbolsField").val( modSettings.symbolPro.symbols );
 	$("#symbolProSymbolsField").on( "input", function() {
-		var tempNum = $("#symbolProSymbolsField").val();
+		var tempNum = this.val();
 		modSettings.symbolPro.symbols = parseInt( tempNum, 10 );
 		save();
 	} );

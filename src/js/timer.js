@@ -31,7 +31,7 @@ function timerSetup() {
 		viewerInterval: 20*1000,
 		followerInterval: 15*1000,
 		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
-		lifePointsInterval: 30*1000,
+		lifePointsInterval: 60*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
 		followerPlayTime: now,

@@ -100,63 +100,143 @@ function pointsSetup() {
 // currentUsers = []; {"username": tempuser, "role": staff/moderator/admin/globalmod/viewer}
 // this is automatically run every 60 seconds
 function updatePoints() {
+
 	if ( !pointsSettings.enabled ) return;
 
 	if ( currentUsers.length == 0 || pointsSettings == null ) {
 		return;
 	}
 
-	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
-		var found = false;
-		for ( var p = 0; p < pointsSettings.users.length; p++ ) {
-			var currentLC = currentUsers[c].username.toLowerCase();
-			var savedLC = pointsSettings.users[p].username.toLowerCase();
-			if ( currentLC == savedLC ) {
-				pointsSettings.users[p].totalPoints += pointsSettings.pointsPerUpdate;
-				pointsSettings.users[p].currentPoints += pointsSettings.pointsPerUpdate;
-				found = true;
-				break;
-			}
-		}
-		if ( !found ) {
-			pointsSettings.users.push({
-				username: currentUsers[c].username,
-				totalPoints: 1,
-				currentPoints: 1
-			});
-		}
-	}
 
-	save();
-	drawList();
+	var startTime = new Date();
+
+	var pointsWorker = new Worker("js/worker-points.js");
+	pointsWorker.postMessage([currentUsers, pointsSettings.users, pointsSettings.pointsPerUpdate]);
+
+	pointsWorker.onmessage = function(e) {
+		pointsSettings.users = e.data;
+
+		save();
+		drawList();
+
+		var endTime = new Date();
+		console.log(`update points: ${endTime.getTime() - startTime.getTime()}ms`);
+	}
 }
 
 function updateLifePoints() {
+
+	if ( !pointsSettings.enabled ) return;
+
 	if ( currentUsers.length == 0 || pointsSettings == null ) {
 		return;
 	}
 
-	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
-		var found = false;
-		for ( var p = 0; p < pointsSettings.users.length; p++ ) {
-			var currentLC = currentUsers[c].username.toLowerCase();
-			var savedLC = pointsSettings.users[p].username.toLowerCase();
-			if ( currentLC == savedLC ) {
-				pointsSettings.users[p].totalPoints ++;
-				found = true;
-				break;
-			}
-		}
-		if ( !found ) {
-			pointsSettings.users.push({
-				username: currentUsers[c].username,
-				totalPoints: 1,
-				currentPoints: 1
-			});
-		}
+
+	var startTime = new Date();
+
+	var pointsWorker = new Worker("js/worker-lifetime.js");
+	pointsWorker.postMessage([currentUsers, pointsSettings.users, pointsSettings.pointsPerUpdate]);
+
+	pointsWorker.onmessage = function(e) {
+		pointsSettings.users = e.data;
+
+		save();
+		drawList();
+
+		var endTime = new Date();
+		console.log(`update life: ${endTime.getTime() - startTime.getTime()}ms`);
+	}
+}
+
+//function updateLifePoints() {
+//
+//	if ( !pointsSettings.enabled ) return;
+//
+//	var startTime = new Date();
+//
+//	if ( currentUsers.length == 0 || pointsSettings == null ) {
+//		return;
+//	}
+//
+//	var newUserArray = [];
+//
+//	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
+//		var currentLC = currentUsers[c].username.toLowerCase();
+//
+//		var theIndex;
+//	 	if ( pointsSettings.users.length > 0 ) {
+//			theIndex = binarySearch( currentLC , pointsSettings.users, 0 );
+//		}
+//		else {
+//			theIndex = -1;
+//		}
+//
+//		if ( theIndex == -1 ) {
+//			newUserArray.push( {
+//				username: currentUsers[c].username,
+//				totalPoints: 1,
+//				currentPoints: pointsSettings.pointsPerUpdate
+//			} );
+//		}
+//		else {
+//			pointsSettings.users[theIndex].totalPoints += 1;
+//		}
+//	}
+//
+//	if ( newUserArray.length > 0 ) {
+//		pointsSettings.users = pointsSettings.users.concat(newUserArray);
+//		pointsSettings.users = sortList(pointsSettings.users);
+//	}
+//	save();
+//	drawList();
+//
+//	var endTime = new Date();
+//	console.log(`update life points: ${endTime.getTime() - startTime.getTime()}ms`);
+//}
+
+function sortList(theArray) {
+	theArray.sort( function( a, b ) {
+		if ( a.username < b.username )
+			return -1;
+		else if ( a.username > b.username )
+			return 1;
+		else
+			return 0;
+	} );
+
+	return theArray;
+}
+
+// temparray is initially pointsSettings.users
+// searchname is already lowercase
+function binarySearch(searchname, searcharray, indexoffset) {
+	var temparray = [];
+	temparray = temparray.concat(searcharray);
+
+	var index = Math.floor( (temparray.length - 1) / 2);
+
+	if (!temparray[index]) {
+		return -1;
 	}
 
-	save();
+	var arrayname = temparray[index].username.toLowerCase();
+
+	if ( searchname === arrayname ) { // found
+		return (indexoffset + index);
+
+	}
+	else if ( searchname > arrayname && temparray.length >= 1) {
+		var newarray = temparray.splice( index + 1, Number.MAX_VALUE );
+		return binarySearch( searchname, newarray, (indexoffset + index + 1) );
+
+	} else if ( searchname < arrayname && temparray.length >= 1) {
+		var newarray = temparray.splice( 0, index );
+		return binarySearch( searchname, newarray, indexoffset );
+
+	} else {
+		return -1;
+	}
 }
 
 function drawList() {
@@ -170,7 +250,7 @@ function drawList() {
 			<th class="col-sm-3">Actions</th>
 		</tr>`;
 
-	var beginning = $("#pointsListText").val()
+	var beginning = $("#pointsListText").val().toLowerCase();
 	if (!beginning) {
 		output += `</table>`;
 		$("#pointsList").html( output );
@@ -181,7 +261,7 @@ function drawList() {
 
 	for ( var i = 0; i < pointsSettings.users.length; i++ ) {
 		var username = pointsSettings.users[i].username;
-		if ( regex.test(username) ) {
+		if ( regex.test(username.toLowerCase()) ) {
 			output += `<tr>
 					<td>${username}</td>
 					<td>${pointsSettings.users[i].currentPoints}</td>
