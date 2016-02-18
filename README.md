@@ -32,9 +32,9 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Save song lists
 - [x] Add a user to points list even if that user is not in the chat
 - [x] Add a "play" button to individual quotes and timed messages
-- [ ] More text file outputs
+- [x] More text file outputs
 - [x] Put game and stream title in the window title
-- [ ] Reduce saving to every 5 seconds or so
+- [x] Reduce saving to every 30 seconds or so
 - [x] Generic Module status tab + api command for module description
 - [x] Documentation on how obs-integration works
 - [ ] Points requirement for raffles
