@@ -22,16 +22,15 @@ var fs;
 var logFile;
 var execPath;
 var hosts = [];
-var hostFile;
 var viewers = [];
 var startDate = new Date();
 var subBadgeUrl = "";
 var permitted = [];
-var emoticonsTwitch = [];
-var emoticonsBTTV = [];
-var emoticonsBTTVall = [];
+var emoticons = [];
 var currentUsers = [];
 var recentEvents = [];
+var mainwin;
+var gui;
 
 var rawIrcOn = false;
 var commandsOn = true;
@@ -44,7 +43,7 @@ var settings = {
 	theme: "default"
 };
 
-var title = "KoalaBot 0.8.13";
+var title = "KoalaBot 0.9.0";
 
 $(document).ready( function() {
 
@@ -59,6 +58,15 @@ $(document).ready( function() {
 	else {
 		execPath = "";
 	}
+
+	gui = require("nw.gui");
+	mainwin = gui.Window.get();
+	mainwin.on("close", function() {
+	  this.hide(); // Pretend to be closed already
+	  console.log("Final save");
+	  save();
+	  this.close(true);
+	} );
 
 	$("#getOauthLink").click( setupOauth );
 
@@ -76,7 +84,6 @@ $(document).ready( function() {
 			bot.join( newchan, function() {
 				log( `* Joining ${newchan}` );
 				settings.channel = newchan;
-				save();
 				onChannelEnter();
 			} );
 		}
@@ -85,6 +92,9 @@ $(document).ready( function() {
 	// making logs and settings directories
 	try { fs.accessSync( `${execPath}logs` ); }
 	catch (e) { fs.mkdirSync( `${execPath}logs` ); }
+
+	try { fs.accessSync( `${execPath}txt` ); }
+	catch (e) { fs.mkdirSync( `${execPath}txt` ); }
 
 	try { fs.accessSync( `${execPath}settings` ); }
 	catch (e) { fs.mkdirSync( `${execPath}settings` ); }
@@ -101,7 +111,6 @@ $(document).ready( function() {
 	}
 	$("#botTheme").attr( "href", `${execPath}themes/default.css` );
 
-	hostFile = `${execPath}logs/hosts.log`;
 	$("#botThemeCurrent").html( "default" );
 	settings.theme = "default";
 
@@ -133,9 +142,6 @@ $(document).ready( function() {
 	// setting up timed messages
 	timedMessagesSetup();
 
-	// starting the timer
-	timerSetup();
-
 	// setting up stats stuff
 	statsSetup();
 
@@ -150,6 +156,9 @@ $(document).ready( function() {
 
 	// set up the quotes
 	quoteSetup();
+
+	// starting the timer
+	timerSetup();
 
 	// set up mods
 	apiSetup();
@@ -174,10 +183,8 @@ $(document).ready( function() {
 		// Running tabs
 		runChat();
 		onChannelEnter();
-		save();
 	} catch (e) {
 		$("#getOauthField").val( "" );
-		save();
 	}
 
 	//	populate the #botThemeList
@@ -199,11 +206,14 @@ $(document).ready( function() {
 		$("#botTheme").attr( "href", `${execPath}themes/${tempTheme}` );
 		$("#botThemeCurrent").html(tempTheme.split(".")[0]);
 		settings.theme = tempTheme;
-		save();
 		return false;
 	} );
 
 
+
+	fs.writeFile( `${execPath}txt/host-session.txt`, "" );
+	fs.writeFile( `${execPath}txt/follow-session.txt`, "" );
+	fs.writeFile( `${execPath}txt/sub-session.txt`, "" );
 } );
 
 function getUsername() {
@@ -222,7 +232,6 @@ function getUsername() {
 			settings.channel = "#" + settings.username;
 			$("#getChannelField").val( settings.channel );
 
-			save();
 			runChat();
 			onChannelEnter();
 		}
@@ -293,11 +302,6 @@ function runChat() {
 // This is run every time a channel is entered
 function onChannelEnter() {
 
-	// clearing the host file, hosts tab, and the list of hosts
-	fs.writeFileSync( hostFile, "" );
-	$("#hosts").html("");
-	hosts = [];
-
 	// getting when you change channel because it's channel-specific
 	getEmoticonsBTTV();
 
@@ -327,7 +331,6 @@ function onChannelEnter() {
 		function( response ) {
 			settings.id = response._id;
 			eventSettings.isPartnered = response.partner;
-			save();
 			$("#gameField").val( response.game );
 			$("#statusField").val( response.status );
 
@@ -433,6 +436,9 @@ function updateViewerCount( viewerCount ) {
 				<br>
 				<span class="glyphicon glyphicon-heart text-danger"></span>
 				&nbsp;&nbsp;&nbsp;${followerCount.toLocaleString()}` );
+
+			fs.writeFile( `${execPath}txt/follower-total-count.txt`, `${followerCount.toLocaleString()}` );
+			fs.writeFile( `${execPath}txt/viewer-current-count.txt`, `${viewerCount.toLocaleString()}` );
 		}
 	);
 }
@@ -445,10 +451,21 @@ function getEmoticons() {
 			"api_version" : 3
 		},
 		function( response ) {
-			if ( "emoticons" in response ) emoticonsTwitch = response.emoticons;
-			else setTimeout( function() { getEmoticons(); }, 5*1000 );
+			if ( "emoticons" in response ) {
+				for (var i in response.emoticons) {
+					emoticons.push( {
+						regex : response.emoticons[i].regex,
+						url : response.emoticons[i].images[0].url
+					} );
+				}
+				sortEmotes(emoticons);
+			}
+			else {
+				setTimeout( function() { getEmoticons(); }, 5*1000 );
+			}
 		}
 	);
+
 }
 
 function getEmoticonsBTTV() {
@@ -456,7 +473,15 @@ function getEmoticonsBTTV() {
 		`https://api.betterttv.net/2/channels/${settings.channel.substring(1)}`,
 		{},
 		function ( response ) {
-			if ( "emotes" in response ) emoticonsBTTV = response.emotes;
+			if ( "emotes" in response ) {
+				for (var i in response.emotes) {
+					emoticons.push( {
+						regex : response.emotes[i].code,
+						url : `https://cdn.betterttv.net/emote/${response.emotes[i].id}/1x`
+					} );
+				}
+				sortEmotes(emoticons);
+			}
 		}
 	);
 
@@ -464,7 +489,15 @@ function getEmoticonsBTTV() {
 		"https://api.betterttv.net/emotes",
 		{},
 		function ( response ) {
-			if ( "emotes" in response ) emoticonsBTTVall = response.emotes;
+			if ( "emotes" in response ) {
+				for (var i in response.emotes) {
+					emoticons.push( {
+						regex : response.emotes[i].regex,
+						url : `https:${response.emotes[i].url}`
+					} );
+				}
+				sortEmotes(emoticons);
+			}
 		}
 	);
 }
@@ -485,26 +518,41 @@ function checkEmote( word ) {
 	// if the word is a single character, don't bother checking
 	if( word.length < 2 ) return word + " ";
 
-	// checking BTTV channel specific emotes first since it's smaller
-	for( var j in emoticonsBTTV ) {
-		if ( word === emoticonsBTTV[j].code )
-			return `<img src="https://cdn.betterttv.net/emote/${emoticonsBTTV[j].id}/1x"> `;
-	}
+	var startFor = new Date();
+	var index = searchEmotesFor(word, emoticons);
+	var endFor = new Date();
 
-	// checking universal BTTV emotes
-	for( var j in emoticonsBTTVall ) {
-		if ( word === emoticonsBTTVall[j].regex )
-			return `<img src="https:${emoticonsBTTVall[j].url}"> `;
+	if ( index == -1 ) { // not an emote
+		return `${word} `;
 	}
-
-	// checking official Twitch emotes
-	for( var j in emoticonsTwitch ) {
-		if ( word === emoticonsTwitch[j].regex )
-			return `<img src="${emoticonsTwitch[j].images[0].url}"> `;
+	else {
+		return `<img src="${emoticons[index].url}"> `;
 	}
+}
 
-	// not an emote
-	return `${word} `;
+function sortEmotes(theArray) {
+	theArray.sort( function( a, b ) {
+		if ( a.regex < b.regex )
+			return -1;
+		else if ( a.regex > b.regex )
+			return 1;
+		else
+			return 0;
+	} );
+
+	return theArray;
+}
+
+function searchEmotesFor(searchword, searcharray) {
+	for ( var i = 0; i < searcharray.length; i++ ) {
+		if ( searchword == searcharray[i].regex ) {
+			return i;
+		}
+		if ( searchword < searcharray[i].regex ) {
+			return -1;
+		}
+	}
+	return -1;
 }
 
 function log( message ) {
@@ -608,6 +656,13 @@ function save() {
 	fs.writeFile( `${execPath}settings/songSettings.ini`, JSON.stringify( songSettings ), function ( err ) {
 		if ( err ) log( "* Error saving songSettings" );
 	} );
+
+	// saving defaultCommands.ini
+	fs.writeFile( `${execPath}settings/defaultCommands.ini`, JSON.stringify( defaultCommands ), function ( err ) {
+		if ( err ) log( "* Error saving defaultCommands" );
+	} );
+
+	console.log("Settings saved");
 }
 
 function setupOauth() {
@@ -626,10 +681,17 @@ function setupOauth() {
 			settings.access_token = req.query.token;
 			$("#getOauthField").val( req.query.token );
 			getUsername();
+			save();
 		}
 	} );
 	app.listen( 3000 );
 
 	$("#getOauthModal").modal("show");
 	return false;
+}
+
+
+// https://github.com/nwjs/nw.js/wiki/Shell
+function openLink(url){
+	gui.Shell.openExternal(url);
 }

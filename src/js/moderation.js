@@ -68,7 +68,6 @@ function moderationSetup(){
 		} else {
 			modSettings.linkPro.on = false;
 		}
-		save();
 	} );
 
 	// wordPro button states
@@ -87,7 +86,6 @@ function moderationSetup(){
 		} else {
 			modSettings.wordPro.on = false;
 		}
-		save();
 	} );
 
 	// capsPro button states
@@ -106,7 +104,6 @@ function moderationSetup(){
 		} else {
 			modSettings.capsPro.on = false;
 		}
-		save();
 	} );
 
 	// symbolPro button states
@@ -125,14 +122,12 @@ function moderationSetup(){
 		} else {
 			modSettings.symbolPro.on = false;
 		}
-		save();
 	} );
 
 	// wordProArea settings
 	$("#wordProArea").val( modSettings.wordPro.badwords.join(" ") );
 	$("#wordProArea").change( function() {
 		modSettings.wordPro.badwords = this.val().split(" ");
-		save();
 	} );
 
 	// set up timeout states and listeners
@@ -140,142 +135,129 @@ function moderationSetup(){
 	$("#linkProTimeoutField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.linkPro.timeout = parseInt( tempNum, 10 );
-		save();
 	} );
 
 	$("#linkProTimeoutText").val( modSettings.linkPro.timeoutText );
 	$("#linkProTimeoutText").on( "input", function() {
 		modSettings.linkPro.timeoutText = this.val();
-		save();
 	} );
 
 	$("#wordProTimeoutField").val( modSettings.wordPro.timeout );
 	$("#wordProTimeoutField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.wordPro.timeout = parseInt( tempNum, 10 );
-		save();
 	} );
 
 	$("#wordProTimeoutText").val( modSettings.wordPro.timeoutText );
 	$("#wordProTimeoutText").on( "input", function() {
 		modSettings.wordPro.timeoutText = this.val();
-		save();
 	} );
 
 	$("#capsProTimeoutField").val( modSettings.capsPro.timeout );
 	$("#capsProTimeoutField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.capsPro.timeout = parseInt( tempNum, 10 );
-		save();
 	} );
 
 	$("#capsProTimeoutText").val( modSettings.capsPro.timeoutText );
 	$("#capsProTimeoutText").on( "input", function() {
 		modSettings.capsPro.timeoutText = this.val();
-		save();
 	} );
 
 	$("#capsProPerWordField").val( modSettings.capsPro.capsPerWord );
 	$("#capsProPerWordField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.capsPro.capsPerWord = parseInt( tempNum, 10 );
-		save();
 	} );
 
 	$("#capsProPerPostField").val( modSettings.capsPro.capsTotal );
 	$("#capsProPerPostField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.capsPro.capsTotal = parseInt( tempNum, 10 );
-		save();
 	} );
 
 	$("#symbolProTimeoutField").val( modSettings.symbolPro.timeout );
 	$("#symbolProTimeoutField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.symbolPro.timeout = parseInt( tempNum, 10 );
-		save();
 	} );
 
 	$("#symbolProTimeoutText").val( modSettings.symbolPro.timeoutText );
 	$("#symbolProTimeoutText").on( "input", function() {
 		modSettings.symbolPro.timeoutText = this.val();
-		save();
 	} );
 
 	$("#symbolProSymbolsField").val( modSettings.symbolPro.symbols );
 	$("#symbolProSymbolsField").on( "input", function() {
 		var tempNum = this.val();
 		modSettings.symbolPro.symbols = parseInt( tempNum, 10 );
-		save();
 	} );
 
 }
 
 function moderation( from, mod, text ) {
-	if ( !mod && from.toLowerCase() != settings.channel.substring(1) ) {
+	if ( mod ) return;
+	if ( from.toLowerCase() == settings.channel.substring(1) ) return;
+	if ( from.toLowerCase() == settings.username.toLowerCase() ) return;
 
-		if ( modSettings.linkPro.on ) {
-			if( linkPro( from, text ) ) {
-				log( `* Link protection timeout on: ${from}` );
-				setTimeout( function() {
-					bot.say( settings.channel, `/timeout ${from} ${modSettings.linkPro.timeout}` );
-				}, 1000);
-				if( modSettings.linkPro.timeoutText !== "" ) {
-					var output = modSettings.linkPro.timeoutText;
-					output = output.replace( /%user%/g, from );
-					cmdSay( output );
-				}
+	if ( modSettings.linkPro.on ) {
+		if( linkPro( from, text ) ) {
+			log( `* Link protection timeout on: ${from}` );
+			setTimeout( function() {
+				bot.say( settings.channel, `/timeout ${from} ${modSettings.linkPro.timeout}` );
+			}, 1000);
+			if( modSettings.linkPro.timeoutText !== "" ) {
+				var output = modSettings.linkPro.timeoutText;
+				output = output.replace( /%user%/g, from );
+				cmdSay( output );
 			}
 		}
+	}
 
-		if ( modSettings.wordPro.on ) {
-			if( wordPro( text ) ) {
-				log( `* Word protection timeout on: ${from}` );
-				setTimeout( function() {
-					bot.say( settings.channel, `/timeout ${from} ${modSettings.wordPro.timeout}` );
-				}, 1000);
-				if( modSettings.wordPro.timeoutText !== "" ) {
-					var output = modSettings.wordPro.timeoutText;
-					output = output.replace( /%user%/g, from );
-					cmdSay( output );
-				}
+	if ( modSettings.wordPro.on ) {
+		if( wordPro( text ) ) {
+			log( `* Word protection timeout on: ${from}` );
+			setTimeout( function() {
+				bot.say( settings.channel, `/timeout ${from} ${modSettings.wordPro.timeout}` );
+			}, 1000);
+			if( modSettings.wordPro.timeoutText !== "" ) {
+				var output = modSettings.wordPro.timeoutText;
+				output = output.replace( /%user%/g, from );
+				cmdSay( output );
 			}
 		}
+	}
 
-		if ( modSettings.capsPro.on ) {
-			if( capsPro( text ) ) {
-				log( `* Caps protection timeout on: ${from}` );
-				setTimeout( function() {
-					bot.say( settings.channel, `/timeout ${from} ${modSettings.capsPro.timeout}` );
-				}, 1000);
-				if( modSettings.capsPro.timeoutText !== "" ) {
-					var output = modSettings.capsPro.timeoutText;
-					output = output.replace( /%user%/g, from );
-					cmdSay( output );
-				}
+	if ( modSettings.capsPro.on ) {
+		if( capsPro( text ) ) {
+			log( `* Caps protection timeout on: ${from}` );
+			setTimeout( function() {
+				bot.say( settings.channel, `/timeout ${from} ${modSettings.capsPro.timeout}` );
+			}, 1000);
+			if( modSettings.capsPro.timeoutText !== "" ) {
+				var output = modSettings.capsPro.timeoutText;
+				output = output.replace( /%user%/g, from );
+				cmdSay( output );
 			}
 		}
+	}
 
-		if ( modSettings.symbolPro.on ) {
-			if( symbolPro( text ) ) {
-				log( `* Symbol protection timeout on: ${from}` );
-				setTimeout( function() {
-					bot.say( settings.channel, `/timeout ${from} ${modSettings.symbolPro.timeout}` );
-				}, 1000 );
-				if( modSettings.symbolPro.timeoutText !== "" ) {
-					var output = modSettings.symbolPro.timeoutText;
-					output = output.replace( /%user%/g, from );
-					cmdSay( output );
-				}
+	if ( modSettings.symbolPro.on ) {
+		if( symbolPro( text ) ) {
+			log( `* Symbol protection timeout on: ${from}` );
+			setTimeout( function() {
+				bot.say( settings.channel, `/timeout ${from} ${modSettings.symbolPro.timeout}` );
+			}, 1000 );
+			if( modSettings.symbolPro.timeoutText !== "" ) {
+				var output = modSettings.symbolPro.timeoutText;
+				output = output.replace( /%user%/g, from );
+				cmdSay( output );
 			}
 		}
-
 	}
 }
 
-function cmdPermit( params, from, mod, subscriber ) {
-	if ( !mod ) return;
-
+function cmdPermit( params, from ) {
 	var permitTime = 60;
 
 	var user = params[0];

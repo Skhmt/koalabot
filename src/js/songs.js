@@ -59,7 +59,6 @@ function songsSetup() {
     $("#songShuffleStreamer").click( function() {
         songSettings.streamerQueue = shuffleArray( songSettings.streamerQueue );
         updateStreamerSongList();
-        save();
     } );
 
     $("#songVolumeContainer").click( function(e) {
@@ -98,18 +97,12 @@ function songsSetup() {
         } else {
             songSettings.songRequests = false;
         }
-        save();
     } );
 
     // song point cost listener and setter
     $("#songPointCost").val( songSettings.songPointCost );
     $("#songPointCost").on( "input", function() {
         songSettings.songPointCost = $("#songPointCost").val();
-        save();
-    } );
-
-    fs.writeFile( `${execPath}logs/song.log`, "", function ( err ) {
-        if ( err ) log( "* Error saving song log" );
     } );
 
     ytPlayer = document.getElementById("ytPlayer").contentWindow;
@@ -135,13 +128,6 @@ function songStateChecker() {
     setTimeout( songStateChecker, 500 );
 }
 
-/*
- * If there's an error (video doesn't work on non-websites, restricted by country, etc), go to the next song
- */
-/*function onError(event) {
-    nextSong();
-}*/
-
 function nextSong() {
 
     currentSong = null;
@@ -162,10 +148,7 @@ function nextSong() {
             currentSong = tempSong;
             songSettings.streamerQueue.push( tempSong );
             updateStreamerSongList();
-            fs.writeFile( `${execPath}logs/song.log`, currentSong.title, function ( err ) {
-                if ( err ) log( "* Error saving song log" );
-            } );
-            save();
+            fs.writeFile( `${execPath}txt/song-current.txt`, currentSong.title );
         }
     }
 }
@@ -203,27 +186,24 @@ function addSongStreamer(videoid) {
                 if ( ytPlayer.getPlayerState() != 1 ) { // YT.PlayerState.PLAYING == 1
                     nextSong();
                 }
-                save();
             }
         }
     );
 }
 
-function addSong(videoid, username, mod) {
+function addSong(videoid, username) {
 
     var userpoints = apiGetPoints(username);
     if ( userpoints == null ) {
         cmdSay( `Sorry ${username}, you don't have enough points to request a song. :(` );
         return;
     }
-    else if ( userpoints < songSettings.songPointCost && !mod ) {
+    else if ( userpoints < songSettings.songPointCost ) {
         cmdSay( `Sorry ${username}, you don't have enough points to request a song. :(` );
         return;
     }
 
-    if (!mod) {
-        apiModPoints( username, -1*(songSettings.songPointCost) );
-    }
+    apiModPoints( username, -1*(songSettings.songPointCost) );
 
     // allows most copy-pastes to work
     if ( videoid.length != 11 ) {
@@ -266,14 +246,13 @@ function deleteSongStreamer(index) {
     updateStreamerSongList();
 }
 
-function cmdAddSong(params, from, mod, subscriber) {
+function cmdAddSong( params, from ) {
 	if ( !songSettings.songRequests ) return;
-    addSong( params[0], from, mod );
+    addSong( params[0], from );
 }
 
-function cmdSetVolume(params, from, mod, subscriber) {
+function cmdSetVolume( params, from ) {
     if ( !songSettings.songRequests ) return;
-    if ( !mod ) return;
 
     var vol = params[0];
 
@@ -284,7 +263,7 @@ function cmdSetVolume(params, from, mod, subscriber) {
     }
 }
 
-function cmdGetSong(params, from, mod, subscriber) {
+function cmdGetSong( params, from ) {
     if ( !songSettings.songRequests ) return;
 
     if ( currentSong == null ) {
@@ -299,18 +278,14 @@ function cmdGetSong(params, from, mod, subscriber) {
     }
 }
 
-function cmdSkipSong(params, from, mod, subscriber){
+function cmdSkipSong( params, from ) {
 	if ( !songSettings.songRequests ) return;
-    if ( mod ) {
-        nextSong();
-    }
+    nextSong();
 }
 
-function cmdMute(params, from, mod, subscriber){
+function cmdMute( params, from ) {
 	if ( !songSettings.songRequests ) return;
-    if ( mod ) {
-        toggleMute(true);
-    }
+    toggleMute(true);
 }
 
 // re-writes the song list

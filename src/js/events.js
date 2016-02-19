@@ -78,7 +78,6 @@ function eventSetup() {
         } else {
             eventSettings.followerChat = false;
         }
-        save();
     } );
 
     // host chat click listener
@@ -88,7 +87,6 @@ function eventSetup() {
         } else {
             eventSettings.hostChat = false;
         }
-        save();
     } );
 
     // sub chat click listener
@@ -98,7 +96,6 @@ function eventSetup() {
         } else {
             eventSettings.subChat = false;
         }
-        save();
     } );
 
     // sub chat months click listener
@@ -108,7 +105,6 @@ function eventSetup() {
         } else {
             eventSettings.subChatMonths = false;
         }
-        save();
     } );
 
 
@@ -116,28 +112,24 @@ function eventSetup() {
     $("#followerChatText").val( eventSettings.followerChatText );
     $("#followerChatText").on( "input", function() {
         eventSettings.followerChatText = $("#followerChatText").val();
-        save();
     } );
 
     // host text initial setup and listener
     $("#hostChatText").val( eventSettings.hostChatText );
     $("#hostChatText").on( "input", function() {
         eventSettings.hostChatText = $("#hostChatText").val();
-        save();
     } );
 
     // sub text initial setup and listener
     $("#subChatText").val( eventSettings.subChatText );
     $("#subChatText").on( "input", function() {
         eventSettings.subChatText = $("#subChatText").val();
-        save();
     } );
 
     // sub text months initial setup and listener
     $("#subChatTextMonths").val( eventSettings.subChatTextMonths );
     $("#subChatTextMonths").on( "input", function() {
         eventSettings.subChatTextMonths = $("#subChatTextMonths").val();
-        save();
     } );
 }
 
@@ -176,9 +168,8 @@ function updateHosts() {
                     }
 
                     // write to host file
-                    fs.appendFile( hostFile, `${tempHost}\r\n`, function ( err ) {
-                        if ( err ) log( "* Error writing to host file" );
-                    } );
+					fs.appendFile( `${execPath}txt/host-session.txt`, `${tempHost}\r\n` );
+					fs.writeFile( `${execPath}txt/host-recent.txt`, `${tempHost}\r\n` );
                 }
             }
         }
@@ -236,6 +227,9 @@ function updateFollowers() {
                     } else {
                         log( `* ${getTimeStamp()} ${tempUser} is following` );
                     }
+
+					fs.appendFile( `${execPath}txt/follow-session.txt`, `${tempUser}\r\n` );
+					fs.writeFile( `${execPath}txt/follow-recent.txt`, `${tempHost}` );
                 }
             }
         }
@@ -245,6 +239,11 @@ function updateFollowers() {
 function subNotify(message) {
 
     var msgArray = message.split(" ");
+
+	if ( msgArray[1] != "viewers" ) { // name just subscribed or name subscribed for 13 months in a row
+		fs.appendFile( `${execPath}txt/sub-session.txt`, `${tempUser}\r\n` );
+		fs.writeFile( `${execPath}txt/sub-recent.txt`, `${tempHost}` );
+	}
 
     if ( msgArray[1] === "just" ) { // "name just subscribed!"
 

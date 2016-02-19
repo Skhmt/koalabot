@@ -32,11 +32,13 @@ function timerSetup() {
 		followerInterval: 15*1000,
 		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
 		lifePointsInterval: 60*1000,
+		saveInterval: 60*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
 		followerPlayTime: now,
 		pointsPlayTime: now,
 		lifePointsPlayTime: now,
+		savePlayTime: (now + 60*1000)
 	};
 
 	timerTick();
@@ -77,6 +79,11 @@ function timerTick() {
 	if ( now >= timerSettings.lifePointsPlayTime && settings.channel !== null ) {
 		updateLifePoints();
 		timerSettings.lifePointsPlayTime = now + timerSettings.lifePointsInterval;
+	}
+
+	if ( now >= timerSettings.savePlayTime && settings.channel !== null ) {
+		save();
+		timerSettings.savePlayTime = now + timerSettings.saveInterval;
 	}
 
 

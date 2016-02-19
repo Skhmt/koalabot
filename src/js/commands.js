@@ -35,12 +35,12 @@ function cmdSetup() {
 	} );
 
 	$("#updateGameButton").click(function() {
-		changeGame( $("#gameField").val().split(" "), settings.username, true, true );
+		changeGame( $("#gameField").val().split(" "), settings.username );
 		return false;
 	} );
 
 	$("#updateStatusButton").click(function() {
-		changeStatus( $("#statusField").val().split(" "), settings.username, true, true );
+		changeStatus( $("#statusField").val().split(" "), settings.username );
 		return false;
 	} );
 
@@ -81,7 +81,6 @@ function cmdSetup() {
 	// uptime radio listeners
 	$("input[name='uptimeRadio']").change( function() {
 		cmdSettings.uptime = this.value;
-		save();
 	} );
 
 
@@ -108,9 +107,20 @@ function parseCommand(text, from, mod, subscriber) {
 	var params = text.split(" ");
 	params.shift(); // an array of params
 
+	var isStreamer = (from.toLowerCase() === settings.username.toLowerCase() ||
+		from.toLowerCase() === settings.channel.substring(1).toLowerCase() );
+
 	for ( var i = 0; i < cmdList.length; i++ ) {
 		if ( cmdList[i].cmd === cmd ) {
-			eval(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
+			var rbac = cmdList[i].rbac;
+			if ( rbac != "all" ) {
+				if ( rbac == "off" ) return;
+				if ( rbac == "reg" && apiGetPoints(from) < pointsSettings.regularPoints && !sub && !mod && !isStreamer ) return;
+				if ( rbac == "sub" && !sub && !mod && !isStreamer) return;
+				if ( rbac == "mod" && !mod && !isStreamer) return;
+				if ( rbac == "bot" ) return;
+			}
+			eval(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}")`);
 			return;
 		}
 	}
@@ -158,8 +168,7 @@ function refreshCommands() {
 
 // !addcom (-ul=userLevel) [!command]  [text]
 // this is a chat function
-function cmdAddCmd( params, from, mod, subscriber ) {
-	if ( !mod ) return;
+function cmdAddCmd( params, from ) {
 
 	if ( params[0] == null ) {
 		return cmdSay( `Usage: ${cmdSettings.symbol}addcom (-ul=mod) [${cmdSettings.symbol}command] [text]` );
@@ -200,7 +209,6 @@ function cmdAddCmd( params, from, mod, subscriber ) {
 
 	cmdSettings.custom.push( tempCommand );
 	cmdSay( `Adding command: ${tempCommand.name}, ul: ${tempCommand.userType}, text: ${tempCommand.text}` );
-	save();
 	refreshCommands();
 }
 
@@ -221,11 +229,10 @@ function addCmdButton() {
 	$("#addCmdText").val("");
 
 	cmdSettings.custom.push( tempCommand );
-	save();
 	refreshCommands();
 }
 
-function cmdDelCmd( params, from, mod, subscriber ) {
+function cmdDelCmd( params, from ) {
 	var cmdIndex = "";
 	var lcCmd = params[0].toLowerCase();
 	for ( var i = 0; i < cmdSettings.custom.length; i++ ) {
@@ -240,14 +247,12 @@ function cmdDelCmd( params, from, mod, subscriber ) {
 
 	cmdSettings.custom.splice( cmdIndex, 1 );
 	cmdSay( `Deleted command: ${params[0]}` );
-	save();
 	refreshCommands();
 }
 
 function delCmdButton( id ) {
 	if ( confirm( `Are you sure you want to delete ${cmdSettings.custom[id].name} ?` ) ) {
 		cmdSettings.custom.splice( id, 1 );
-		save();
 		refreshCommands();
 	}
 }
@@ -294,42 +299,4 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 function cmdSay( text ) {
 	bot.say( settings.channel, text );
 	log( `<b>[${cmdSettings.symbol}] ${text}</b>` );
-}
-
-function changeGame( params, from, mod, subscriber ) {
-	if (!mod) return;
-	var game = params.join(" ");
-
-	$.get(
-		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
-		{
-			"channel[game]": game,
-			"_method": "put",
-			"oauth_token": settings.access_token.substring(6)
-		}
-	);
-
-	cmdSay( `${from} has changed the stream game to: ${game}` );
-	$("#gameField").val( game );
-
-	$("title").html(`${$("#statusField").val()} &mdash; ${game} &mdash; ${title}`);
-}
-
-function changeStatus( params, from, mod, subscriber ) {
-	if (!mod) return;
-	var status = params.join(" ");
-
-	$.get(
-		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
-		{
-			"channel[status]":status,
-			"_method": "put",
-			"oauth_token": settings.access_token.substring(6)
-		}
-	);
-
-	cmdSay( `${from} has changed the stream status to: ${status}` );
-	$("#statusField").val( status );
-
-	$("title").html(`${status} &mdash; ${$("#gameField").val()} &mdash; ${title}`);
 }

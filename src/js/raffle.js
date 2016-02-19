@@ -52,38 +52,32 @@ function raffleSetup() {
 	// raffleAnnounce listener
 	$("input[name='raffleAnnounceRadio']").change( function() {
 		raffleSettings.announce = this.value;
-		save();
 	} );
 
 
 	$("#raffleStartText").val(raffleSettings.startText);
 	$("#raffleStartText").change( function() {
 		raffleSettings.startText = $("#raffleStartText").val();
-		save();
 	} );
 
 	$("#raffleEndText").val(raffleSettings.endText);
 	$("#raffleEndText").change( function() {
 		raffleSettings.endText = $("#raffleEndText").val();
-		save();
 	} );
 
 	$("#raffleWinnerText").val(raffleSettings.winnerText);
 	$("#raffleWinnerText").change( function() {
 		raffleSettings.winnerText = $("#raffleWinnerText").val();
-		save();
 	} );
 
 	$("#raffleTime").val(raffleSettings.time);
 	$("#raffleTime").on( "input", function() {
 		raffleSettings.time = $("#raffleTime").val();
-		save();
 	} );
 
 	$("#raffleKeyword").val(raffleSettings.keyword);
 	$("#raffleKeyword").on( "input", function() {
 		raffleSettings.keyword = $("#raffleKeyword").val();
-		save();
 	} );
 
 }

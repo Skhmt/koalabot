@@ -1,48 +1,81 @@
 // static commands
 
-function addStaticCommands() {
+var defaultCommands = [];
 
-	cmdList.push(
-		// { cmd: "", func: "" },
-		{ cmd: "bottime", func: "cmdBotTime" },
-		{ cmd: "streamtime", func: "cmdStreamTime" },
-		{ cmd: "laptime", func: "cmdLapTime" },
-		{ cmd: "uptime", func: "cmdUpTime" },
-		{ cmd: "highlight", func: "cmdHighlight" },
-		{ cmd: "ht", func: "cmdHighlight" },
-		{ cmd: "bot", func: "cmdBot" },
-		{ cmd: "game", func: "cmdGame" },
-		{ cmd: "status", func: "cmdStatus" },
-		{ cmd: "addcmd", func: "cmdAddCmd" },
-		{ cmd: "addcom", func: "cmdAddCmd" },
-		{ cmd: "delcmd", func: "cmdDelCmd" },
-		{ cmd: "delcom", func: "cmdDelCmd" }
+function addStaticCommands() {
+	try {
+		var readFile = fs.readFileSync( `${execPath}settings/defaultCommands.ini` );
+		defaultCommands = $.parseJSON( readFile );
+	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
+		defaultCommands = createDefaultCommands();
+	}
+
+	var output = `<table class="table table-striped table-hover table-condensed">
+		<tr>
+			<th>Command</th>
+			<th>Access</th>
+			<th>Description</th>
+		</tr>`;
+	for ( var i = 0; i < defaultCommands.length; i++ ) {
+		cmdList.push( {cmd: defaultCommands[i].cmd, func: defaultCommands[i].func, rbac: defaultCommands[i].rbac} );
+		output += `<tr>
+			<td>${cmdSettings.symbol}${defaultCommands[i].cmd}</td>
+			<td>${defaultCommands[i].rbac}</td>
+			<td>${defaultCommands[i].desc}</td>
+		</tr>`;
+	}
+	output += `</table>`;
+
+	$("#commandsConfigPanel").append(output);
+}
+
+function createDefaultCommands() {
+
+	var cmds = [];
+
+	cmds.push(
+		{ cmd: "bottime", func: "cmdBotTime", rbac: "all", desc: "Displays the time the bot has been open." },
+		{ cmd: "streamtime", func: "cmdStreamTime", rbac: "all", desc: "Displays the time the stream has been live." },
+		{ cmd: "laptime", func: "cmdLapTime", rbac: "all", desc: "Displays the lap time." },
+		{ cmd: "uptime", func: "cmdUpTime", rbac: "all", desc: "Displays the uptime." },
+		{ cmd: "highlight", func: "cmdHighlight", rbac: "mod", desc: "Records the timestamp for future stream highlights." },
+		{ cmd: "ht", func: "cmdHighlight", rbac: "mod", desc: "Records the timestamp for future stream highlights." },
+		{ cmd: "bot", func: "cmdBot", rbac: "all", desc: "Displays the bot's author's info and link." },
+		{ cmd: "game", func: "cmdGame", rbac: "mod", desc: "Changes the game played as shown on Twitch." },
+		{ cmd: "status", func: "cmdStatus", rbac: "mod", desc: "Changes the stream status as shown on Twitch." },
+		{ cmd: "addcmd", func: "cmdAddCmd", rbac: "mod", desc: "Adds a custom command." },
+		{ cmd: "addcom", func: "cmdAddCmd", rbac: "mod", desc: "Adds a custom command." },
+		{ cmd: "delcmd", func: "cmdDelCmd", rbac: "mod", desc: "Deletes a custom command." },
+		{ cmd: "delcom", func: "cmdDelCmd", rbac: "mod", desc: "Deletes a custom command." }
 	);
 
 	// quotes
-	cmdList.push(
-		{ cmd: "quote", func: "cmdQuote" },
-		{ cmd: "addquote", func: "cmdAddQuote" },
-		{ cmd: "delquote", func: "cmdDelQuote" }
+	cmds.push(
+		{ cmd: "quote", func: "cmdQuote", rbac: "all", desc: "Displays a quote." },
+		{ cmd: "addquote", func: "cmdAddQuote", rbac: "all", desc: "Adds a quote." },
+		{ cmd: "delquote", func: "cmdDelQuote", rbac: "mod", desc: "Deletes a quote." }
 	);
 
 	// moderation
-	cmdList.push(
-		{ cmd: "permit", func: "cmdPermit" }
+	cmds.push(
+		{ cmd: "permit", func: "cmdPermit", rbac: "mod", desc: "Permits a user to post a link for 60 seconds." }
 	);
 
 	// songs
-	cmdList.push(
-        { cmd: "currentsong", func: "cmdGetSong" },
-        { cmd: "skipsong", func: "cmdSkipSong" },
-        { cmd: "volume", func: "cmdSetVolume" },
-        { cmd: "mute", func: "cmdMute" },
-        { cmd: "songrequest", func: "cmdAddSong" }
+	cmds.push(
+        { cmd: "currentsong", func: "cmdGetSong", rbac: "all", desc: "Displays the current song title." },
+        { cmd: "skipsong", func: "cmdSkipSong", rbac: "mod", desc: "Skips the song being played." },
+        { cmd: "volume", func: "cmdSetVolume", rbac: "mod", desc: "Changes the volume of the song." },
+        { cmd: "mute", func: "cmdMute", rbac: "mod", desc: "Mutes the song." },
+        { cmd: "songrequest", func: "cmdAddSong", rbac: "all", desc: "Adds a song to the queue." }
     );
 
 	// points
-	cmdList.push(
-		{ cmd: "points", func: "cmdPoints" });
+	cmds.push(
+		{ cmd: "points", func: "cmdPoints", rbac: "all", desc: "Displays the user's points." }
+	);
+
+	return cmds;
 }
 
 /*
@@ -51,13 +84,11 @@ function cmd ( params, from, mod, subscriber ) {
 }
 */
 
-function cmdBot ( params, from, mod, subscriber ) {
-	cmdSay( `This is KoalaBot. It is being developed by skhmt using NW.js.
-		Get it at: https://github.com/Skhmt/twitch-bot` );
+function cmdBot ( params, from ) {
+	cmdSay( `This is ${title}. It is being developed by skhmt. Get it at: https://github.com/Skhmt/twitch-bot` );
 }
 
-function cmdHighlight( params, from, mod, subscriber ) {
-	if ( !mod ) return;
+function cmdHighlight( params, from ) {
 
 	// Get time the stream started
 	$.getJSON(
@@ -98,7 +129,7 @@ function cmdHighlight( params, from, mod, subscriber ) {
 	);
 }
 
-function cmdUpTime ( params, from, mod, subscriber ) {
+function cmdUpTime ( params, from ) {
 	if ( cmdSettings.uptime === "bot" ) {
 		cmdSay( `Uptime: ${timeDifference( startDate.getTime() )}` );
 	} else if ( cmdSettings.uptime === "stream" ) {
@@ -108,11 +139,11 @@ function cmdUpTime ( params, from, mod, subscriber ) {
 	}
 }
 
-function cmdLapTime ( params, from, mod, subscriber ) {
+function cmdLapTime ( params, from ) {
 	cmdSay( `The current lap time is ${timeDifference( lap.getTime() )}` );
 }
 
-function cmdStreamTime ( params, from, mod, subscriber ) {
+function cmdStreamTime ( params, from ) {
 	$.getJSON(
 		`https://api.twitch.tv/kraken/streams/${settings.channel.substring(1)}`,
 		{
@@ -131,7 +162,7 @@ function cmdStreamTime ( params, from, mod, subscriber ) {
 }
 
 
-function cmdBotTime ( params, from, mod, subscriber ) {
+function cmdBotTime ( params, from ) {
 	cmdSay( `The bot has been running for ${timeDifference( startDate.getTime() )}` );
 }
 
@@ -190,4 +221,41 @@ function isFollower( from ) {
 	).error(function() {
 		cmdSay( `${from} is not a follower.` );
 	} );
+}
+
+
+function changeGame( params, from ) {
+	var game = params.join(" ");
+
+	$.get(
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
+		{
+			"channel[game]": game,
+			"_method": "put",
+			"oauth_token": settings.access_token.substring(6)
+		}
+	);
+
+	cmdSay( `${from} has changed the stream game to: ${game}` );
+	$("#gameField").val( game );
+
+	$("title").html(`${$("#statusField").val()} &mdash; ${game} &mdash; ${title}`);
+}
+
+function changeStatus( params, from ) {
+	var status = params.join(" ");
+
+	$.get(
+		`https://api.twitch.tv/kraken/channels/${settings.channel.substring(1)}`,
+		{
+			"channel[status]":status,
+			"_method": "put",
+			"oauth_token": settings.access_token.substring(6)
+		}
+	);
+
+	cmdSay( `${from} has changed the stream status to: ${status}` );
+	$("#statusField").val( status );
+
+	$("title").html(`${status} &mdash; ${$("#gameField").val()} &mdash; ${title}`);
 }

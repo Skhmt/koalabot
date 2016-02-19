@@ -37,7 +37,6 @@ function pointsSetup() {
 	$("#pointUnits").val( pointsSettings.unit );
 	$("#pointUnits").on( "input", function() {
 		pointsSettings.unit = this.value;
-		save();
 		drawList();
 	} );
 
@@ -49,7 +48,6 @@ function pointsSetup() {
 		} else {
 			pointsSettings.pointsPerUpdate = Number( this.value );
 		}
-		save();
 	} );
 
 	$("#pointsMinuteUpdate").val( pointsSettings.minutesPerUpdate );
@@ -61,7 +59,6 @@ function pointsSetup() {
 			pointsSettings.minutesPerUpdate = Number( this.value );
 		}
 		timerSettings.pointsInterval = pointsSettings.minutesPerUpdate*60*1000;
-		save();
 	} );
 
 	if ( pointsSettings.enabled ) {
@@ -78,7 +75,6 @@ function pointsSetup() {
 		} else {
 			pointsSettings.enabled = false;
 		}
-		save();
 	} );
 
 	$("#addUserPointsButton").click(function(){
@@ -88,7 +84,6 @@ function pointsSetup() {
 			currentPoints: 0
 		} );
 		$("#addUserPointsText").val("")
-		save();
 		drawList();
 	} );
 
@@ -116,7 +111,6 @@ function updatePoints() {
 	pointsWorker.onmessage = function(e) {
 		pointsSettings.users = e.data;
 
-		save();
 		drawList();
 
 		var endTime = new Date();
@@ -141,101 +135,10 @@ function updateLifePoints() {
 	pointsWorker.onmessage = function(e) {
 		pointsSettings.users = e.data;
 
-		save();
 		drawList();
 
 		var endTime = new Date();
 		console.log(`update life: ${endTime.getTime() - startTime.getTime()}ms`);
-	}
-}
-
-//function updateLifePoints() {
-//
-//	if ( !pointsSettings.enabled ) return;
-//
-//	var startTime = new Date();
-//
-//	if ( currentUsers.length == 0 || pointsSettings == null ) {
-//		return;
-//	}
-//
-//	var newUserArray = [];
-//
-//	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
-//		var currentLC = currentUsers[c].username.toLowerCase();
-//
-//		var theIndex;
-//	 	if ( pointsSettings.users.length > 0 ) {
-//			theIndex = binarySearch( currentLC , pointsSettings.users, 0 );
-//		}
-//		else {
-//			theIndex = -1;
-//		}
-//
-//		if ( theIndex == -1 ) {
-//			newUserArray.push( {
-//				username: currentUsers[c].username,
-//				totalPoints: 1,
-//				currentPoints: pointsSettings.pointsPerUpdate
-//			} );
-//		}
-//		else {
-//			pointsSettings.users[theIndex].totalPoints += 1;
-//		}
-//	}
-//
-//	if ( newUserArray.length > 0 ) {
-//		pointsSettings.users = pointsSettings.users.concat(newUserArray);
-//		pointsSettings.users = sortList(pointsSettings.users);
-//	}
-//	save();
-//	drawList();
-//
-//	var endTime = new Date();
-//	console.log(`update life points: ${endTime.getTime() - startTime.getTime()}ms`);
-//}
-
-function sortList(theArray) {
-	theArray.sort( function( a, b ) {
-		if ( a.username < b.username )
-			return -1;
-		else if ( a.username > b.username )
-			return 1;
-		else
-			return 0;
-	} );
-
-	return theArray;
-}
-
-// temparray is initially pointsSettings.users
-// searchname is already lowercase
-function binarySearch(searchname, searcharray, indexoffset) {
-	var temparray = [];
-	temparray = temparray.concat(searcharray);
-
-	var index = Math.floor( (temparray.length - 1) / 2);
-
-	if (!temparray[index]) {
-		return -1;
-	}
-
-	var arrayname = temparray[index].username.toLowerCase();
-
-	if ( searchname === arrayname ) { // found
-		return (indexoffset + index);
-
-	}
-	else if ( searchname > arrayname && temparray.length >= 1) {
-		var newarray = temparray.splice( index + 1, Number.MAX_VALUE );
-		return binarySearch( searchname, newarray, (indexoffset + index + 1) );
-
-	} else if ( searchname < arrayname && temparray.length >= 1) {
-		var newarray = temparray.splice( 0, index );
-		return binarySearch( searchname, newarray, indexoffset );
-
-	} else {
-		return -1;
 	}
 }
 
@@ -251,7 +154,7 @@ function drawList() {
 		</tr>`;
 
 	var beginning = $("#pointsListText").val().toLowerCase();
-	if (!beginning) {
+	if ( !beginning || beginning.length < 2 ) {
 		output += `</table>`;
 		$("#pointsList").html( output );
 		return;
@@ -286,13 +189,11 @@ function drawList() {
 
 function addPoint( index, amount ) {
 	pointsSettings.users[index].currentPoints += amount;
-	save();
 	drawList();
 }
 
 function subtractPoint( index, amount ) {
 	pointsSettings.users[index].currentPoints -= amount;
-	save();
 	drawList();
 }
 
@@ -306,7 +207,7 @@ function getPointIndex( name ) {
 	return -1;
 }
 
-function cmdPoints( params, from, mod, subscriber ) {
+function cmdPoints( params, from ) {
 	if ( !pointsSettings.enabled ) return;
 
 	var theIndex = getPointIndex( from );
@@ -321,6 +222,5 @@ function cmdPoints( params, from, mod, subscriber ) {
 
 function deletePoints( index ) {
 	pointsSettings.users.splice(index, 1);
-	save();
 	drawList();
 }

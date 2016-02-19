@@ -58,6 +58,7 @@
 					<a href="#" data-toggle="dropdown" class="dropdown-toggle">Settings <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#tab-botConfig" data-toggle="tab">Bot Config</a></li>
+						<li><a href="#tab-commandsConfig" data-toggle="tab">Cmd Config</a></li>
 						<li><a href="#tab-spam" data-toggle="tab">Spam</a></li>
 						<li><a href="#tab-statistics" id="openStats" data-toggle="tab">Statistics</a></li>
 						<li class="divider"></li>
@@ -754,6 +755,19 @@
 			</div>
 		</div>
 
+		<!-- COMMANDS CONFIG -->
+		<div class="tab-pane" id="tab-commandsConfig">
+			<div class="row-fluid">
+				<div class="col-sm-12">
+					<div class="panel panel-default" id="commandsConfigPanel">
+						<div class="panel-body">
+							Command Symbol: !
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- STATISTICS -->
 		<div class="tab-pane" id="tab-statistics">
 			<div class="row-fluid">
@@ -779,7 +793,12 @@
 						</div>
 						<div class="panel-body">
 							<p>
-								<em>https://github.com/Skhmt/twitch-bot</em>
+								<em><a href="#" onclick="openLink('https://github.com/Skhmt/twitch-bot');">
+									https://github.com/Skhmt/twitch-bot
+								</a></em><br>
+								<em><a href="#" onclick="openLink('https://www.reddit.com/r/koalabot');">
+									https://www.reddit.com/r/koalabot
+								</a></em>
 							</p>
 							<p>
 								Made by: skhmt, 2016.
@@ -788,10 +807,19 @@
 								Thanks to the people below that have helped a lot!
 							</p>
 							<p>
-								M3rchant (<em>twitch.tv/m3rchant</em>) <br>
+								M3rchant
+									(<em><a href="#" onclick="openLink('http://www.twitch.tv/m3rchant');">
+										twitch.tv/m3rchant
+									</a></em>) <br>
 								Ashalle <br>
-								Tons0fun (<em>twitch.tv/the_tons0fun</em>) <br>
-								JoshTheSquid (<em>twitch.tv/dryroastedlemon</em>) <br>
+								Tons0fun
+									(<em><a href="#" onclick="openLink('http://www.twitch.tv/the_tons0fun');">
+										twitch.tv/the_tons0fun
+									</a></em>) <br>
+								JoshTheSquid
+									(<em><a href="#" onclick="openLink('http://www.twitch.tv/dryroastedlemon');">
+										twitch.tv/dryroastedlemon
+									</a></em>) <br>
 							</p>
 						</div>
 					</div>

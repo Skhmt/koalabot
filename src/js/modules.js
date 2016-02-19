@@ -48,12 +48,12 @@ function apiSetup() {
  * @param {String} functionName - What function to call.
  * @return {Boolean} True if success, false if fail
  */
-function apiAddCmd(keyword, functionName) {
+function apiAddCmd(keyword, functionName, rbac, desc) {
     try {
-        cmdList.push({ cmd: keyword.toLowerCase(), func: functionName });
+        cmdList.push({ cmd: keyword.toLowerCase(), func: functionName, rbac: rbac });
 		$("#moduleListCommands").append(`
 			<li class="list-group-item">
-				${cmdSettings.symbol} ${keyword.toLowerCase()}
+				${cmdSettings.symbol} ${keyword.toLowerCase()} - ${rbac}
 			</li>`);
         return true;
     } catch (e) {
@@ -161,7 +161,6 @@ function apiSetPoints(username, points) {
         return null;
     }
     pointsSettings.users[index].currentPoints = parseInt( points, 10 );
-    save();
     drawList();
     return pointsSettings.users[index].currentPoints;
 }
@@ -179,7 +178,6 @@ function apiModPoints(username, points) {
     }
     pointsSettings.users[index].currentPoints += parseInt( points, 10 );
 
-    save();
     drawList();
     return pointsSettings.users[index].currentPoints;
 }

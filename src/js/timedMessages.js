@@ -97,7 +97,6 @@ function addMessage() {
 			text: tempText,
 			time: tempTime
 		} );
-		save();
 
 		// clear the fields
 		$("#addMsgText").val("");
@@ -110,7 +109,6 @@ function addMessage() {
 function deleteMessage( id ) {
 	if ( confirm( `Are you sure you want to delete "${timedMessages[id].text}" ?` ) ) {
 		timedMessages.splice( id, 1 );
-		save();
 		refreshMessages();
 	}
 }

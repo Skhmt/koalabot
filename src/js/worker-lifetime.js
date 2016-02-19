@@ -18,7 +18,8 @@ onmessage = function(e) {
 
         var theIndex;
         if ( users.length > 0 ) {
-            theIndex = binarySearch( currentLC , users, 0 );
+            // theIndex = binarySearch( currentLC, users, 0 );
+			theIndex = forSearch( currentLC, users );
         }
         else {
             theIndex = -1;
@@ -59,33 +60,46 @@ function sortList(theArray) {
     return theArray;
 }
 
+function forSearch(searchword, searcharray) {
+	for ( var i = 0; i < searcharray.length; i++ ) {
+		searchname = searcharray[i].username.toLowerCase();
+		if ( searchword == searchname ) {
+			return i;
+		}
+		if ( searchword < searchname ) {
+			return -1;
+		}
+	}
+	return -1;
+}
+
 // temparray is initially pointsSettings.users
 // searchname is already lowercase
-function binarySearch(searchname, searcharray, indexoffset) {
-    var temparray = [];
-    temparray = temparray.concat(searcharray);
-
-    var index = Math.floor( (temparray.length - 1) / 2);
-
-    if (!temparray[index]) {
-        return -1;
-    }
-
-    var arrayname = temparray[index].username.toLowerCase();
-
-    if ( searchname === arrayname ) { // found
-        return (indexoffset + index);
-
-    }
-    else if ( searchname > arrayname && temparray.length >= 1) {
-        var newarray = temparray.splice( index + 1, Number.MAX_VALUE );
-        return binarySearch( searchname, newarray, (indexoffset + index + 1) );
-
-    } else if ( searchname < arrayname && temparray.length >= 1) {
-        var newarray = temparray.splice( 0, index );
-        return binarySearch( searchname, newarray, indexoffset );
-
-    } else {
-        return -1;
-    }
-}
+// function binarySearch(searchname, searcharray, indexoffset) {
+//     var temparray = [];
+//     temparray = temparray.concat(searcharray);
+//
+//     var index = Math.floor( (temparray.length - 1) / 2);
+//
+//     if (!temparray[index]) {
+//         return -1;
+//     }
+//
+//     var arrayname = temparray[index].username.toLowerCase();
+//
+//     if ( searchname === arrayname ) { // found
+//         return (indexoffset + index);
+//
+//     }
+//     else if ( searchname > arrayname && temparray.length >= 1) {
+//         var newarray = temparray.splice( index + 1, Number.MAX_VALUE );
+//         return binarySearch( searchname, newarray, (indexoffset + index + 1) );
+//
+//     } else if ( searchname < arrayname && temparray.length >= 1) {
+//         var newarray = temparray.splice( 0, index );
+//         return binarySearch( searchname, newarray, indexoffset );
+//
+//     } else {
+//         return -1;
+//     }
+// }

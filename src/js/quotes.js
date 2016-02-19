@@ -31,7 +31,7 @@ function quoteSetup() {
 }
 
 //cmdSettings.quotes[{active: true, message:"", who:"", date:""},...]
-function cmdQuote( params, from, mod, subscriber ) {
+function cmdQuote( params, from ) {
 
 	var tempIndex = params[0];
 
@@ -48,7 +48,7 @@ function cmdQuote( params, from, mod, subscriber ) {
 	}
 
 
-	if ( tempIndex == null ) {
+	if ( !tempIndex ) {
 		var randIndex = Math.floor( Math.random() * activeQuotes.length );
 		var tempQuote = activeQuotes[randIndex];
 		return cmdSay( `"${tempQuote.message}" - ${tempQuote.who}, ${tempQuote.date}` );
@@ -73,12 +73,11 @@ function addQuote(message, who, date) {
 		date: date
 	};
 	cmdSettings.quotes.push( tempQuote );
-	save();
 	refreshQuotes();
 }
 
 // !addquote [user] [quote...]
-function cmdAddQuote( params, from, mod, subscriber ) {
+function cmdAddQuote( params, from ) {
 	if ( params[0] == null || params[1] == null ) {
 		return cmdSay( `Usage: ${cmdSettings.symbol}addquote [author] [quote]` ); // not enough params to make a quote... perhaps send an error message?
 	}
@@ -94,12 +93,11 @@ function cmdAddQuote( params, from, mod, subscriber ) {
 
 	cmdSay( `"${tempQuote.message}" - <em>${tempQuote.who}</em> added to id: ${cmdSettings.quotes.push( tempQuote )-1}` );
 
-	save();
 	refreshQuotes();
 }
 
 // just setting to false, not actually deleting so the numbering doesn't change
-function cmdDelQuote( params, from, mod, subscriber ) {
+function cmdDelQuote( params, from ) {
 	var i = params[0];
 	if ( i != parseInt(i, 10) ) {
 		cmdSay( `Error, ${i} is not a number.` );
@@ -116,14 +114,12 @@ function cmdDelQuote( params, from, mod, subscriber ) {
 
 	cmdSettings.quotes[params[0]].active = false;
 	cmdSay( `Quote at id: ${i} has been deleted.` );
-	save();
 	refreshQuotes();
 }
 
 function delQuoteButton( i ) {
 	if ( confirm( `Are you sure you want to delete "${cmdSettings.quotes[i].message}" ?` ) ) {
 		cmdSettings.quotes[i].active = false;
-		save();
 		refreshQuotes();
 	}
 }
