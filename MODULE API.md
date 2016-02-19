@@ -1,4 +1,4 @@
-### apiAddCmd(keyword, functionName) 
+### apiAddCmd(keyword, functionName, rbac, desc) 
 
 Adds a command, makes it lower case. It will call the function name you send it.
 The function will be given these parameters: params (array), from (string), mod (boolean), subscriber (boolean)
@@ -8,6 +8,10 @@ The function will be given these parameters: params (array), from (string), mod 
 **keyword**: `String`, The !command a user types in
 
 **functionName**: `String`, What function to call.
+
+**rbac**: `String`, Role-based access control. Choose from: off, all, reg, sub, mod, or bot. Off disables the command, even for the streamer. All is self explanatory. Reg is for regulars and above (sub, mod, bot). Sub is for subscribers and above (mod, bot). Mod is for moderators and above (bot). Bot is for the bot itself AND the streamer.
+
+**desc**: `String`, a short description of the command. 
 
 **Returns**: `Boolean`, True if success, false if fail
 
