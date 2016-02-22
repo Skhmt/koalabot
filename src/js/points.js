@@ -147,10 +147,10 @@ function drawList() {
 	output += `
 		<table class="table table-striped table-hover table-condensed">
 		<tr>
-			<th class="col-sm-5">Username</th>
-			<th class="col-sm-2">${pointsSettings.unit}</th>
-			<th class="col-sm-2">Hours</th>
-			<th class="col-sm-3">Actions</th>
+			<th class="col-sm-5 col-lg-8">Username</th>
+			<th class="col-sm-2 col-lg-1">${pointsSettings.unit}</th>
+			<th class="col-sm-2 col-lg-1">Hours</th>
+			<th class="col-sm-3 col-lg-2">Actions</th>
 		</tr>`;
 
 	var beginning = $("#pointsListText").val().toLowerCase();

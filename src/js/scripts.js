@@ -458,7 +458,7 @@ function getEmoticons() {
 						url : response.emoticons[i].images[0].url
 					} );
 				}
-				sortEmotes(emoticons);
+				emoticons = sortEmotes(emoticons);
 			}
 			else {
 				setTimeout( function() { getEmoticons(); }, 5*1000 );
@@ -480,7 +480,7 @@ function getEmoticonsBTTV() {
 						url : `https://cdn.betterttv.net/emote/${response.emotes[i].id}/1x`
 					} );
 				}
-				sortEmotes(emoticons);
+				emoticons = sortEmotes(emoticons);
 			}
 		}
 	);
@@ -496,7 +496,7 @@ function getEmoticonsBTTV() {
 						url : `https:${response.emotes[i].url}`
 					} );
 				}
-				sortEmotes(emoticons);
+				emoticons = sortEmotes(emoticons);
 			}
 		}
 	);
@@ -518,9 +518,9 @@ function checkEmote( word ) {
 	// if the word is a single character, don't bother checking
 	if( word.length < 2 ) return word + " ";
 
-	var startFor = new Date();
+	//var startFor = new Date();
 	var index = searchEmotesFor(word, emoticons);
-	var endFor = new Date();
+	//var endFor = new Date();
 
 	if ( index == -1 ) { // not an emote
 		return `${word} `;

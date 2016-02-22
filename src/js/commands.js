@@ -145,18 +145,18 @@ function refreshCommands() {
 		else usertype = `[${cmdSettings.custom[i].userType}]`;
 
 		output += `<tr>
-			<td class="col-sm-1">
+			<td class="col-sm-1 col-lg-1">
 				<button onclick='delCmdButton(${i})' class='btn btn-danger btn-xs'>
 					<span class="glyphicon glyphicon-remove"></span>
 				</button>
 			</td>
-			<td class="col-sm-2">
+			<td class="col-sm-2 col-lg-1">
 				<b>${cmdSettings.symbol + cmdSettings.custom[i].name}</b>
 			</td>
-			<td class="col-sm-1">
+			<td class="col-sm-1 col-lg-1">
 				<i>${usertype}</i>
 			</td>
-			<td class="col-sm-8">
+			<td class="col-sm-8 col-lg-9">
 				${cmdSettings.custom[i].text}
 			</td>
 			</tr>`;
@@ -292,7 +292,8 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 		.replace(/%2%/g, params[1])
 		.replace(/%3%/g, params[2])
 		.replace(/%4%/g, params[3])
-		.replace(/%5%/g, params[4]);
+		.replace(/%5%/g, params[4])
+		.replace(/%from%/g, from);
 	cmdSay(output);
 }
 

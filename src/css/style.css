@@ -7,7 +7,7 @@
 body { padding-top: 50px; }
 
 .navbar-nav > li > a {
-	padding: 5px 10px 0px 10px !important;
+	padding: 5px 8px 0px 8px !important;
 	height: 30px !important;
 }
 .navbar-brand {

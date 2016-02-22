@@ -42,7 +42,7 @@
 				<li><a href="#tab-raffle" data-toggle="tab">Raffle</a></li>
 				<li><a href="#tab-points" data-toggle="tab">Points</a></li>
 				<li><a href="#tab-commands" data-toggle="tab">Commands</a></li>
-				<li><a href="#tab-timedMessages" data-toggle="tab">Timed Msgs</a></li>
+				<li><a href="#tab-timedMessages" data-toggle="tab">Timed Messages</a></li>
 				<li><a href="#tab-quotes" data-toggle="tab">Quotes</a></li>
 
 				<li class="dropdown">
@@ -58,7 +58,7 @@
 					<a href="#" data-toggle="dropdown" class="dropdown-toggle">Settings <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#tab-botConfig" data-toggle="tab">Bot Config</a></li>
-						<li><a href="#tab-commandsConfig" data-toggle="tab">Cmd Config</a></li>
+						<li><a href="#tab-commandsConfig" data-toggle="tab">Commands</a></li>
 						<li><a href="#tab-spam" data-toggle="tab">Spam</a></li>
 						<li><a href="#tab-statistics" id="openStats" data-toggle="tab">Statistics</a></li>
 						<li class="divider"></li>
@@ -76,10 +76,10 @@
 		<!-- CHAT -->
 		<div class="tab-pane active" id="tab-chat">
 			<div class="row-fluid">
-				<div class="col-sm-9">
+				<div class="col-sm-9 col-md-10">
 					<div class="well well-sm scroll" id="console" style="height: calc(100vh - 125px);"></div>
 				</div>
-				<div class="col-sm-3">
+				<div class="col-sm-3 col-md-2">
 					<div class="well well-sm" id="viewercount" style="height: 60px; "></div>
 					<div class="well well-sm scroll" id="userlist" style="height: calc(100vh - 205px);"></div>
 				</div>
@@ -103,10 +103,10 @@
 		<!-- EVENTS -->
 		<div class="tab-pane" id="tab-events">
 			<div class="row-fluid">
-				<div class="col-sm-5">
+				<div class="col-sm-5 col-md-6 col-lg-7">
 					<div class="well well-sm scroll" style="height: calc(100vh - 75px);" id="hosts"></div>
 				</div>
-				<div class="col-sm-7">
+				<div class="col-sm-7 col-md-6 col-lg-5">
 					<div class="panel panel-default">
 						<ul class="list-group">
 							<li class="list-group-item">
@@ -183,7 +183,7 @@
 		<!-- MUSIC -->
 		<div class="tab-pane" id="tab-music">
 			<div class="row-fluid">
-				<div class="col-sm-5">
+				<div class="col-sm-5 col-md-6 col-lg-7">
 					<label class="control-label">Viewer Song Queue</label>
 					<div class="well well-sm scroll" id="songList" style="height: calc(50vh - 75px);"></div>
 					<label class="control-label">Streamer Song Queue</label>
@@ -193,7 +193,7 @@
 					</button>
 					<div class="well well-sm scroll" id="songListStreamer" style="height: calc(50vh - 75px);"></div>
 				</div>
-				<div class="col-sm-7">
+				<div class="col-sm-7 col-md-6 col-lg-5">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<span class="btn-group" data-toggle="buttons">
@@ -221,17 +221,17 @@
 									<span class="glyphicon glyphicon-step-forward"></span>
 								</button>
 								&nbsp; &nbsp;
-								<button id="volDownSongButton" class="btn btn-primary btn-sm">
+								<!-- <button id="volDownSongButton" class="btn btn-primary btn-sm">
 									<span class="glyphicon glyphicon-volume-down"></span>
-								</button>
+								</button> -->
 								<button id="muteSongButton" class="btn btn-primary btn-sm">
 									<span class="glyphicon glyphicon-volume-off"></span>
 								</button>
-								<button id="volUpSongButton" class="btn btn-primary btn-sm">
+								<!-- <button id="volUpSongButton" class="btn btn-primary btn-sm">
 									<span class="glyphicon glyphicon-volume-up"></span>
-								</button>
+								</button> -->
 								&nbsp; &nbsp;
-								<div style="display:inline-block; width: 200px;" id="songVolumeContainer">
+								<div style="display:inline-block; width: 290px;" id="songVolumeContainer">
 									<div class="progress progress-striped active" style="margin-bottom: -5px !important;">
 										<div class="progress-bar progress-bar-success" style="width: 100%;" id="songVolume"></div>
 									</div>
@@ -270,10 +270,10 @@
 		<!-- RAFFLE -->
 		<div class="tab-pane" id="tab-raffle">
 			<div class="row-fluid">
-				<div class="col-sm-4">
+				<div class="col-sm-4 col-md-5 col-lg-6">
 					<div class="well well-sm scroll" id="raffleList" style="height: calc(100vh - 75px);"></div>
 				</div>
-				<div class="col-sm-8">
+				<div class="col-sm-8 col-md-7 col-lg-6">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<button id="raffleStart" class="btn btn-success btn-sm">
@@ -793,8 +793,8 @@
 						</div>
 						<div class="panel-body">
 							<p>
-								<em><a href="#" onclick="openLink('https://github.com/Skhmt/twitch-bot');">
-									https://github.com/Skhmt/twitch-bot
+								<em><a href="#" onclick="openLink('https://github.com/Skhmt/KoalaBot');">
+									https://github.com/Skhmt/KoalaBot
 								</a></em><br>
 								<em><a href="#" onclick="openLink('https://www.reddit.com/r/koalabot');">
 									https://www.reddit.com/r/koalabot

@@ -47,7 +47,7 @@ function refreshMessages() {
 	for ( var i = 0; i < timedMessages.length; i++ ) {
 		// build a message... [X] [Time] [Message]
 		output += `<tr>
-			<td class="col-sm-2">
+			<td class="col-sm-2 col-lg-1">
 				<button onclick='playMessage(${i})' class='btn btn-success btn-xs'>
 					<span class="glyphicon glyphicon-play"></span>
 				</button>
@@ -56,10 +56,10 @@ function refreshMessages() {
 					<span class="glyphicon glyphicon-remove"></span>
 				</button>
 			</td>
-			<td class="col-sm-1">
+			<td class="col-sm-1 col-lg-1">
 				<span class='timedMessageSpan'>${timedMessages[i].time}s</span>
 			</td>
-			<td class="col-sm-9">
+			<td class="col-sm-9 col-lg-10">
 				${timedMessages[i].text}
 			</td>
 		</tr>`;

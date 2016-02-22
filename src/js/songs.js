@@ -137,9 +137,7 @@ function nextSong() {
         ytPlayer.playVideo();
         currentSong = tempSong;
         updateSongList();
-        fs.writeFile( `${execPath}logs/song.log`, currentSong.title, function ( err ) {
-            if ( err ) log( "* Error saving song log" );
-        } );
+        fs.writeFile( `${execPath}txt/song-current.txt`, currentSong.title );
     } else { // try the streamerqueue
         if (songSettings.streamerQueue.length > 0 ) {
             var tempSong = songSettings.streamerQueue.shift();

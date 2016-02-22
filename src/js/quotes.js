@@ -137,7 +137,7 @@ function refreshQuotes() {
 	for ( var i = 0; i < cmdSettings.quotes.length; i++ ) {
 		if ( cmdSettings.quotes[i].active ) {
 			output += `<tr>
-				<td class="col-sm-2">
+				<td class="col-sm-2 col-lg-1">
 					<button onclick="playQuoteButton(${i})" class="btn btn-success btn-xs">
 						<span class="glyphicon glyphicon-play"></span>
 					</button>
@@ -146,7 +146,7 @@ function refreshQuotes() {
 						<span class="glyphicon glyphicon-remove"></span>
 					</button>
 				</td>
-				<td class="col-sm-10">
+				<td class="col-sm-10 col-lg-11">
 					<strong>${i} :</strong> &nbsp; &nbsp;
 					"<i>${cmdSettings.quotes[i].message}</i>"
 					- <b>${cmdSettings.quotes[i].who}</b>, ${cmdSettings.quotes[i].date}
