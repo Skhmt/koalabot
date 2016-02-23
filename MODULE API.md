@@ -16,6 +16,20 @@ The function will be given these parameters: params (array), from (string), mod 
 **Returns**: `Boolean`, True if success, false if fail
 
 
+### apiChangeRBAC(keyword, rbac) 
+
+Adds a command, makes it lower case. It will call the function name you send it.
+The function will be given these parameters: params (array), from (string), mod (boolean), subscriber (boolean)
+
+**Parameters**
+
+**keyword**: `String`, The !command a user types in
+
+**rbac**: `String`, Role-based access control. See apiAddCmd.
+
+**Returns**: `Boolean`, True if success, false if fail
+
+
 ### apiAddTab(moduleName) 
 
 Adds a module to the dropdown and creates a page.
@@ -83,6 +97,17 @@ Gets the number of points a user has.
 **username**: `String`, case insensitive
 
 **Returns**: `integer`, null if not found, otherwise the amount of points of the user
+
+
+### apiGetMinutes(username) 
+
+Gets the number of minutes a user has been in the stream while the bot is also in the stream.
+
+**Parameters**
+
+**username**: `String`, case insensitive
+
+**Returns**: `integer`, null if not found, otherwise the amount of minutes the user has been in the stream
 
 
 ### apiSetPoints(username, points) 
