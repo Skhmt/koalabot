@@ -21,6 +21,8 @@
  * @overview The API for use with KoalaBot modules
  */
 
+var moduleCommands = [];
+
 function apiSetup() {
     // Checking for mods folder, creating if not found
     try { fs.accessSync( `${execPath}mods` ); }
@@ -46,19 +48,70 @@ function apiSetup() {
  * The function will be given these parameters: params (array), from (string), mod (boolean), subscriber (boolean)
  * @param {String} keyword - The !command a user types in
  * @param {String} functionName - What function to call.
- * @return {Boolean} True if success, false if fail
+ * @param {String} rbac - Role-based access control. Choose from: off, all, reg, sub, mod, or bot. Off disables the
+ * command, even for the streamer. All is self explanatory. Reg is for regulars and above (sub, mod, bot).
+ * Sub is for subscribers and above (mod, bot). Mod is for moderators and above (bot).
+ * Bot is for the bot itself AND the streamer.
+ * @param {String} desc - short description of the command
+ * @return {boolean} True if success, false if fail
  */
 function apiAddCmd(keyword, functionName, rbac, desc) {
     try {
-        cmdList.push({ cmd: keyword.toLowerCase(), func: functionName, rbac: rbac });
-		$("#moduleListCommands").append(`
-			<li class="list-group-item">
-				${cmdSettings.symbol} ${keyword.toLowerCase()} - ${rbac}
-			</li>`);
+        var keylc = keyword.toLowerCase();
+        cmdList.push({ cmd: keylc, func: functionName, rbac: rbac });
+        moduleCommands[keylc] = { rbac: rbac, desc: desc };
+        apiRefreshModuleCommands();
         return true;
     } catch (e) {
         return false;
     }
+}
+
+/**
+ * Refreshes the module command list
+ */
+
+function apiRefreshModuleCommands() {
+    var output = `
+    <div class="panel-heading"><h2 class="panel-title">Module Commands: </h2></div>
+    <table class="table table-striped table-hover table-condensed">
+        <tr>
+            <th>Command</th>
+            <th>Access</th>
+            <th>Description</th>
+        </tr>`;
+
+    var moduleKeys = Object.keys(moduleCommands);
+    for (var i = 0; i < moduleKeys.length; i++) {
+        var keyword = moduleKeys[i];
+        output += `<tr>
+            <td>${keyword}</td>
+            <td>${moduleCommands[keyword].rbac}</td>
+            <td>${moduleCommands[keyword].desc}</td>
+        </tr>`;
+    }
+    output += `</table>`;
+
+    $("#moduleListCommands").html( output );
+}
+
+/**
+ * Changes the access control of a module command
+ * @param {String} keyword - the keyword to change
+ * @param {String} rbac - the access control to set it to
+ * @returns {boolean} - true if success, false if not found
+ */
+function apiChangeRBAC(keyword, rbac) {
+    var keylc = keyword.toLowerCase();
+    for (var i = 0; i < cmdList.length; i++) {
+        if (cmdList[i].cmd === keylc) {
+            cmdList[i].rbac = rbac;
+            moduleCommands[keylc].rbac = rbac;
+            apiRefreshModuleCommands();
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -142,11 +195,11 @@ function apiGetPointsUnit() {
  * @return {integer} null if not found, otherwise the amount of points of the user
  */
 function apiGetPoints(username) {
-    var index = getPointIndex(username);
-    if ( index == -1 ) {
+	var usernameLC = username.toLowerCase();
+    if ( !pointsSettings.users[usernameLC] ) {
         return null;
     }
-    return pointsSettings.users[index].currentPoints;
+    return pointsSettings.users[usernameLC].currentPoints;
 }
 
 /**
@@ -156,13 +209,13 @@ function apiGetPoints(username) {
  * @return {integer} null if not found, otherwise the amount of points of the user
  */
 function apiSetPoints(username, points) {
-    var index = getPointIndex(username);
-    if ( index == -1 ) {
+	var usernameLC = username.toLowerCase();
+    if ( !pointsSettings.users[usernameLC] ) {
         return null;
     }
-    pointsSettings.users[index].currentPoints = parseInt( points, 10 );
+    pointsSettings.users[usernameLC].currentPoints = parseInt( points, 10 );
     drawList();
-    return pointsSettings.users[index].currentPoints;
+    return pointsSettings.users[usernameLC].currentPoints;
 }
 
 /**
@@ -172,14 +225,27 @@ function apiSetPoints(username, points) {
  * @return {integer} null if not found, otherwise the amount of points of the user
  */
 function apiModPoints(username, points) {
-    var index = getPointIndex(username);
-    if ( index == -1 ) {
+	var usernameLC = username.toLowerCase();
+    if ( !pointsSettings.users[usernameLC] ) {
         return null;
     }
-    pointsSettings.users[index].currentPoints += parseInt( points, 10 );
+    pointsSettings.users[usernameLC].currentPoints += parseInt( points, 10 );
 
     drawList();
-    return pointsSettings.users[index].currentPoints;
+    return pointsSettings.users[usernameLC].currentPoints;
+}
+
+/**
+ * Gets the number of minutes a user has been in the stream while the bot is also in the stream.
+ * @param {String} username - case insensitive
+ * @return {integer} null if not found, otherwise the amount of minutes the user has been in the stream
+ */
+function apiGetMinutes(username) {
+    var usernameLC = username.toLowerCase();
+    if ( !pointsSettings.users[usernameLC] ) {
+        return null;
+    }
+    return pointsSettings.users[usernameLC].totalPoints;
 }
 
 /**
@@ -218,7 +284,7 @@ function apiAppendFile(filename, text) {
  * To save an object, do something like:  apiWriteFile( "modExampleSettings.ini", JSON.stringify( modExampleSettings ) );
  * @param {String} filename - case sensitive, the path to the \mods\ directory is included
  * @param {String} text - what to make the contents of the file
- * @return {Boolean} true if success, false if fail
+ * @return {boolean} true if success, false if fail
  */
 function apiWriteFile(filename, text) {
     try {

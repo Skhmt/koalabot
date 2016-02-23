@@ -229,7 +229,7 @@ function updateFollowers() {
                     }
 
 					fs.appendFile( `${execPath}txt/follow-session.txt`, `${tempUser}\r\n` );
-					fs.writeFile( `${execPath}txt/follow-recent.txt`, `${tempHost}` );
+					fs.writeFile( `${execPath}txt/follow-recent.txt`, `${tempUser}` );
                 }
             }
         }
@@ -240,9 +240,9 @@ function subNotify(message) {
 
     var msgArray = message.split(" ");
 
-	if ( msgArray[1] != "viewers" ) { // name just subscribed or name subscribed for 13 months in a row
-		fs.appendFile( `${execPath}txt/sub-session.txt`, `${tempUser}\r\n` );
-		fs.writeFile( `${execPath}txt/sub-recent.txt`, `${tempHost}` );
+	if ( msgArray[1] != "viewers" ) { // "name just subscribed" or "name subscribed for 13 months in a row"
+		fs.appendFile( `${execPath}txt/sub-session.txt`, `${msgArray[0]}\r\n` );
+		fs.writeFile( `${execPath}txt/sub-recent.txt`, `${msgArray[0]}` );
 	}
 
     if ( msgArray[1] === "just" ) { // "name just subscribed!"
@@ -271,7 +271,7 @@ function subNotify(message) {
             output = output.replace( /%months%/g, msgArray[3] );
             cmdSay( output );
         }
-
+		$("#hosts").append( `${getTimeStamp()} Sub: ${msgArray[0]} x${msgArray[3]} <br>` );
     } else { // "13 viewers resubscribed while you were away!"
         // nothing
     }

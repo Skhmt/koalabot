@@ -43,7 +43,7 @@ var settings = {
 	theme: "default"
 };
 
-var title = "KoalaBot 0.9.0";
+var title = "KoalaBot 0.9.1";
 
 $(document).ready( function() {
 
@@ -453,12 +453,8 @@ function getEmoticons() {
 		function( response ) {
 			if ( "emoticons" in response ) {
 				for (var i in response.emoticons) {
-					emoticons.push( {
-						regex : response.emoticons[i].regex,
-						url : response.emoticons[i].images[0].url
-					} );
+					emoticons[response.emoticons[i].regex] = response.emoticons[i].images[0].url;
 				}
-				emoticons = sortEmotes(emoticons);
 			}
 			else {
 				setTimeout( function() { getEmoticons(); }, 5*1000 );
@@ -475,12 +471,8 @@ function getEmoticonsBTTV() {
 		function ( response ) {
 			if ( "emotes" in response ) {
 				for (var i in response.emotes) {
-					emoticons.push( {
-						regex : response.emotes[i].code,
-						url : `https://cdn.betterttv.net/emote/${response.emotes[i].id}/1x`
-					} );
+					emoticons[response.emotes[i].code] = `https://cdn.betterttv.net/emote/${response.emotes[i].id}/1x`;
 				}
-				emoticons = sortEmotes(emoticons);
 			}
 		}
 	);
@@ -491,12 +483,8 @@ function getEmoticonsBTTV() {
 		function ( response ) {
 			if ( "emotes" in response ) {
 				for (var i in response.emotes) {
-					emoticons.push( {
-						regex : response.emotes[i].regex,
-						url : `https:${response.emotes[i].url}`
-					} );
+					emoticons[response.emotes[i].regex] = `https:${response.emotes[i].url}`;
 				}
-				emoticons = sortEmotes(emoticons);
 			}
 		}
 	);
@@ -508,51 +496,16 @@ function writeEmoticons( message ) {
 
 	// for each word, check if it's an emoticon and if it is, output the url instead of the text
 	for( var i = 0; i < text.length; i++ ) {
-		output += checkEmote(text[i]);
+		var word = text[i];
+		if ( emoticons[word] ) {
+			output += `<img src="${emoticons[word]}"> `;
+		}
+		else {
+			output += `${word} `;
+		}
 	}
 
 	return output;
-}
-
-function checkEmote( word ) {
-	// if the word is a single character, don't bother checking
-	if( word.length < 2 ) return word + " ";
-
-	//var startFor = new Date();
-	var index = searchEmotesFor(word, emoticons);
-	//var endFor = new Date();
-
-	if ( index == -1 ) { // not an emote
-		return `${word} `;
-	}
-	else {
-		return `<img src="${emoticons[index].url}"> `;
-	}
-}
-
-function sortEmotes(theArray) {
-	theArray.sort( function( a, b ) {
-		if ( a.regex < b.regex )
-			return -1;
-		else if ( a.regex > b.regex )
-			return 1;
-		else
-			return 0;
-	} );
-
-	return theArray;
-}
-
-function searchEmotesFor(searchword, searcharray) {
-	for ( var i = 0; i < searcharray.length; i++ ) {
-		if ( searchword == searcharray[i].regex ) {
-			return i;
-		}
-		if ( searchword < searcharray[i].regex ) {
-			return -1;
-		}
-	}
-	return -1;
 }
 
 function log( message ) {
@@ -567,7 +520,9 @@ function log( message ) {
 	var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 20;
 
 	// add message
+	// var start = $.now();
 	$("#console").append( `${writeEmoticons(message)} <br>` );
+	// console.log(`${parseInt($.now())-parseInt(start)}ms : "${message}"`);
 
 	// if it was scrolled to the bottom before the message was appended, scroll to the bottom
 	if( isScrolledToBottom )
@@ -619,48 +574,70 @@ function getTimeStamp() {
 function save() {
 	// saving settings.ini
 	fs.writeFile( `${execPath}settings/settings.ini`, JSON.stringify( settings ), function ( err ) {
-		if ( err ) log( "* Error saving settings" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving modSettings.ini
 	fs.writeFile( `${execPath}settings/modSettings.ini`, JSON.stringify( modSettings ), function ( err ) {
-		if ( err ) log( "* Error saving modSettings" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving timedMessages.ini
 	fs.writeFile( `${execPath}settings/timedMessages.ini`, JSON.stringify( timedMessages ), function ( err ) {
-		if ( err ) log( "* Error saving timedMessages" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving cmdSettings.ini
 	fs.writeFile( `${execPath}settings/cmdSettings.ini`, JSON.stringify( cmdSettings ), function ( err ) {
-		if ( err ) log( "* Error saving cmdSettings" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving raffleSettings.ini
 	fs.writeFile( `${execPath}settings/raffleSettings.ini`, JSON.stringify( raffleSettings ), function ( err ) {
-		if ( err ) log( "* Error saving raffleSettings" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving eventSettings.ini
 	fs.writeFile( `${execPath}settings/eventSettings.ini`, JSON.stringify( eventSettings ), function ( err ) {
-		if ( err ) log( "* Error saving eventSettings" );
-	} );
-
-	// saving pointsSettings.ini
-	fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( pointsSettings ), function ( err ) {
-		if ( err ) log( "* Error saving pointsSettings" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving songSettings.ini
 	fs.writeFile( `${execPath}settings/songSettings.ini`, JSON.stringify( songSettings ), function ( err ) {
-		if ( err ) log( "* Error saving songSettings" );
+		if ( err ) console.log( err );
 	} );
 
 	// saving defaultCommands.ini
 	fs.writeFile( `${execPath}settings/defaultCommands.ini`, JSON.stringify( defaultCommands ), function ( err ) {
-		if ( err ) log( "* Error saving defaultCommands" );
+		if ( err ) console.log( err );
 	} );
+
+	// saving pointsSettings.ini
+	if ( pointsSettings.users ) {
+		var tempUserArray = [];
+		var keyList = Object.keys( pointsSettings.users );
+		for (var i = 0; i < keyList.length; i++) {
+			var tempName = keyList[i];
+			tempUserArray.push( {
+				username: tempName,
+				totalPoints: pointsSettings.users[tempName].totalPoints,
+				currentPoints: pointsSettings.users[tempName].currentPoints
+			} );
+		}
+		var tempPointsSettings = {
+			enabled: pointsSettings.enabled,
+			unit: pointsSettings.unit,
+			regularPoints: pointsSettings.regularPoints,
+			pointsPerUpdate: pointsSettings.pointsPerUpdate,
+			minutesPerUpdate: pointsSettings.minutesPerUpdate,
+			ranks: pointsSettings.ranks,
+			users: tempUserArray
+		};
+
+		fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( tempPointsSettings ), function ( err ) {
+			if ( err ) console.log( err );
+		} );
+	}
 
 	console.log("Settings saved");
 }

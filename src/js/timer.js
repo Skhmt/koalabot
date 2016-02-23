@@ -32,13 +32,13 @@ function timerSetup() {
 		followerInterval: 15*1000,
 		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
 		lifePointsInterval: 60*1000,
-		saveInterval: 60*1000,
+		saveInterval: 120*1000,
 		hostPlayTime: now,
 		viewerPlayTime: now,
 		followerPlayTime: now,
 		pointsPlayTime: now,
 		lifePointsPlayTime: now,
-		savePlayTime: (now + 60*1000)
+		savePlayTime: (now + 120*1000)
 	};
 
 	timerTick();

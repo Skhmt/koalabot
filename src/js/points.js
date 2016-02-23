@@ -21,6 +21,17 @@ function pointsSetup() {
 	try {
 		var readFile = fs.readFileSync( `${execPath}settings/pointsSettings.ini` );
 		pointsSettings = $.parseJSON( readFile );
+
+		var tempUserArray = [];
+		for ( var i = 0; i < pointsSettings.users.length; i++ ) {
+			var tempuser = pointsSettings.users[i];
+			tempUserArray[tempuser.username] = {
+				totalPoints: tempuser.totalPoints,
+				currentPoints: tempuser.currentPoints
+			};
+		}
+		pointsSettings.users = tempUserArray;
+
 		drawList();
 	} catch(e) { // if there isn't a modSettings.ini, just use the default settings
 		pointsSettings = {
@@ -29,8 +40,8 @@ function pointsSetup() {
 			regularPoints: 999999,
 			pointsPerUpdate: 1,
 			minutesPerUpdate: 1,
-			users: [], // {username: string, totalPoints: int, currentPoints: int }
-			ranks: [] // {name: string, points: int}
+			ranks: [], // {name: string, points: int}
+			users: [] // {username: string, totalPoints: int, currentPoints: int }
 		};
 	}
 
@@ -103,19 +114,22 @@ function updatePoints() {
 	}
 
 
-	var startTime = new Date();
+	var startTime = $.now();
 
-	var pointsWorker = new Worker("js/worker-points.js");
-	pointsWorker.postMessage([currentUsers, pointsSettings.users, pointsSettings.pointsPerUpdate]);
+	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
+        var currentLC = currentUsers[c].username.toLowerCase();
 
-	pointsWorker.onmessage = function(e) {
-		pointsSettings.users = e.data;
-
-		drawList();
-
-		var endTime = new Date();
-		console.log(`update points: ${endTime.getTime() - startTime.getTime()}ms`);
-	}
+		if ( pointsSettings.users[currentLC] ) {
+			pointsSettings.users[currentLC].currentPoints += pointsSettings.pointsPerUpdate;
+		}
+		else {
+			pointsSettings.users[currentLC] = {
+				totalPoints: 1,
+				currentPoints: pointsSettings.pointsPerUpdate
+			}
+		}
+    }
+	console.log(`update points: ${$.now() - startTime}ms`);
 }
 
 function updateLifePoints() {
@@ -127,19 +141,22 @@ function updateLifePoints() {
 	}
 
 
-	var startTime = new Date();
+	var startTime = $.now();
 
-	var pointsWorker = new Worker("js/worker-lifetime.js");
-	pointsWorker.postMessage([currentUsers, pointsSettings.users, pointsSettings.pointsPerUpdate]);
+	for ( var c = 0; c < currentUsers.length; c++ ) { // for each user currently in the chat room...
+        var currentLC = currentUsers[c].username.toLowerCase();
 
-	pointsWorker.onmessage = function(e) {
-		pointsSettings.users = e.data;
-
-		drawList();
-
-		var endTime = new Date();
-		console.log(`update life: ${endTime.getTime() - startTime.getTime()}ms`);
-	}
+		if ( pointsSettings.users[currentLC] ) {
+			pointsSettings.users[currentLC].totalPoints += 1;
+		}
+		else {
+			pointsSettings.users[currentLC] = {
+				totalPoints: 1,
+				currentPoints: pointsSettings.pointsPerUpdate
+			}
+		}
+    }
+	console.log(`update life: ${$.now() - startTime}ms`);
 }
 
 function drawList() {
@@ -154,6 +171,18 @@ function drawList() {
 		</tr>`;
 
 	var beginning = $("#pointsListText").val().toLowerCase();
+	beginning = beginning
+		.replace(/\\/g, '')
+		.replace(/\//g, '')
+		.replace(/\*/g, '')
+		.replace(/\+/g, '')
+		.replace(/\?/g, '')
+		.replace(/\{/g, '')
+		.replace(/\}/g, '')
+		.replace(/\$/g, '')
+		.replace(/\^/g, '')
+		.replace(/\./g, '');
+
 	if ( !beginning || beginning.length < 2 ) {
 		output += `</table>`;
 		$("#pointsList").html( output );
@@ -162,20 +191,23 @@ function drawList() {
 
 	var regex = new RegExp("^" + beginning);
 
-	for ( var i = 0; i < pointsSettings.users.length; i++ ) {
-		var username = pointsSettings.users[i].username;
-		if ( regex.test(username.toLowerCase()) ) {
+	var keyList = Object.keys( pointsSettings.users );
+
+	for ( var i = 0; i < keyList.length; i++ ) {
+		var username = keyList[i];
+		//if ( username.toLowerCase().startsWith(beginning) ) {
+		if ( regex.test(username) ) {
 			output += `<tr>
 					<td>${username}</td>
-					<td>${pointsSettings.users[i].currentPoints}</td>
-					<td>${(pointsSettings.users[i].totalPoints/60.0).toFixed(2)}</td>
+					<td>${pointsSettings.users[username].currentPoints}</td>
+					<td>${(pointsSettings.users[username].totalPoints/60.0).toFixed(2)}</td>
 					<td>
-						<button class="btn btn-success btn-xs" onclick="addPoint(${i}, 5)">+5</button>
-						<button class="btn btn-info btn-xs" onclick="addPoint(${i}, 1)">+1</button>
-						<button class="btn btn-warning btn-xs" onclick="subtractPoint(${i}, 1)">&ndash;1</button>
-						<button class="btn btn-danger btn-xs" onclick="subtractPoint(${i}, 5)">&ndash;5</button>
+						<button class="btn btn-success btn-xs" onclick="addPoint('${username}', 5)">+5</button>
+						<button class="btn btn-info btn-xs" onclick="addPoint('${username}', 1)">+1</button>
+						<button class="btn btn-warning btn-xs" onclick="subtractPoint('${username}', 1)">&ndash;1</button>
+						<button class="btn btn-danger btn-xs" onclick="subtractPoint('${username}', 5)">&ndash;5</button>
 						&nbsp;&nbsp;
-						<button class="btn btn-danger btn-xs" onclick="deletePoints(${i})">
+						<button class="btn btn-danger btn-xs" onclick="deletePoints('${username}')">
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					</td>
@@ -187,40 +219,34 @@ function drawList() {
 	$("#pointsList").html( output );
 }
 
-function addPoint( index, amount ) {
-	pointsSettings.users[index].currentPoints += amount;
+function addPoint( name, amount ) {
+	pointsSettings.users[name].currentPoints += amount;
 	drawList();
 }
 
-function subtractPoint( index, amount ) {
-	pointsSettings.users[index].currentPoints -= amount;
+function subtractPoint( name, amount ) {
+	pointsSettings.users[name].currentPoints -= amount;
 	drawList();
-}
-
-function getPointIndex( name ) {
-	var nameLC = name.toLowerCase();
-	for ( var i = 0; i < pointsSettings.users.length; i++ ) {
-		if ( nameLC === pointsSettings.users[i].username ) {
-			return i;
-		}
-	}
-	return -1;
 }
 
 function cmdPoints( params, from ) {
 	if ( !pointsSettings.enabled ) return;
 
-	var theIndex = getPointIndex( from );
-	if ( theIndex == -1 ) {
+	var nameLC = from.toLowerCase();
+
+	if ( !pointsSettings.users[nameLC] ) {
 		cmdSay(`${from} has no points.`);
 	}
 	else {
-		var points = pointsSettings.users[theIndex].currentPoints;
+		var points = pointsSettings.users[nameLC].currentPoints;
 		cmdSay(`${from} has ${points} ${pointsSettings.unit}.`);
 	}
 }
 
-function deletePoints( index ) {
-	pointsSettings.users.splice(index, 1);
+function deletePoints( name ) {
+
+	var nameLC = name.toLowerCase();
+
+	delete pointsSettings.users[nameLC];
 	drawList();
 }
