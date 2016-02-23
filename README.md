@@ -40,7 +40,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Add "regular" rank (between viewer and sub)
 - [x] Global hotkeys
 - [x] Change mod requirements for commands
-- [x] Cooldowns for commands 
+- [ ] Cooldowns for commands 
 - [ ] Points requirement for raffles
 - [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
