@@ -37,14 +37,13 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Reduce saving to every 30 seconds or so
 - [x] Generic Module status tab + api command for module description
 - [x] Documentation on how obs-integration works
-- [ ] Points requirement for raffles
+- [x] Add "regular" rank (between viewer and sub)
 - [x] Global hotkeys
-- [ ] Change mod requirements for commands
-- [ ] Cooldowns for commands 
-- [ ] Look in to overriding existing commands via module
+- [x] Change mod requirements for commands
+- [ ] Points requirement for raffles
+- [x] Cooldowns for commands 
 - [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
-- [ ] Add "regular" rank (between viewer and sub)
 - [ ] Open/view old statistics (https://github.com/nwjs/nw.js/wiki/File-dialogs)
 
 #### Commands:
