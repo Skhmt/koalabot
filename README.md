@@ -61,7 +61,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!game**|[game name]|Mod-only. *Changes the game.*|
 |**!status**|[stream status]|Mod-only. *Changes the stream status.*|
 |**!permit**|[username]|Mod-only. *Allows the user to post links for 60 seconds.*|
-|**!addcom**|(-ul=[mod/sub/streamer]) [!commandname] [text]|Mod-only. *Adds a command. The new command can be set to only be used by a certain user level. Using %1%, %2%, %3%, %4%, or %5% when creating a command will replace it with that parameter when the command is run. For example, "!addcom !tree %1% and %2% sitting in a tree" then "!tree wolfish indy" would output "wolfish and indie sitting in a tree".*|
+|**!addcom**|(-ul=[mod/sub/streamer]) [!commandname] [text]|Mod-only. *Adds a command. The new command can be set to only be used by a certain user level. Using %1%, %2%, %3%, %4%, or %5% when creating a command will replace it with that parameter when the command is run. For example, "!addcom !tree %1% and %2% sitting in a tree" then "!tree wolfish indy" would output "wolfish and indie sitting in a tree". Use %from% to insert the username of the person that used the command.*|
 |**!addcmd**||*Same as above.*|
 |**!delcom**|[!commandname]|Mod-only. *Deletes a command.*|
 |**!delcmd**||*Same as above.*|
