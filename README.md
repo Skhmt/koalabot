@@ -40,6 +40,11 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [x] Add "regular" rank (between viewer and sub)
 - [x] Global hotkeys
 - [x] Change mod requirements for commands
+- [ ] Top x (100?) users?
+- [ ] All users button
+- [ ] Play songs instantly?
+- [ ] Add song playing to streamer queue
+- [ ] Move game/stream status to chat tab
 - [ ] Cooldowns for commands 
 - [ ] Points requirement for raffles
 - [ ] Edit timed messages, commands, and quotes
