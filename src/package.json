@@ -1,11 +1,12 @@
 {
 	"name": "KoalaBot",
 	"description": "blah",
-	"version": "0.9.1",
+	"version": "0.9.2",
 	"main": "index.html",
 	"dependencies": {
 		"node-irc": "latest",
-		"express": "latest"
+		"express": "latest",
+		"sql.js": "latest"
 	},
 	"window": {
 		"width": 800,

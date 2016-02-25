@@ -346,3 +346,82 @@ function apiHotkey(hotkey) {
 
 	return shortcut;
 }
+
+
+function apiDB(filename) {
+	if (!filename) return null;
+
+	var my = {};
+
+	my._db; // = new sql.Database();
+
+	my.write = function() {
+		try {
+			var binArray = my._db.export();
+			var buffer = new Buffer( binArray );
+			fs.writeFileSync( filename, buffer );
+			return true;
+		} catch (err) {
+			console.log(err);
+			return false;
+		}
+	};
+
+	my.sel = function(query) {
+		try {
+			var response = my._db.exec(query);
+			return {array: response, table: tableify(response)};
+		} catch(err) {
+			console.log(err);
+			return null;
+		}
+	};
+
+	// CREATE TABLE / INSERT INTO / DELETE FROM
+	my.run = function(query) {
+		try {
+			my._db.run(query);
+			return true;
+		} catch(err) {
+			console.log(err);
+			return false;
+		}
+	};
+
+	try {
+		var file = fs.readFileSync( filename );
+		my._db = new sql.Database( file );
+	} catch(err) {
+		// console.log(err);
+		my._db = new sql.Database();
+		my.write();
+	}
+
+	function tableify(table) {
+		var output = '';
+		for ( var x = 0; x < table.length; x++ ) {
+			output += '<table class="table table-striped table-condensed">';
+
+			// making table headers
+			output += '<tr>';
+			for ( var i = 0; i < table[x].columns.length; i++ ) {
+				output += `<th> ${table[x].columns[i]} </th>`;
+			}
+			output += '</tr>';
+
+			// making data
+			for ( var row = 0; row < table[x].values.length; row++ ) {
+				output += '<tr>';
+				for ( var col = 0; col < table[x].values[row].length; col++ ) {
+					output += `<td> ${table[x].values[row][col]} </td>`;
+				}
+				output += '</tr>';
+			}
+
+			output += '</table>';
+		}
+		return output;
+	}
+
+	return my;
+};

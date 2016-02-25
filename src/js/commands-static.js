@@ -12,21 +12,48 @@ function addStaticCommands() {
 
 	var output = `<table class="table table-striped table-hover table-condensed">
 		<tr>
-			<th>Command</th>
-			<th>Access</th>
-			<th>Description</th>
+			<th class="col-sm-2">Command</th>
+			<th class="col-sm-3">Access</th>
+			<th class="col-sm-7">Description</th>
 		</tr>`;
 	for ( var i = 0; i < defaultCommands.length; i++ ) {
 		cmdList.push( {cmd: defaultCommands[i].cmd, func: defaultCommands[i].func, rbac: defaultCommands[i].rbac} );
+		var rbac = defaultCommands[i].rbac;
+		var cmd = defaultCommands[i].cmd;
 		output += `<tr>
-			<td>${cmdSettings.symbol}${defaultCommands[i].cmd}</td>
-			<td>${defaultCommands[i].rbac}</td>
+			<td>${cmdSettings.symbol}${cmd}</td>
+			<td>
+				<select class="form-control input-sm" id="cmdRBAC_${cmd}" onchange="changeRBAC('${cmd}')">
+					<option value="off" ${(rbac=='off')?'selected="selected"':''}>Off</option>
+					<option value="all" ${(rbac=='all')?'selected="selected"':''}>All users</option>
+					<option value="reg" ${(rbac=='reg')?'selected="selected"':''}>Regulars, Subs, Mods</option>
+					<option value="sub" ${(rbac=='sub')?'selected="selected"':''}>Subscribers & Mods</option>
+					<option value="mod" ${(rbac=='mod')?'selected="selected"':''}>Moderators</option>
+					<option value="bot" ${(rbac=='bot')?'selected="selected"':''}>Streamer (and bot) only</option>
+				</select>
+			</td>
 			<td>${defaultCommands[i].desc}</td>
 		</tr>`;
 	}
 	output += `</table>`;
 
 	$("#commandsConfigPanel").append(output);
+}
+
+function changeRBAC(cmd) {
+	var selector = `#cmdRBAC_${cmd}`;
+	var newRBAC = $(selector).val();
+
+	for (var i in defaultCommands) {
+		if ( defaultCommands[i].cmd == cmd ) {
+			defaultCommands[i].rbac = newRBAC;
+		}
+	}
+	for (var i in cmdList) {
+		if ( cmdList[i].cmd == cmd ) {
+			cmdList[i].rbac = newRBAC;
+		}
+	}
 }
 
 function createDefaultCommands() {

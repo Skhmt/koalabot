@@ -23,23 +23,54 @@ var timerSettings;
 
 function timerSetup() {
 
-	var now = new Date().getTime();
+	var now = $.now();
 
 	timerSettings = {
 		refreshInterval: 100,
-		hostInterval: 10*1000,
-		viewerInterval: 20*1000,
-		followerInterval: 15*1000,
-		pointsInterval: pointsSettings.minutesPerUpdate*60*1000,
-		lifePointsInterval: 60*1000,
-		saveInterval: 120*1000,
-		hostPlayTime: now,
-		viewerPlayTime: now,
-		followerPlayTime: now,
-		pointsPlayTime: now,
-		lifePointsPlayTime: now,
-		savePlayTime: (now + 120*1000)
+		list: []
 	};
+
+	// host
+	timerSettings.list.push( {
+		interval: 10*1000,
+		playTime: now,
+		func: 'updateHosts'
+	} );
+
+	// viewer
+	timerSettings.list.push( {
+		interval: 20*1000,
+		playTime: now,
+		func: 'updateUserlist'
+	} );
+
+	// follower
+	timerSettings.list.push( {
+		interval: 15*1000,
+		playTime: now,
+		func: 'updateFollowers'
+	} );
+
+	// points
+	timerSettings.list.push( {
+		interval: pointsSettings.minutesPerUpdate*60*1000,
+		playTime: now,
+		func: 'updatePoints'
+	} );
+
+	// life points
+	timerSettings.list.push( {
+		interval: 60*1000,
+		playTime: now,
+		func: 'updateLifePoints'
+	} );
+
+	// save
+	timerSettings.list.push( {
+		interval: 150*1000,
+		playTime: (now + 150*1000),
+		func: 'save'
+	} );
 
 	timerTick();
 }
@@ -47,7 +78,7 @@ function timerSetup() {
 
 
 function timerTick() {
-	var now = new Date().getTime();
+	var now = $.now();
 
 	for ( var i = 0; i < timerList.length; i++ ) {
 		if ( now >= timerList[i].playTime ) { // if it's at or past the time to play the message
@@ -56,36 +87,14 @@ function timerTick() {
 		}
 	}
 
-	if ( now >= timerSettings.hostPlayTime && settings.channel !== null ) {
-		updateHosts();
-		timerSettings.hostPlayTime = now + timerSettings.hostInterval;
+	if ( settings.channel !== null ) {
+		for ( var j = 0; j < timerSettings.list.length; j++ ) {
+			if ( now >= timerSettings.list[j].playTime ) {
+				eval( timerSettings.list[j].func + '();' );
+				timerSettings.list[j].playTime = now + timerSettings.list[j].interval;
+			}
+		}
 	}
-
-	if ( now >= timerSettings.viewerPlayTime && settings.channel !== null ) {
-		updateUserlist();
-		timerSettings.viewerPlayTime = now + timerSettings.viewerInterval;
-	}
-
-	if ( now >= timerSettings.followerPlayTime && settings.channel !== null ) {
-		updateFollowers();
-		timerSettings.followerPlayTime = now + timerSettings.followerInterval;
-	}
-
-	if ( now >= timerSettings.pointsPlayTime && settings.channel !== null ) {
-		updatePoints();
-		timerSettings.pointsPlayTime = now + timerSettings.pointsInterval;
-	}
-
-	if ( now >= timerSettings.lifePointsPlayTime && settings.channel !== null ) {
-		updateLifePoints();
-		timerSettings.lifePointsPlayTime = now + timerSettings.lifePointsInterval;
-	}
-
-	if ( now >= timerSettings.savePlayTime && settings.channel !== null ) {
-		save();
-		timerSettings.savePlayTime = now + timerSettings.saveInterval;
-	}
-
 
 	chatScroll();
 

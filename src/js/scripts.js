@@ -31,6 +31,7 @@ var currentUsers = [];
 var recentEvents = [];
 var mainwin;
 var gui;
+var sql;
 
 var rawIrcOn = false;
 var commandsOn = true;
@@ -43,7 +44,7 @@ var settings = {
 	theme: "default"
 };
 
-var title = "KoalaBot 0.9.1";
+var title = "KoalaBot 0.9.2";
 
 $(document).ready( function() {
 
@@ -58,6 +59,8 @@ $(document).ready( function() {
 	else {
 		execPath = "";
 	}
+
+	sql = require( 'sql.js' );
 
 	gui = require("nw.gui");
 	mainwin = gui.Window.get();
@@ -573,44 +576,28 @@ function getTimeStamp() {
 
 function save() {
 	// saving settings.ini
-	fs.writeFile( `${execPath}settings/settings.ini`, JSON.stringify( settings ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/settings.ini`, JSON.stringify( settings ) );
 
 	// saving modSettings.ini
-	fs.writeFile( `${execPath}settings/modSettings.ini`, JSON.stringify( modSettings ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/modSettings.ini`, JSON.stringify( modSettings ) );
 
 	// saving timedMessages.ini
-	fs.writeFile( `${execPath}settings/timedMessages.ini`, JSON.stringify( timedMessages ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/timedMessages.ini`, JSON.stringify( timedMessages ) );
 
 	// saving cmdSettings.ini
-	fs.writeFile( `${execPath}settings/cmdSettings.ini`, JSON.stringify( cmdSettings ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/cmdSettings.ini`, JSON.stringify( cmdSettings ) );
 
 	// saving raffleSettings.ini
-	fs.writeFile( `${execPath}settings/raffleSettings.ini`, JSON.stringify( raffleSettings ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/raffleSettings.ini`, JSON.stringify( raffleSettings ) );
 
 	// saving eventSettings.ini
-	fs.writeFile( `${execPath}settings/eventSettings.ini`, JSON.stringify( eventSettings ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/eventSettings.ini`, JSON.stringify( eventSettings ) );
 
 	// saving songSettings.ini
-	fs.writeFile( `${execPath}settings/songSettings.ini`, JSON.stringify( songSettings ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/songSettings.ini`, JSON.stringify( songSettings ) );
 
 	// saving defaultCommands.ini
-	fs.writeFile( `${execPath}settings/defaultCommands.ini`, JSON.stringify( defaultCommands ), function ( err ) {
-		if ( err ) console.log( err );
-	} );
+	fs.writeFile( `${execPath}settings/defaultCommands.ini`, JSON.stringify( defaultCommands ) );
 
 	// saving pointsSettings.ini
 	if ( pointsSettings.users ) {
@@ -634,9 +621,7 @@ function save() {
 			users: tempUserArray
 		};
 
-		fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( tempPointsSettings ), function ( err ) {
-			if ( err ) console.log( err );
-		} );
+		fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( tempPointsSettings ) );
 	}
 
 	console.log("Settings saved");

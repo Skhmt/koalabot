@@ -37,13 +37,18 @@ function pointsSetup() {
 		pointsSettings = {
 			enabled: true,
 			unit: "points",
-			regularPoints: 999999,
+			regularPoints: 30*60,
 			pointsPerUpdate: 1,
 			minutesPerUpdate: 1,
 			ranks: [], // {name: string, points: int}
 			users: [] // {username: string, totalPoints: int, currentPoints: int }
 		};
 	}
+
+	$("#regularPoints").val( parseInt(pointsSettings.regularPoints / 60) );
+	$("#regularPoints").on( "input", function() {
+		pointsSettings.regularPoints = this.value * 60;
+	} );
 
 	$("#pointUnits").val( pointsSettings.unit );
 	$("#pointUnits").on( "input", function() {

@@ -187,6 +187,7 @@ function cmdAddCmd( params, from ) {
 	if ( params[0].substring(0,4) === "-ul=" ) {
 		var type = params[0].substring(4);
 		if ( type === "mod" ) tempCommand.userType = "mod";
+		else if ( type === "reg" ) tempCommand.userType = "reg";
 		else if ( type === "sub" ) tempCommand.userType = "sub";
 		else if ( type === "streamer" ) tempCommand.userType = "streamer";
 		params.splice(0,1); // removing !addcom -ul=*
@@ -274,14 +275,19 @@ function customCommand( cmd, params, from, mod, subscriber ) {
 	var isStreamer = ( from == settings.channel.substring(1) );
 	var isBot = ( from == settings.username );
 
+	var usertype = cmdSettings.custom[cmdIndex].userType;
+
 	// checking permissions
-	if ( cmdSettings.custom[cmdIndex].userType === "mod" && !mod && !isStreamer && !isBot ) {
+	if ( usertype === "mod" && !mod && !isStreamer && !isBot ) {
 		return;
 	}
-	else if ( cmdSettings.custom[cmdIndex].userType === "sub" && !mod && !subscriber && !isStreamer && !isBot ) {
+	else if ( usertype === "reg" && apiGetPoints(from) < pointsSettings.regularPoints && !mod && !subscriber && !isStreamer && !isBot ) {
 		return;
 	}
-	else if ( cmdSettings.custom[cmdIndex].userType === "streamer" && !isStreamer && !isBot ) {
+	else if ( usertype === "sub" && !mod && !subscriber && !isStreamer && !isBot ) {
+		return;
+	}
+	else if ( usertype === "streamer" && !isStreamer && !isBot ) {
 		return;
 	}
 
