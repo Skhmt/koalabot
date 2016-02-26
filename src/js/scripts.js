@@ -44,7 +44,7 @@ var settings = {
 	theme: "default"
 };
 
-var title = "KoalaBot 0.9.2";
+var title = "KoalaBot 0.9.3";
 
 $(document).ready( function() {
 
