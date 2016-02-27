@@ -157,7 +157,7 @@ function cmdUpTime ( params, from ) {
 	if ( cmdSettings.uptime === "bot" ) {
 		cmdSay( `Uptime: ${timeDifference( startDate.getTime() )}` );
 	} else if ( cmdSettings.uptime === "stream" ) {
-		cmdStreamTime( params, from, mod, subscriber );
+		cmdStreamTime( params, from );
 	} else {
 		cmdSay( `Uptime: ${timeDifference( lap.getTime() )}` );
 	}
@@ -168,6 +168,8 @@ function cmdLapTime ( params, from ) {
 }
 
 function cmdStreamTime ( params, from ) {
+	// {"stream":null,"_links":{"self":"https://api.twitch.tv/kraken/streams/skhmt","channel":"https://api.twitch.tv/kraken/channels/skhmt"}}
+	//
 	$.getJSON(
 		`https://api.twitch.tv/kraken/streams/${settings.channel.substring(1)}`,
 		{
@@ -175,12 +177,12 @@ function cmdStreamTime ( params, from ) {
 			"api_version" : 3
 		},
 		function(response) {
-			if ( "error" in response ) {
-				return cmdSay(error);
+			if ( !response.stream ) {
+				return console.log(error);
 			}
 			var created = response.stream.created_at; // ex: "2015-12-03T20:39:04Z"
 			var temp = new Date( created );
-			var timediff = timeDifference ( temp );
+			var timediff = timeDifference( temp );
 			cmdSay( `The stream has been live for ${timediff}` );
 	} );
 }
