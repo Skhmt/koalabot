@@ -35,12 +35,12 @@ function cmdSetup() {
 	} );
 
 	$("#updateGameButton").click(function() {
-		changeGame( $("#gameField").val().split(" "), settings.username );
+		cmdGame( $("#gameField").val().split(" "), settings.username );
 		return false;
 	} );
 
 	$("#updateStatusButton").click(function() {
-		changeStatus( $("#statusField").val().split(" "), settings.username );
+		cmdStatus( $("#statusField").val().split(" "), settings.username );
 		return false;
 	} );
 
@@ -120,6 +120,7 @@ function parseCommand(text, from, mod, subscriber) {
 				if ( rbac == "mod" && !mod && !isStreamer) return;
 				if ( rbac == "bot" ) return;
 			}
+			console.log(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
 			eval(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
 			return;
 		}
@@ -234,6 +235,8 @@ function addCmdButton() {
 }
 
 function cmdDelCmd( params, from ) {
+	if (!params[0]) return cmdSay( `Usage: ${cmdSettings.symbol}delcom [${cmdSettings.symbol}command to delete]` );
+
 	var cmdIndex = "";
 	var lcCmd = params[0].toLowerCase();
 	for ( var i = 0; i < cmdSettings.custom.length; i++ ) {

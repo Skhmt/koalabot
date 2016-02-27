@@ -32,9 +32,6 @@ function quoteSetup() {
 
 //cmdSettings.quotes[{active: true, message:"", who:"", date:""},...]
 function cmdQuote( params, from ) {
-
-	var tempIndex = params[0];
-
 	// get an array of quotes that are enabled
 	var activeQuotes = [];
 	for ( var i = 0; i < cmdSettings.quotes.length; i++ ) {
@@ -48,12 +45,14 @@ function cmdQuote( params, from ) {
 	}
 
 
-	if ( !tempIndex ) {
+	if ( !params[0] ) {
 		var randIndex = Math.floor( Math.random() * activeQuotes.length );
 		var tempQuote = activeQuotes[randIndex];
 		return cmdSay( `"${tempQuote.message}" - ${tempQuote.who}, ${tempQuote.date}` );
 	}
-	else if ( tempIndex == parseInt(tempIndex, 10) && // if it's an integer
+
+	var tempIndex = params[0];
+	if ( tempIndex == parseInt(tempIndex, 10) && // if it's an integer
 		tempIndex >= 0 && // if it's not negative
 		tempIndex < cmdSettings.quotes.length ) { // if it's a valid id
 			if ( cmdSettings.quotes[tempIndex].active ) {
@@ -78,7 +77,7 @@ function addQuote(message, who, date) {
 
 // !addquote [user] [quote...]
 function cmdAddQuote( params, from ) {
-	if ( params[0] == null || params[1] == null ) {
+	if ( !params[0] || !params[1] ) {
 		return cmdSay( `Usage: ${cmdSettings.symbol}addquote [author] [quote]` ); // not enough params to make a quote... perhaps send an error message?
 	}
 	var tempQuote = {
@@ -98,6 +97,8 @@ function cmdAddQuote( params, from ) {
 
 // just setting to false, not actually deleting so the numbering doesn't change
 function cmdDelQuote( params, from ) {
+	if ( !params[0] ) return cmdSay( `Usage: ${cmdSettings.symbol}delquote [quote id]` );
+
 	var i = params[0];
 	if ( i != parseInt(i, 10) ) {
 		cmdSay( `Error, ${i} is not a number.` );

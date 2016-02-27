@@ -251,7 +251,9 @@ function isFollower( from ) {
 }
 
 
-function changeGame( params, from ) {
+function cmdGame( params, from ) {
+	if (!params[0]) return cmdSay( `Usage: ${cmdSettings.symbol}game [game name]` );
+
 	var game = params.join(" ");
 
 	$.get(
@@ -269,7 +271,9 @@ function changeGame( params, from ) {
 	$("title").html(`${$("#statusField").val()} &mdash; ${game} &mdash; ${title}`);
 }
 
-function changeStatus( params, from ) {
+function cmdStatus( params, from ) {
+	if ( !params[0] ) return cmdSay( `Usage: ${cmdSettings.symbol}status [stream status]` );
+
 	var status = params.join(" ");
 
 	$.get(

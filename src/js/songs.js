@@ -31,7 +31,7 @@ function songsSetup() {
     } );
 
     $("#addSongButton").click( function() {
-        addSong( $("#addSongText").val(), settings.username, true );
+        addSong( $("#addSongText").val(), settings.username );
         $("#addSongText").val("");
     } );
 
@@ -250,12 +250,13 @@ function deleteSongStreamer(index) {
 
 function cmdAddSong( params, from ) {
 	if ( !songSettings.songRequests ) return;
-    addSong( params[0], from );
+    if ( !params[0] ) return cmdSay(`Usage: ${cmdSettings.symbol}songrequest [youtube video id]`);
+    addSong( params, from );
 }
 
 function cmdSetVolume( params, from ) {
     if ( !songSettings.songRequests ) return;
-
+    if ( !params[0] ) return cmdSay(`Usage: ${cmdSettings.symbol}volume [volume from 0 to 100]`);
     var vol = params[0];
 
     if ( vol >= 0 && vol <= 100 ) {

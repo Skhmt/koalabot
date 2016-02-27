@@ -260,6 +260,8 @@ function moderation( from, mod, text ) {
 function cmdPermit( params, from ) {
 	var permitTime = 60;
 
+	if ( !params[0] ) return cmdSay( `Usage: ${cmdSettings.symbol}permit [username]` );
+
 	var user = params[0];
 
 	cmdSay( `${user} has been permitted to post a link for ${permitTime} seconds.` );
