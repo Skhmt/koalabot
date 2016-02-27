@@ -142,11 +142,7 @@ function cmdHighlight( params, from ) {
 			output += highlight;
 			var text = params.join(" ");
 			if ( text.length > 1 ) {
-				output += " ( ";
-				for ( var i = 1; i < text.length; i++ ){
-					output += text[i] + " ";
-				}
-				output += ")";
+				output += ` ( ${text} )`;
 			}
 			output += "\r\n";
 
