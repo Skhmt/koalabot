@@ -111,7 +111,7 @@ function cmd ( params, from, mod, subscriber ) {
 }
 */
 
-function cmdBot ( params, from ) {
+function cmdBot( params, from ) {
 	cmdSay( `This is ${title}. It is being developed by skhmt. Get it at: https://github.com/Skhmt/twitch-bot` );
 }
 
@@ -153,7 +153,7 @@ function cmdHighlight( params, from ) {
 	);
 }
 
-function cmdUpTime ( params, from ) {
+function cmdUpTime( params, from ) {
 	if ( cmdSettings.uptime === "bot" ) {
 		cmdSay( `Uptime: ${timeDifference( startDate.getTime() )}` );
 	} else if ( cmdSettings.uptime === "stream" ) {
@@ -163,11 +163,11 @@ function cmdUpTime ( params, from ) {
 	}
 }
 
-function cmdLapTime ( params, from ) {
+function cmdLapTime( params, from ) {
 	cmdSay( `The current lap time is ${timeDifference( lap.getTime() )}` );
 }
 
-function cmdStreamTime ( params, from ) {
+function cmdStreamTime( params, from ) {
 	// {"stream":null,"_links":{"self":"https://api.twitch.tv/kraken/streams/skhmt","channel":"https://api.twitch.tv/kraken/channels/skhmt"}}
 	//
 	$.getJSON(
@@ -177,8 +177,9 @@ function cmdStreamTime ( params, from ) {
 			"api_version" : 3
 		},
 		function(response) {
-			if ( !response.stream ) {
-				return console.log(error);
+			console.log(response);
+			if ( response.stream == null ) {
+				return cmdSay( 'Stream offline.' );
 			}
 			var created = response.stream.created_at; // ex: "2015-12-03T20:39:04Z"
 			var temp = new Date( created );
@@ -188,7 +189,7 @@ function cmdStreamTime ( params, from ) {
 }
 
 
-function cmdBotTime ( params, from ) {
+function cmdBotTime( params, from ) {
 	cmdSay( `The bot has been running for ${timeDifference( startDate.getTime() )}` );
 }
 
