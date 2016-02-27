@@ -155,10 +155,7 @@ function addSongStreamer(videoid) {
 
     // allows most copy-pastes to work
     if ( videoid.length != 11 ) {
-        videoid = videoid.replace("https://", "");
-        videoid = videoid.replace("http://", "");
-        videoid = videoid.replace("youtu.be/", "");
-        videoid = videoid.replace("www.youtube.com/watch?v=", "");
+        videoid = sanitizeYT(videoid);
     }
 
     $.getJSON(
@@ -189,6 +186,16 @@ function addSongStreamer(videoid) {
     );
 }
 
+function sanitizeYT(url) {
+    return url.replace("https://", "")
+        .replace("http://", "")
+        .replace("youtu.be/", "")
+        .replace("www.youtube.com/watch?v=", "")
+        .replace("m.youtube.com/watch?v=", "")
+        .split("&")[0]
+        .split("?")[0];
+}
+
 function addSong(videoid, username) {
 
     var userpoints = apiGetPoints(username);
@@ -205,10 +212,7 @@ function addSong(videoid, username) {
 
     // allows most copy-pastes to work
     if ( videoid.length != 11 ) {
-        videoid = videoid.replace("https://", "");
-        videoid = videoid.replace("http://", "");
-        videoid = videoid.replace("youtu.be/", "");
-        videoid = videoid.replace("www.youtube.com/watch?v=", "");
+        videoid = sanitizeYT(videoid);
     }
 
     $.getJSON(

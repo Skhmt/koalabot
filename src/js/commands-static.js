@@ -140,6 +140,7 @@ function cmdHighlight( params, from ) {
 			var output = `[${dateNow.toDateString()}, ${dateNow.toLocaleTimeString()}]`;
 			output += ` ${from}: `;
 			output += highlight;
+			var text = params.join(" ");
 			if ( text.length > 1 ) {
 				output += " ( ";
 				for ( var i = 1; i < text.length; i++ ){
