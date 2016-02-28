@@ -497,10 +497,38 @@ function writeEmoticons( message ) {
 	var output = "";
 	var text = message.split(" ");
 
+	var arrayWords = ['every',
+		'join',
+		'concat',
+		'filter',
+		'map',
+		'pop',
+		'push',
+		'reduce',
+		'reverse',
+		'shift',
+		'some',
+		'slice',
+		'sort',
+		'unshift',
+		'length',
+		'prototype',
+		'constructor'
+	];
+
 	// for each word, check if it's an emoticon and if it is, output the url instead of the text
 	for( var i = 0; i < text.length; i++ ) {
 		var word = text[i];
-		if ( emoticons[word] ) {
+		// Check arrayWords...
+		var found = false;
+		for( var x = 0; x < arrayWords.length; x++ ) {
+			if ( arrayWords[x] == word ) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found && emoticons[word] ) {
 			output += `<img src="${emoticons[word]}"> `;
 		}
 		else {

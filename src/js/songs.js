@@ -251,7 +251,7 @@ function deleteSongStreamer(index) {
 function cmdAddSong( params, from ) {
 	if ( !songSettings.songRequests ) return;
     if ( !params[0] ) return cmdSay(`Usage: ${cmdSettings.symbol}songrequest [youtube video id]`);
-    addSong( params, from );
+    addSong( params[0], from );
 }
 
 function cmdSetVolume( params, from ) {
