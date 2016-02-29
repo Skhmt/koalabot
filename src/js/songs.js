@@ -238,18 +238,16 @@ function deleteSongStreamer(index) {
 
 function cmdAddSong( params, from ) {
 	if ( !songSettings.songRequests ) return;
+
     if ( !params[0] ) return cmdSay(`Usage: ${cmdSettings.symbol}songrequest [youtube video id]`);
-    if ( pointsSettings.enabled ) {
-        var userpoints = apiGetPoints(from);
-        if ( userpoints == null && songSettings.songPointCost > 0 ) {
+
+    if ( pointsSettings.enabled && songSettings.songPointCost > 0 ) {
+        var userpoints = apiGetPoints( from );
+        if ( !userpoints || userpoints < songSettings.songPointCost ) {
             cmdSay(`Sorry ${from}, you don't have enough points to request a song. :(`);
             return;
         }
-        else if ( userpoints < songSettings.songPointCost ) {
-            cmdSay(`Sorry ${from}, you don't have enough points to request a song. :(`);
-            return;
-        }
-        apiModPoints( username, -1*(songSettings.songPointCost) );
+        apiModPoints( from, -1*(songSettings.songPointCost) );
     }
 
     addSong( params[0], from );
