@@ -198,18 +198,6 @@ function sanitizeYT(url) {
 
 function addSong(videoid, username) {
 
-    var userpoints = apiGetPoints(username);
-    if ( userpoints == null ) {
-        cmdSay( `Sorry ${username}, you don't have enough points to request a song. :(` );
-        return;
-    }
-    else if ( userpoints < songSettings.songPointCost ) {
-        cmdSay( `Sorry ${username}, you don't have enough points to request a song. :(` );
-        return;
-    }
-
-    apiModPoints( username, -1*(songSettings.songPointCost) );
-
     // allows most copy-pastes to work
     if ( videoid.length != 11 ) {
         videoid = sanitizeYT(videoid);
@@ -251,6 +239,19 @@ function deleteSongStreamer(index) {
 function cmdAddSong( params, from ) {
 	if ( !songSettings.songRequests ) return;
     if ( !params[0] ) return cmdSay(`Usage: ${cmdSettings.symbol}songrequest [youtube video id]`);
+    if ( pointsSettings.enabled ) {
+        var userpoints = apiGetPoints(from);
+        if ( userpoints == null && songSettings.songPointCost > 0 ) {
+            cmdSay(`Sorry ${from}, you don't have enough points to request a song. :(`);
+            return;
+        }
+        else if ( userpoints < songSettings.songPointCost ) {
+            cmdSay(`Sorry ${from}, you don't have enough points to request a song. :(`);
+            return;
+        }
+        apiModPoints( username, -1*(songSettings.songPointCost) );
+    }
+
     addSong( params[0], from );
 }
 
