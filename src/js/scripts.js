@@ -32,6 +32,7 @@ var recentEvents = [];
 var mainwin;
 var gui;
 var sql;
+var oauthsetup = false;
 
 var rawIrcOn = false;
 var commandsOn = true;
@@ -44,11 +45,9 @@ var settings = {
 	theme: "default"
 };
 
-var title = "KoalaBot 0.9.5";
-
 $(document).ready( function() {
 
-	$("title").html(title);
+	setTitle('');
 
 	var path = require( "path" );
 	fs = require( "fs" );
@@ -212,7 +211,7 @@ $(document).ready( function() {
 		return false;
 	} );
 
-
+	$('[data-toggle="tooltip"]').tooltip();
 
 	fs.writeFile( `${execPath}txt/host-session.txt`, "" );
 	fs.writeFile( `${execPath}txt/follow-session.txt`, "" );
@@ -337,7 +336,7 @@ function onChannelEnter() {
 			$("#gameField").val( response.game );
 			$("#statusField").val( response.status );
 
-			$("title").html(`${response.status} &mdash; ${response.game} &mdash; ${title}`);
+			setTitle(`${response.status} &mdash; ${response.game} &mdash;`);
 		}
 	);
 }
@@ -656,32 +655,50 @@ function save() {
 }
 
 function setupOauth() {
+	if ( !oauthsetup ) {
+		var express = require( 'express' );
+		var app = express();
+		app.use( express.static( "public" ) );
+		app.get( "/oauth", function(req, res) {
+			$('#getOauthModal').modal( 'hide' );
+			$('#oauthFrame').attr('src', '');
+			if ( req.query.token.length > 20 ) {
+				settings.access_token = req.query.token;
+				$('#getOauthField').val( req.query.token );
+				getUsername();
+			}
+		} );
+		app.listen( 3000 );
+
+		oauthsetup = true;
+	}
+	doOauth();
+	return false;
+}
+
+function doOauth() {
 	$("#oauthFrame").attr("src", `https://api.twitch.tv/kraken/oauth2/authorize?
 	response_type=token&
 	client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
 	redirect_uri=http://localhost:3000/oauth.html&
 	scope=channel_editor+chat_login&
 	force_verify=true`);
-	var express = require( "express" );
-	var app = express();
-	app.use( express.static( "public" ) );
-	app.get( "/oauth", function(req, res) {
-		$("#getOauthModal").modal( "hide" );
-		if ( req.query.token.length > 20 ) {
-			settings.access_token = req.query.token;
-			$("#getOauthField").val( req.query.token );
-			getUsername();
-			save();
-		}
-	} );
-	app.listen( 3000 );
 
-	$("#getOauthModal").modal("show");
-	return false;
+	$('#getOauthModal').modal('show');
 }
 
 
 // https://github.com/nwjs/nw.js/wiki/Shell
-function openLink(url){
+function openLink(url) {
 	gui.Shell.openExternal(url);
+}
+
+function setTitle(title) {
+	$.getJSON(
+		'package.json',
+		{},
+		function ( response ) {
+			$("title").html(`${title} KoalaBot ${response.version}`);
+		}
+	);
 }

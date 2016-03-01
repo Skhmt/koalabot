@@ -112,7 +112,7 @@ function cmd ( params, from, mod, subscriber ) {
 */
 
 function cmdBot( params, from ) {
-	cmdSay( `This is ${title}. It is being developed by skhmt. Get it at: https://github.com/Skhmt/twitch-bot` );
+	cmdSay( `I am running on KoalaBot. It is being developed by skhmt. Get it at: https://github.com/Skhmt/koalabot` );
 }
 
 function cmdHighlight( params, from ) {
@@ -268,7 +268,7 @@ function cmdGame( params, from ) {
 	cmdSay( `${from} has changed the stream game to: ${game}` );
 	$("#gameField").val( game );
 
-	$("title").html(`${$("#statusField").val()} &mdash; ${game} &mdash; ${title}`);
+	setTitle(`${status} &mdash; ${$("#gameField").val()} &mdash;`);
 }
 
 function cmdStatus( params, from ) {
@@ -288,5 +288,5 @@ function cmdStatus( params, from ) {
 	cmdSay( `${from} has changed the stream status to: ${status}` );
 	$("#statusField").val( status );
 
-	$("title").html(`${status} &mdash; ${$("#gameField").val()} &mdash; ${title}`);
+	setTitle(`${status} &mdash; ${$("#gameField").val()} &mdash;`);
 }
