@@ -30,7 +30,7 @@ function raffleSetup() {
 	} catch(e) { // if there isn't a raffleSettings.ini, just use the default settings
 		raffleSettings = {
 			announce: "on",
-			startText: "Raffle starting, plz type %key% to enter! It will end in %time% minutes, good luck!",
+			startText: "Raffle starting, plz type %keyword% to enter! It will end in %time% minutes, good luck!",
 			endText: "The raffle has ended!",
 			winnerText: "The winrar is: %winner%",
 			time: 5,
@@ -99,7 +99,7 @@ function startRaffle() {
 
 	// Say the start text
 	var output = $("#raffleStartText").val();
-	output = output.replace( /%key%/g, "!" + $("#raffleKeyword").val() );
+	output = output.replace( /%keyword%/g, "!" + $("#raffleKeyword").val() );
 	output = output.replace( /%time%/g, $("#raffleTime").val() );
 	cmdSay( output );
 
