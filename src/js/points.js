@@ -94,11 +94,10 @@ function pointsSetup() {
 	} );
 
 	$("#addUserPointsButton").click(function(){
-		pointsSettings.users.push( {
-			username: $("#addUserPointsText").val(),
-			totalPoints: 0,
-			currentPoints: 0
-		} );
+		pointsSettings.users[$("#addUserPointsText").val()] = {
+			totalPoints: 1,
+			currentPoints: pointsSettings.pointsPerUpdate
+		};
 		$("#addUserPointsText").val("")
 		drawList();
 	} );
