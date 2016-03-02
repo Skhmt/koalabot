@@ -269,7 +269,7 @@ function cmdPermit( params, from ) {
 	permitted.push( user.toLowerCase() );
 
 	setTimeout( function() {
-		var indexToRemove = permitted.indexOf( user );
+		var indexToRemove = permitted.indexOf( user.toLowerCase() );
 		permitted.splice( indexToRemove, 1 );
 	}, permitTime*1000);
 }
@@ -280,7 +280,8 @@ function linkPro( from, text ) {
 	// if user isn't in the array "permitted" (is approved to post a link), return false
 	var user = from.toLowerCase();
 
-	if ( permitted.indexOf( user ) !== -1 ) {
+	console.log(`linkpro from: '${from}' user: '${user}' permitted: '${JSON.stringify(permitted)}' user in permitted: '${(user in permitted)}'`);
+	if ( permitted.indexOf(user) >= 0 ) {
 		return false;
 	}
 

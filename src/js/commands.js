@@ -120,7 +120,6 @@ function parseCommand(text, from, mod, subscriber) {
 				if ( rbac == "mod" && !mod && !isStreamer) return;
 				if ( rbac == "bot" ) return;
 			}
-			console.log(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
 			eval(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
 			return;
 		}
