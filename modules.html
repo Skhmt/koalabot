@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>KoalaBot Module API</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            position: relative;
+        }
+        .affix {
+            top: 20px;
+        }
+        .nav-stacked > li > a {
+            padding-top: 3px !important;
+            padding-bottom: 3px !important;
+            margin: 0 !important;
+        }
+		.nobullet {
+			list-style-type: none;
+		}
+    </style>
+</head>
+
+<body data-spy="scroll" data-target="#myScrollspy" data-offset="15">
+
+    <div class="container-fluid" style="background-color:#000;color:#fff;height:80px;">
+        <h1>KoalaBot Module API</h1>
+    </div>
+    <br>
+
+    <div class="container">
+        <div class="row">
+
+
+<div class="col-sm-9">
+
+	<div id="installing">
+		<h2>Installing Modules</h2>
+		<p>
+			Modules are written in javascript with the .js extension. To install,
+			put the code into a text file, name it [modulename].js, and put it
+			into the /modules/ folder. Restart KoalaBot.
+		</p>
+		<p>
+			Some example modules:
+		</p>
+		<ul class="nobullet">
+			<li>
+				<strong><a href="https://gist.github.com/Skhmt/69f7b846b50a9cf7c29b">OBS Integration</a></strong>
+				<em>(skhmt)</em> -
+				Hosts a local website that you can open via OBS' CLR/Browsersource for follower, host, sub, and completely
+				custom notifications. Also requires <a href="https://gist.github.com/Skhmt/7d3f42bb530e932b2254">this</a>.
+			</li>
+			<li>
+				<strong><a href="https://gist.github.com/Skhmt/3385325460be37f7e3f5">Import Ankhbot Points</a></strong>
+				<em>(skhmt)</em> -
+				Imports your points database from Ankhbot to KoalaBot
+			</li>
+			<li>
+				<strong><a href="https://gist.github.com/Skhmt/87df53b1a7058644c695">Developer Options</a></strong>
+				<em>(skhmt)</em> -
+				Gives you the Chrome Developer Console, lets you see raw IRC messages, and gives you a button to temporarily turn off all commands.
+			</li>
+			<li>
+				<strong><a href="https://gist.github.com/Skhmt/c27e2d84402632974b89">Gambling</a></strong>
+				<em>(skhmt)</em> -
+				A gambling chatroom game.
+			</li>
+			<li>
+				<strong><a href="https://gist.github.com/Skhmt/4eee6752028f6407b3f1">How long _ has been following</a></strong>
+				<em>(skhmt)</em> -
+				An example of using jQuery's ajax functions to get data from an "external API" and return it when a user runs a command.
+			</li>
+		</ul>
+		<p>You can find more modules and get help in creating them at <a href="https://www.reddit.com/r/koalabot">/r/koalabot</a>.</p>
+	</div>
+
+	<hr>
+
+    <div id="apiAddCmd">
+        <h2>apiAddCmd(keyword, functionName, rbac, desc)</h2>
+        <p>Adds a command, makes it lower case. It will call the function name
+			you send it. The function will be given these parameters: params
+			(array), from (string), mod (boolean), subscriber (boolean)</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>keyword</strong>
+				<em>(string)</em> -
+				The !command a user types in.
+			</li>
+			<li>
+				<strong>functionName</strong>
+				<em>(string)</em> -
+				The function to call.
+			</li>
+			<li>
+				<strong>rbac</strong>
+				<em>(string)</em> -
+				Role-based access control. Choose from: <code>off</code>, <code>all</code>,
+				<code>reg</code>, <code>sub</code>, <code>mod</code>, or <code>bot</code>.
+				Off disables the command, even for the streamer. All is
+				self explanatory. Reg is for regulars and above (sub, mod, bot).
+				Sub is for subscribers and above (mod, bot). Mod is for moderators
+				and above (bot). Bot is for the bot itself AND the streamer.
+			</li>
+			<li>
+				<strong>desc</strong>
+				<em>(string)</em> -
+				A short description of the command.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>boolean</em> -
+			True if success, false if fail.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiChangeRBAC">
+        <h2>apiChangeRBAC(keyword, rbac)</h2>
+		<p>Changes the access control of a command.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>keyword</strong>
+				<em>(string)</em> -
+				The !command a user types in.
+			</li>
+			<li>
+				<strong>rbac</strong>
+				<em>(string)</em> -
+				Role-based access control. See apiAddCmd.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>boolean</em> -
+			True if success, false if fail.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiAddTab">
+        <h2>apiAddTab(moduleName)</h2>
+		<p>Adds a module to the dropdown and creates a page. If the module only
+			adds commands and doesn't require a user interface, this doesn't need
+			to be used.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>moduleName</strong>
+				<em>(string)</em> -
+				The name of the module.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>boolean</em> -
+			The id of the page to <code>$(id).prepend</code> /
+			<code>$(id).html</code> / <code>$(id).append</code> .
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiSay">
+        <h2>apiSay(text)</h2>
+		<p>Writes to the chat. It outputs as [+] to show it's a module rather than
+			[!] that the base bot uses.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>text</strong>
+				<em>(string)</em> -
+				The text to say in the chat.
+			</li>
+		</ul>
+    </div>
+
+	<hr>
+
+    <div id="apiLog">
+        <h2>apiLog(text)</h2>
+		<p>Only outputs to the chatlog and your chat window, but <em>does not</em> send a
+			chat message for others to see. It is used to notify the streamer of things.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>text</strong>
+				<em>(string)</em> -
+				The text to log.
+			</li>
+		</ul>
+    </div>
+
+	<hr>
+
+    <div id="apiGetPath">
+        <h2>apiGetPath()</h2>
+        <p>Gets the path to the mods folder, ex: <code>C:\bot\mods\</code></p>
+		<p>
+			<strong>Returns</strong>
+			<em>string</em> -
+			 The path to the mods folder, <em>including</em> the trailing slash
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiGetChannelName">
+        <h2>apiGetChannelName()</h2>
+        <p>Gets the channel name, which is also the streamer's username.</p>
+		<p>
+			<strong>Returns</strong>
+			<em>string</em> -
+			The channel name.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiGetBotName">
+        <h2>apiGetBotName()</h2>
+        <p>Gets the bot's username.</p>
+		<p>
+			<strong>Returns</strong>
+			<em>string</em> -
+			The bot name.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiGetPointsUnit">
+        <h2>apiGetPointsUnit()</h2>
+        <p>Gets the unit name for points. For example, "gold" or "cats".</p>
+		<p>
+			<strong>Returns</strong>
+			<em>string</em> -
+			The points unit.
+		</p>
+    </div>
+
+	<hr>
+
+	<div id="apiGetPoints">
+        <h2>apiGetPoints(username)</h2>
+        <p>Gets the number of points a user has.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>username</strong>
+				<em>(string)</em> -
+				The username, case insensitive.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>integer</em> -
+			Null if not found, otherwise the amount of points of the user.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiGetMinutes">
+        <h2>apiGetMinutes(username)</h2>
+        <p>Gets the number of minutes a user has been in the stream while the bot
+			is also in the stream.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>username</strong>
+				<em>(string)</em> -
+				The username, case insensitive.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>integer</em> -
+			Null if not found, otherwise the amount of minutes the user has been
+			in the stream.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiSetPoints">
+        <h2>apiSetPoints(username, points)</h2>
+        <p>Sets the points a user has. This is not for adding or subtracting points.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>username</strong>
+				<em>(string)</em> -
+				Case insensitive.
+			</li>
+			<li>
+				<strong>points</strong>
+				<em>(integer)</em> -
+				What to set the user's points to.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>integer</em> -
+			Null if not found, otherwise the new amount of points the user has.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiModPoints">
+        <h2>apiModPoints(username, points)</h2>
+        <p>Modifies the points a user has by a relative amount. Using this command
+		with points at 5, for example, would add 5 points to the user's total.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>username</strong>
+				<em>(string)</em> -
+				Case insensitive.
+			</li>
+			<li>
+				<strong>points</strong>
+				<em>(integer)</em> -
+				What to add to or subtract from the user's point total. To subtract,
+				use a negative number.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>boolean</em> -
+			Null if not found, otherwise the new amount of points the user has.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiOpenFile">
+        <h2>apiOpenFile(filename)</h2>
+        <p>Opens a file in the \mods\ directory. To load as an object, do something
+			like: <code>var foo = $.parseJSON( apiOpenFile('modExampleSettings.ini') );</code></p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>filename</strong>
+				<em>(string)</em> -
+				Case sensitive, the path to the \mods\ directory is included.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>string</em> -
+			The file contents, null if it doesn't exist.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiAppendFile">
+        <h2>apiAppendFile(filename, text)</h2>
+        <p>Appends a new line of text to the end a file in the \mods\ directory.
+			If a file isn't found, it will automatically be created, then appended to.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>filename</strong>
+				<em>(string)</em> -
+				Case sensitive, the path to the \mods\ directory is included.
+			</li>
+			<li>
+				<strong>text</strong>
+				<em>(string)</em> -
+				What to add to the contents of the file.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>boolean</em> -
+			True if success, false if fail.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiWriteFile">
+        <h2>apiWriteFile(filename, text)</h2>
+        <p>Writes a file in the \mods\ directory. This will completely over-write
+			an existing file. To save an object, do something like:
+			<code>apiWriteFile( "modExampleSettings.ini", JSON.stringify( modExampleSettings ) );</code></p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>filename</strong>
+				<em>(string)</em> -
+				Case sensitive, the path to the \mods\ directory is included.
+			</li>
+			<li>
+				<strong>text</strong>
+				<em>(string)</em> -
+				What to make the contents of the file.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>boolean</em> -
+			True if success, false if fail.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiGetRecentEvents">
+        <h2>apiGetRecentEvents()</h2>
+        <p>Gets an array of the recent events, in format:
+			<code>{ "time": (integer milliseconds since midnight of January 1, 1970), "type": (string), "text": (string) }</code>
+		</p>
+		<p>Type will be <code>SUB</code>, <code>HOST</code>, <code>FOLLOW</code>,
+			or anything that a module adds</p>
+		<p>
+			<strong>Returns</strong>
+			<em>array</em> -
+			The most recent events in the above format.
+		</p>
+    </div>
+
+	<hr>
+
+    <div id="apiAddRecentEvent">
+        <h2>apiAddRecentEvent(type, text)</h2>
+        <p>Adds to the recent events array. Recent events is used to send to a
+			page via ajax, most likely.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>type</strong>
+				<em>(string)</em> -
+				Can be anything, the bot uses <code>SUB</code>, <code>HOST</code>,
+				and <code>FOLLOW</code> for those events. Use your own type if you need to.
+			</li>
+			<li>
+				<strong>text</strong>
+				<em>(string)</em> -
+				The data. For <code>SUB</code>, <code>HOST</code>, and <code>FOLLOW</code>,
+				it's only the username.
+			</li>
+		</ul>
+    </div>
+
+	<hr>
+
+    <div id="apiHotKey">
+        <h2>apiHotKey(hotkey)</h2>
+        <p>Adds a global hotkey. Supported keys: <code>A</code>-<code>Z</code>,
+			<code>0</code>-<code>9</code>, <code>Comma</code>, <code>Period</code>, <code>Home</code>,
+			<code>End</code>, <code>PageUp</code>, <code>PageDown</code>, <code>Insert</code>,
+			<code>Delete</code>, Arrow keys (<code>Up</code>, <code>Down</code>, <code>Left</code>,
+			<code>Right</code>) and the Media Keys (<code>MediaNextTrack</code>,
+			<code>MediaPlayPause</code>, <code>MediaPrevTrack</code>, <code>MediaStop</code>)</p>
+		<p>Combine them with Ctrl, Alt, or Shift. Ex: <code>Ctrl+Alt+Comma</code></p>
+
+		<p>On OSX, Ctrl is command. These global hotkeys <em>will</em> block the normal
+			function of those keys.</p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>hotkey</strong>
+				<em>(string)</em> -
+				See above comments on format.
+			</li>
+		</ul>
+		<p>
+			<strong>Returns</strong>
+			<em>object</em> -
+			Use to set functionality of the hotkey.
+		</p>
+		<p><strong>Example</strong></p>
+		<ul class="nobullet">
+			<li><code>var foo = apiHotKey( 'Ctrl+Alt+Comma' );<br>
+				foo.on( "active", function(){ alert('bar'); } );
+			</code></li>
+		</ul>
+    </div>
+
+	<hr>
+
+    <div id="apiDB">
+        <h2>apiDB(filename)</h2>
+        <p>Creates/loads a sqlite database. This is an object. Example:
+			<code>var db = apiDB( 'moduleTestDB.sqlite' );</code></p>
+		<p><strong>Parameters</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>filename</strong>
+				<em>(string)</em> -
+				The filename to open or create.
+			</li>
+		</ul>
+		<p><strong>Functions</strong></p>
+		<ul class="nobullet">
+			<li>
+				<strong>write()</strong> -
+				Saves the database to disk. Returns true if success, false if an error.
+			</li>
+			<li>
+				<strong>sel(<em>query</em>)</strong> -
+				Runs a <code>SELECT</code> query on the database. Returns an object in the format:
+				<code>{array: (array formatted response), table: (html table formatted repsonse)}</code>
+			</li>
+			<li>
+				<strong>run(<em>query</em>)</strong> -
+				Runs a <code>CREATE TABLE</code>, <code>INSERT INTO</code>, or <code>DELETE FROM</code> query.
+				Returns true if success, false if fail.
+			</li>
+		</ul>
+    </div>
+
+	<br> <br> <br> <br> <br>
+
+</div>
+
+
+<nav class="col-sm-3" id="myScrollspy">
+	<ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="85">
+		<li><a href="#installing">Installing Modules</a></li>
+	    <li><a href="#apiAddCmd">apiAddCmd</a></li>
+	    <li><a href="#apiChangeRBAC">apiChangeRBAC</a></li>
+	    <li><a href="#apiAddTab">apiAddTab</a></li>
+	    <li><a href="#apiSay">apiSay</a></li>
+	    <li><a href="#apiLog">apiLog</a></li>
+	    <li><a href="#apiGetPath">apiGetPath</a></li>
+	    <li><a href="#apiGetChannelName">apiGetChannelName</a></li>
+	    <li><a href="#apiGetBotName">apiGetBotName</a></li>
+	    <li><a href="#apiGetPointsUnit">apiGetPointsUnit</a></li>
+	    <li><a href="#apiGetPoints">apiGetPoints</a></li>
+	    <li><a href="#apiGetMinutes">apiGetMinutes</a></li>
+	    <li><a href="#apiSetPoints">apiSetPoints</a></li>
+	    <li><a href="#apiModPoints">apiModPoints</a></li>
+	    <li><a href="#apiOpenFile">apiOpenFile</a></li>
+	    <li><a href="#apiAppendFile">apiAppendFile</a></li>
+	    <li><a href="#apiWriteFile">apiWriteFile</a></li>
+	    <li><a href="#apiGetRecentEvents">apiGetRecentEvents</a></li>
+	    <li><a href="#apiAddRecentEvent">apiAddRecentEvent</a></li>
+	    <li><a href="#apiHotKey">apiHotKey</a></li>
+	    <li><a href="#apiDB">apiDB</a></li>
+	</ul>
+</nav>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>
