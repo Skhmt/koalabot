@@ -61,7 +61,6 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 |**!bottime**|n/a|*Shows the amount of time the bot has been open.*|
 |**!streamtime**|n/a|*Shows the amount of time your stream has been going (if your stream disconnects, this resets).*|
 |**!laptime**|n/a|*Shows the amount of time since you've hit the "lap" button.*|
-|**!updawg**|n/a|*Replies with "What's !updawg ?"*|
 |**!highlight**|(comments)|Mod-only. *Adds a time stamp to a log file (both local time and stream time) with the optional comments.*|
 |**!ht**||*Same as above.*|
 |**!game**|[game name]|Mod-only. *Changes the game.*|
