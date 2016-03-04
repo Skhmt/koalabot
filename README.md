@@ -51,6 +51,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 - [ ] Points requirement for raffles
 - [ ] Edit timed messages, commands, and quotes
 - [ ] User ranks
+- [ ] On first chat notification
 - [ ] Open/view old statistics (https://github.com/nwjs/nw.js/wiki/File-dialogs)
 
 #### Commands:
