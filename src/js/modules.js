@@ -359,7 +359,7 @@ function apiDB(filename) {
 		try {
 			var binArray = my._db.export();
 			var buffer = new Buffer( binArray );
-			fs.writeFileSync( filename, buffer );
+			fs.writeFileSync( `${execPath}mods/${filename}`, buffer );
 			return true;
 		} catch (err) {
 			console.log(err);
