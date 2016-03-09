@@ -353,13 +353,13 @@ function apiDB(filename) {
 
 	var my = {};
 
-	my._db; // = new sql.Database();
+	var _db; // = new sql.Database();
 
 	my.write = function() {
 		try {
-			var binArray = my._db.export();
+			var binArray = _db.export();
 			var buffer = new Buffer( binArray );
-			fs.writeFileSync( filename, buffer );
+            fs.writeFile( filename, buffer );
 			return true;
 		} catch (err) {
 			console.log(err);
@@ -369,7 +369,7 @@ function apiDB(filename) {
 
 	my.sel = function(query) {
 		try {
-			var response = my._db.exec(query);
+			var response = _db.exec(query);
 			return {array: response, table: tableify(response)};
 		} catch(err) {
 			console.log(err);
@@ -380,7 +380,7 @@ function apiDB(filename) {
 	// CREATE TABLE / INSERT INTO / DELETE FROM
 	my.run = function(query) {
 		try {
-			my._db.run(query);
+			_db.run(query);
 			return true;
 		} catch(err) {
 			console.log(err);
@@ -390,10 +390,10 @@ function apiDB(filename) {
 
 	try {
 		var file = fs.readFileSync( filename );
-		my._db = new sql.Database( file );
+		_db = new sql.Database( file );
 	} catch(err) {
 		// console.log(err);
-		my._db = new sql.Database();
+		_db = new sql.Database();
 		my.write();
 	}
 

@@ -17,7 +17,6 @@
  // vars
 var clientid = "3y2ofy4qcsvnaybw9ogdzwmwfode8y0"; /* this is the (public) client_id of KoalaBot. */
 var bot;
-var server = "irc.twitch.tv";
 var fs;
 var logFile;
 var execPath;
@@ -251,53 +250,62 @@ function runChat() {
 
 	var irc = require( "irc" );
 
-	var config = {
-		//channels: [settings.channel],
-		server: server,
-		username: settings.username,
-		nick: settings.username,
-		password: settings.access_token,
-		sasl: true,
-		autoConnect: false
-	};
+	$.getJSON(
+		`http://tmi.twitch.tv/servers?channel=${settings.channel.substring(1)}`,
+		{},
+		function ( response ) {
+			var server = response.servers[Math.floor(Math.random() * response.servers.length)].split(':')[0];
+			console.log(server);
 
-	bot = new irc.Client( config.server, config.nick, config );
+			var config = {
+				//channels: [settings.channel],
+				server: server,
+				username: settings.username,
+				nick: settings.username,
+				password: settings.access_token,
+				sasl: true,
+				autoConnect: false
+			};
 
-	bot.connect(5, function() {
-		log( `* Connected to ${server}` );
-	} );
+			bot = new irc.Client( config.server, config.nick, config );
 
-	bot.addListener( "registered", function( message ) {
-		bot.send( "CAP REQ", "twitch.tv/membership" );
-		bot.send( "CAP REQ", "twitch.tv/commands" );
-		bot.send( "CAP REQ", "twitch.tv/tags" )
-		bot.join( settings.channel, function() {
-			log( "* Joining " + settings.channel );
-		} );
-	} );
+			bot.connect(5, function() {
+				log( `* Connected to ${server}` );
+			} );
 
-	bot.addListener( "error", function( message ) {
-		log( "* Error: " + message );
-	} );
+			bot.addListener( "registered", function( message ) {
+				bot.send( "CAP REQ", "twitch.tv/membership" );
+				bot.send( "CAP REQ", "twitch.tv/commands" );
+				bot.send( "CAP REQ", "twitch.tv/tags" )
+				bot.join( settings.channel, function() {
+					log( "* Joining " + settings.channel );
+				} );
+			} );
 
-	bot.addListener( "raw", function( message ) {
-		var args = message.args[0].split(" ");
-		var command = message.command;
-		var user = message.user;
+			bot.addListener( "error", function( message ) {
+				log( "* Error: " + message );
+			} );
 
-		if (rawIrcOn) { // logging all raw commands
-			log( `<b>rawcmd: </b>${message.rawCommand} |
+			bot.addListener( "raw", function( message ) {
+				var args = message.args[0].split(" ");
+				var command = message.command;
+				var user = message.user;
+
+				if (rawIrcOn) { // logging all raw commands
+					log( `<b>rawcmd: </b>${message.rawCommand} |
 				<b>user: </b>${message.user} |
 				<b>host: </b>${message.host} |
 				<b>args: </b> ${JSON.stringify(message.args)}` );
-		}
+				}
 
-		if ( message.user == "twitchnotify" ) { // if it's a sub notification
-			subNotify(message.args[1]);
-		} else {
-			parseMsg(command, args, user);
+				if ( message.user == "twitchnotify" ) { // if it's a sub notification
+					subNotify(message.args[1]);
+				} else {
+					parseMsg(command, args, user);
+				}
+			} );
 		}
-	} );
+	);
 }
 
 
@@ -528,7 +536,7 @@ function writeEmoticons( message ) {
 		}
 
 		if (!found && emoticons[word] ) {
-			output += `<img src="${emoticons[word]}"> `;
+			output += `<abbr title="${word}"><img src="${emoticons[word]}"></abbr> `;
 		}
 		else {
 			output += `${word} `;
