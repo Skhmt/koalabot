@@ -127,69 +127,69 @@ function moderationSetup(){
 	// wordProArea settings
 	$("#wordProArea").val( modSettings.wordPro.badwords.join(" ") );
 	$("#wordProArea").change( function() {
-		modSettings.wordPro.badwords = $(this).val().split(" ");
+		modSettings.wordPro.badwords = this.value.split(" ");
 	} );
 
 	// set up timeout states and listeners
 	$("#linkProTimeoutField").val( modSettings.linkPro.timeout );
 	$("#linkProTimeoutField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.linkPro.timeout = parseInt( tempNum, 10 );
 	} );
 
 	$("#linkProTimeoutText").val( modSettings.linkPro.timeoutText );
 	$("#linkProTimeoutText").on( "input", function() {
-		modSettings.linkPro.timeoutText = $(this).val();
+		modSettings.linkPro.timeoutText = this.value;
 	} );
 
 	$("#wordProTimeoutField").val( modSettings.wordPro.timeout );
 	$("#wordProTimeoutField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.wordPro.timeout = parseInt( tempNum, 10 );
 	} );
 
 	$("#wordProTimeoutText").val( modSettings.wordPro.timeoutText );
 	$("#wordProTimeoutText").on( "input", function() {
-		modSettings.wordPro.timeoutText = $(this).val();
+		modSettings.wordPro.timeoutText = this.value;
 	} );
 
 	$("#capsProTimeoutField").val( modSettings.capsPro.timeout );
 	$("#capsProTimeoutField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.capsPro.timeout = parseInt( tempNum, 10 );
 	} );
 
 	$("#capsProTimeoutText").val( modSettings.capsPro.timeoutText );
 	$("#capsProTimeoutText").on( "input", function() {
-		modSettings.capsPro.timeoutText = $(this).val();
+		modSettings.capsPro.timeoutText = this.value;
 	} );
 
 	$("#capsProPerWordField").val( modSettings.capsPro.capsPerWord );
 	$("#capsProPerWordField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.capsPro.capsPerWord = parseInt( tempNum, 10 );
 	} );
 
 	$("#capsProPerPostField").val( modSettings.capsPro.capsTotal );
 	$("#capsProPerPostField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.capsPro.capsTotal = parseInt( tempNum, 10 );
 	} );
 
 	$("#symbolProTimeoutField").val( modSettings.symbolPro.timeout );
 	$("#symbolProTimeoutField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.symbolPro.timeout = parseInt( tempNum, 10 );
 	} );
 
 	$("#symbolProTimeoutText").val( modSettings.symbolPro.timeoutText );
 	$("#symbolProTimeoutText").on( "input", function() {
-		modSettings.symbolPro.timeoutText = $(this).val();
+		modSettings.symbolPro.timeoutText = this.value;
 	} );
 
 	$("#symbolProSymbolsField").val( modSettings.symbolPro.symbols );
 	$("#symbolProSymbolsField").on( "input", function() {
-		var tempNum = $(this).val();
+		var tempNum = this.value;
 		modSettings.symbolPro.symbols = parseInt( tempNum, 10 );
 	} );
 

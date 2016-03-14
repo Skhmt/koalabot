@@ -46,36 +46,36 @@ var settings = {
 
 $(document).ready( function() {
 
-	setTitle('');
+	var path = require( 'path' );
+	fs = require( 'fs' );
 
-	var path = require( "path" );
-	fs = require( "fs" );
-
-	if ( process.platform == "win32" ) {
+	if ( process.platform == 'win32' ) {
 		execPath = `${path.dirname( process.execPath )}/`;
 	}
 	else {
-		execPath = "";
+		execPath = '';
 	}
 
 	sql = require( 'sql.js' );
 
-	gui = require("nw.gui");
+	gui = require('nw.gui');
 	mainwin = gui.Window.get();
-	mainwin.on("close", function() {
+	mainwin.on('close', function() {
 	  this.hide(); // Pretend to be closed already
-	  console.log("Final save");
+	  console.log('Final save');
 	  save();
 	  this.close(true);
 	} );
 
-	$("#getOauthLink").click( setupOauth );
+	setTitle('');
 
-	$("#changeChannel").click( function() {
-		var newchan = $("#getChannelField").val().toLowerCase();
-		if ( newchan.substring(0,1) !== "#" ) { // if the user forgot the #, add it
+	$('#getOauthLink').click( setupOauth );
+
+	$('#changeChannel').click( function() {
+		var newchan = $('#getChannelField').val().toLowerCase();
+		if ( newchan.substring(0,1) !== '#' ) { // if the user forgot the #, add it
 			newchan = `#${newchan}`;
-			$("#getChannelField").val( newchan );
+			$('#getChannelField').val( newchan );
 		}
 
 		if ( newchan !== settings.channel ) { // if the channel is actually different
@@ -107,23 +107,23 @@ $(document).ready( function() {
 	// Checking if default.css exists in \themes\
 	try { fs.accessSync( `${execPath}themes/default.css` ); }
 	catch (e) { // if it doesn't exist, basically copy+paste it
-		var defaultcss = fs.readFileSync("default.css", "utf8");
-		fs.writeFileSync(`${execPath}themes/default.css`, defaultcss, "utf8");
+		var defaultcss = fs.readFileSync('default.css', 'utf8');
+		fs.writeFileSync(`${execPath}themes/default.css`, defaultcss, 'utf8');
 	}
-	$("#botTheme").attr( "href", `${execPath}themes/default.css` );
+	$('#botTheme').attr( 'href', `${execPath}themes/default.css` );
 
-	$("#botThemeCurrent").html( "default" );
-	settings.theme = "default";
+	$('#botThemeCurrent').html( 'default' );
+	settings.theme = 'default';
 
 
 	// Setting up the chat log
 	var d = new Date();
 	var dmonth = d.getMonth() + 1;
-	dmonth = dmonth < 10 ? "0" + dmonth : dmonth;
-	var dday = d.getDate() < 10 ? "0" + d.getDate() : d.getDate();
-	var dhour = d.getHours() < 10 ? "0" + d.getHours() : d.getHours();
-	var dmin = d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes();
-	var dsec = d.getSeconds() < 10 ? "0" + d.getSeconds() : d.getSeconds();
+	dmonth = dmonth < 10 ? '0' + dmonth : dmonth;
+	var dday = d.getDate() < 10 ? '0' + d.getDate() : d.getDate();
+	var dhour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+	var dmin = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+	var dsec = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds();
 	var logname = `chatlog_${d.getFullYear()}-${dmonth}-${dday}_${dhour}-${dmin}-${dsec}.log`;
 
 	logFile = `${execPath}logs/${logname}`;
@@ -170,15 +170,15 @@ $(document).ready( function() {
 		settings = $.parseJSON( readFile );
 
 		// Setting up config area
-		$("#getOauthField").val( settings.access_token );
-		$("#getChannelField").val( settings.channel );
-		$("#displayName").html( settings.username );
+		$('#getOauthField').val( settings.access_token );
+		$('getChannelField').val( settings.channel );
+		$('#displayName').html( settings.username );
 
 		// Setting up theme
 		try {
 			fs.readFileSync( `${execPath}themes/${settings.theme}` );
-			$("#botTheme").attr( "href", `${execPath}themes/${settings.theme}` );
-			$("#botThemeCurrent").html( settings.theme.split(".")[0] );
+			$('#botTheme').attr( 'href', `${execPath}themes/${settings.theme}` );
+			$('#botThemeCurrent').html( settings.theme.split('.')[0] );
 		} catch (e) {}
 
 		// Running tabs
@@ -192,9 +192,9 @@ $(document).ready( function() {
 	fs.readdir(`${execPath}themes`, function(err, files){
 
 		for ( var f = 0; f < files.length; f++ ) {
-			var splitName = files[f].split(".");
-			if ( splitName[1] == "css" ) {
-				$("#botThemeList").append(`
+			var splitName = files[f].split('.');
+			if ( splitName[1] == 'css' ) {
+				$('#botThemeList').append(`
 					<option value="${files[f]}">
 						${splitName[0]}
 					</option>`);
@@ -202,19 +202,19 @@ $(document).ready( function() {
 		}
 	} );
 
-	$("#botThemeChange").click(function() {
-		var tempTheme = $("#botThemeList").val();
-		$("#botTheme").attr( "href", `${execPath}themes/${tempTheme}` );
-		$("#botThemeCurrent").html(tempTheme.split(".")[0]);
+	$('#botThemeChange').click(function() {
+		var tempTheme = $('#botThemeList').val();
+		$('#botTheme').attr( 'href', `${execPath}themes/${tempTheme}` );
+		$('#botThemeCurrent').html(tempTheme.split('.')[0]);
 		settings.theme = tempTheme;
 		return false;
 	} );
 
 	$('[data-toggle="tooltip"]').tooltip();
 
-	fs.writeFile( `${execPath}txt/host-session.txt`, "" );
-	fs.writeFile( `${execPath}txt/follow-session.txt`, "" );
-	fs.writeFile( `${execPath}txt/sub-session.txt`, "" );
+	fs.writeFile( `${execPath}txt/host-session.txt`, '' );
+	fs.writeFile( `${execPath}txt/follow-session.txt`, '' );
+	fs.writeFile( `${execPath}txt/sub-session.txt`, '' );
 } );
 
 function getUsername() {
@@ -547,7 +547,7 @@ function writeEmoticons( message ) {
 }
 
 function log( message ) {
-	var out = document.getElementById("console");
+	var out = document.getElementById( 'console' );
 
 	// scrollHeight = element's total height including overflow
 	// clientHeight = element's height including padding excluding horizontal scroll bar
@@ -559,7 +559,7 @@ function log( message ) {
 
 	// add message
 	// var start = $.now();
-	$("#console").append( `${writeEmoticons(message)} <br>` );
+	$('#console').append( `${writeEmoticons(message)} <br>` );
 	// console.log(`${parseInt($.now())-parseInt(start)}ms : "${message}"`);
 
 	// if it was scrolled to the bottom before the message was appended, scroll to the bottom
@@ -572,16 +572,16 @@ function log( message ) {
 
 	// write to log
 	fs.appendFile( logFile, `${message}\r\n`, function ( err ) {
-		if ( err ) $("#console").append(`* Error writing to log <br>`);
+		if ( err ) $('#console').append(`* Error writing to log <br>`);
 	} );
 }
 
 function chat() {
 	// get the chat input box value
-	var text = $("#chatText").val();
+	var text = $('#chatText').val();
 
 	// output it to the console
-	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}` );
+	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}` );
 
 	// check if it was a command...
 	if ( text.substring(0, 1) === cmdSettings.symbol ) {
@@ -593,18 +593,16 @@ function chat() {
 	}
 
 	// clear the chat input box
-	$("#chatText").val("");
+	$('#chatText').val('');
 }
 
 function getTimeStamp() {
 	var dt = new Date();
 	var hrs = dt.getHours();
 	var mins = dt.getMinutes();
-	// var secs = dt.getSeconds();
 
-	if ( hrs < 10 ) hrs = "0" + hrs;
-	if ( mins < 10 ) mins = "0" + mins;
-	// if ( secs < 10 ) secs = "0" + secs;
+	if ( hrs < 10 ) hrs = '0' + hrs;
+	if ( mins < 10 ) mins = '0' + mins;
 
 	return `[${hrs}:${mins}]`;
 }
@@ -659,15 +657,15 @@ function save() {
 		fs.writeFile( `${execPath}settings/pointsSettings.ini`, JSON.stringify( tempPointsSettings ) );
 	}
 
-	console.log("Settings saved");
+	console.log( 'Settings saved' );
 }
 
 function setupOauth() {
 	if ( !oauthsetup ) {
 		var express = require( 'express' );
 		var app = express();
-		app.use( express.static( "public" ) );
-		app.get( "/oauth", function(req, res) {
+		app.use( express.static( 'public' ) );
+		app.get( '/oauth', function(req, res) {
 			$('#getOauthModal').modal( 'hide' );
 			$('#oauthFrame').attr('src', '');
 			if ( req.query.token.length > 20 ) {
@@ -685,7 +683,7 @@ function setupOauth() {
 }
 
 function doOauth() {
-	$("#oauthFrame").attr("src", `https://api.twitch.tv/kraken/oauth2/authorize?
+	$('#oauthFrame').attr('src', `https://api.twitch.tv/kraken/oauth2/authorize?
 	response_type=token&
 	client_id=3y2ofy4qcsvnaybw9ogdzwmwfode8y0&
 	redirect_uri=http://localhost:3000/oauth.html&
@@ -702,11 +700,6 @@ function openLink(url) {
 }
 
 function setTitle(title) {
-	$.getJSON(
-		'package.json',
-		{},
-		function ( response ) {
-			$("title").html(`${title} KoalaBot ${response.version}`);
-		}
-	);
+	var version = gui.App.manifest.version;
+	$("title").html(`${title} KoalaBot ${ version }`);
 }

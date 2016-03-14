@@ -766,7 +766,19 @@
 				<div class="col-sm-12">
 					<div class="panel panel-default" id="commandsConfigPanel">
 						<div class="panel-body">
-							Command Symbol: !
+							<form class="form-inline" onsubmit="return false;">
+								<label class="control-label">Command Symbol: </label>&nbsp;
+								<input type="text" id="commandSymbolField" class="form-control input-sm" size="1">
+							</form>
+							<form class="form-inline" onsubmit="return false;">
+								<label class="control-label">Timeout for user commands: </label>&nbsp;
+								<div class="form-group">
+									<div class="input-group input-group-sm">
+										<input type="text" id="commandTimeoutField" class="form-control" size="1">
+										<span class="input-group-addon">s</span>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

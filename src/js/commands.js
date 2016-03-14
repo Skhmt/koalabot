@@ -21,6 +21,7 @@
 var cmdSettings = {};
 var lap;
 var cmdList = [];
+var cmdTimeoutList = [];
 
 function cmdSetup() {
 
@@ -53,6 +54,7 @@ function cmdSetup() {
 			custom : [], //{name, userType, text}
 			quotes: [],
 			uptime: "bot",
+			timeout: 3,
 			songRequests: true
 		};
 	}
@@ -83,6 +85,37 @@ function cmdSetup() {
 		cmdSettings.uptime = this.value;
 	} );
 
+	$('#commandSymbolField').val( cmdSettings.symbol );
+	$('#commandSymbolField').on( 'input', function() {
+		if ( this.value.length == 1 ) {
+			cmdSettings.symbol = this.value;
+		}
+		else if ( this.value.length > 1 ) {
+			this.value = this.value.length.charAt(0);
+		}
+	} );
+
+
+	if ( !cmdSettings.timeout ) {
+		$('#commandTimeoutField').val( 0 );
+		cmdSettings.timeout = 0;
+	}
+	else {
+		$('#commandTimeoutField').val( cmdSettings.timeout );
+	}
+	$('#commandTimeoutField').on( 'input', function() {
+		if ( this.value == parseInt(this.value) ) {
+			cmdSettings.timeout = this.value;
+		}
+		else if ( this.value < 0 ) {
+			cmdSettings.timeout = 0;
+			this.value = 0;
+		}
+		else {
+			cmdSettings.timeout = 0;
+			this.value = 0;
+		}
+	} );
 
 	addStaticCommands();
 
@@ -99,6 +132,12 @@ function cmdSetup() {
 function parseCommand(text, from, mod, subscriber) {
 
 	if (!commandsOn) return;
+
+	if ( cmdTimeoutList.indexOf(from) > -1 ) {
+		log( `${from} is on command cooldown` );
+		return;
+	}
+
 	// there is an array cmdList: [ {cmd: "", func: ""}, ... ]
 	// it has been constructed of static and custom commands
 	// it can be added to by plugins
@@ -121,7 +160,7 @@ function parseCommand(text, from, mod, subscriber) {
 				if ( rbac == "bot" ) return;
 			}
 			eval(`${cmdList[i].func}(${JSON.stringify(params)}, "${from}", ${mod}, ${subscriber})`);
-			return;
+			return addToCommandTimeout(from);
 		}
 	}
 
@@ -130,6 +169,19 @@ function parseCommand(text, from, mod, subscriber) {
 		addToRaffle( from );
 	} else {
 		customCommand( cmd, params, from, mod, subscriber);
+	}
+	addToCommandTimeout(from);
+
+}
+
+function addToCommandTimeout(from) {
+	if ( cmdSettings.timeout > 0 ) {
+		console.log('added ' + from + ' to cmdTimeoutList');
+		cmdTimeoutList.push(from);
+		setTimeout( function() {
+			cmdTimeoutList.splice( cmdTimeoutList.indexOf(from), 1 );
+			console.log('removed ' + from + ' to cmdTimeoutList');
+		}, cmdSettings.timeout * 1000 );
 	}
 }
 
