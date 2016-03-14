@@ -520,7 +520,8 @@ function writeEmoticons( message ) {
 		'unshift',
 		'length',
 		'prototype',
-		'constructor'
+		'constructor',
+		'find'
 	];
 
 	// for each word, check if it's an emoticon and if it is, output the url instead of the text
