@@ -288,23 +288,23 @@
 								<div class="form-group">
 									<div class="input-group input-group-sm">
 										<span class="input-group-addon">!</span>
-										<input type="text" id="raffleKeyword" class="form-control">
+										<input type="text" id="raffleKeyword" class="form-control" data-toggle="tooltip" title="keyword viewers type to enter the raffle">
 									</div>
 								</div>
 							</form>
 							<br>
 							<form class="form-inline" onsubmit="return false;">
-								<label class="control-label">Length of time to enter:</label>&nbsp;
+								<label class="control-label">Time to enter:</label>&nbsp;
 								<div class="form-group">
 									<div class="input-group input-group-sm">
-										<input type="text" id="raffleTime" class="form-control" size="3">
+										<input type="text" id="raffleTime" class="form-control" size="3" data-toggle="tooltip" title="how long the raffle runs from start to finish">
 										<span class="input-group-addon">minutes</span>
 									</div>
 								</div>
 							</form>
 							<br>
 							<form class="form-inline" onsubmit="return false;">
-								<label class="control-label">Announce winner in chat:</label>&nbsp;
+								<label class="control-label">Announce winner in chat?</label>&nbsp;
 
 								<span class="btn-group" data-toggle="buttons">
 									<label class="btn btn-primary btn-xs">
@@ -323,14 +323,14 @@
 								</span>
 							</form>
 							<br>
-							<label class="control-label">Start Text (%key% for keyword, %time% for minutes):</label><br>
-							<textarea id="raffleStartText" rows="2" class="form-control"></textarea>
+							<label class="control-label">Raffle start text:</label><br>
+							<textarea id="raffleStartText" rows="2" class="form-control" data-toggle="tooltip" title="available tags: %keyword%, %time%"></textarea>
 							<br>
-							<label class="control-label">End Text:</label><br>
-							<textarea id="raffleEndText" rows="1" class="form-control"></textarea>
+							<label class="control-label">Raffle end text:</label><br>
+							<textarea id="raffleEndText" rows="1" class="form-control" data-toggle="tooltip" title="no available tags"></textarea>
 							<br>
-							<label class="control-label">Winner Text (%winner% for the winner's username):</label><br>
-							<textarea id="raffleWinnerText" rows="1" class="form-control"></textarea>
+							<label class="control-label">Message announcing winner:</label><br>
+							<textarea id="raffleWinnerText" rows="1" class="form-control" data-toggle="tooltip" title="available tags: %winner%"></textarea>
 						</div>
 					</div>
 				</div>
