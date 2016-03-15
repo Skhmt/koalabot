@@ -178,7 +178,7 @@ $(document).ready( function() {
 
 		// Setting up config area
 		$('#getOauthField').val( settings.access_token );
-		$('getChannelField').val( settings.channel );
+		$('#getChannelField').val( settings.channel );
 		$('#displayName').html( settings.username );
 
 		// Setting up theme
