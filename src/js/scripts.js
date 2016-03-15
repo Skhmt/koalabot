@@ -53,10 +53,12 @@ $(document).ready( function() {
 	gui = require('nw.gui');
 	mainwin = gui.Window.get();
 	mainwin.on('close', function() {
-	  this.hide(); // Pretend to be closed already
-	  console.log('Final save');
-	  save();
-	  this.close(true);
+		console.log('Final save');
+		save();
+		setTimeout(function(){
+			mainwin.close(true);
+		}, 100);
+
 	} );
 
     if ( process.platform == 'win32' ) {
