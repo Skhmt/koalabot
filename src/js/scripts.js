@@ -48,14 +48,6 @@ $(document).ready( function() {
 
 	var path = require( 'path' );
 	fs = require( 'fs' );
-
-	if ( process.platform == 'win32' ) {
-		execPath = `${path.dirname( process.execPath )}/`;
-	}
-	else {
-		execPath = '';
-	}
-
 	sql = require( 'sql.js' );
 
 	gui = require('nw.gui');
@@ -66,6 +58,19 @@ $(document).ready( function() {
 	  save();
 	  this.close(true);
 	} );
+
+    if ( process.platform == 'win32' ) {
+        execPath = `${path.dirname( process.execPath )}/`;
+    }
+    else if ( process.platform == 'darwin' ) {
+        execPath = '';
+        var nativeMenuBar = new gui.Menu( { type: 'menubar' } );
+        nativeMenuBar.createMacBuiltin( 'KoalaBot' );
+        mainwin.menu = nativeMenuBar;
+    }
+    else { // linux flavor?
+        execPath = '';
+    }
 
 	setTitle('');
 
