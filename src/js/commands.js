@@ -165,7 +165,7 @@ function parseCommand(text, from, mod, subscriber) {
 	}
 
 	// Special cases... if it's the raffle keyword, check, otherwise treat as a custom command
-	if ( cmd === $("#raffleKeyword").val() ) {
+	if ( cmd === $("#raffleKeyword").val().toLowerCase() ) {
 		addToRaffle( from );
 	} else {
 		customCommand( cmd, params, from, mod, subscriber);
