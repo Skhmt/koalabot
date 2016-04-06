@@ -566,9 +566,8 @@ function log( message ) {
 	var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 20;
 
 	// add message
-	// var start = $.now();
-	$('#console').append( `${writeEmoticons(message)} <br>` );
-	// console.log(`${parseInt($.now())-parseInt(start)}ms : "${message}"`);
+	var writeMessage = message.replace(/</g, '&lt;').replace(/\(/g,'&gt;');
+	$('#console').append( `${writeEmoticons(writeMessage)} <br>` );
 
 	// if it was scrolled to the bottom before the message was appended, scroll to the bottom
 	if( isScrolledToBottom )
@@ -589,7 +588,7 @@ function chat() {
 	var text = $('#chatText').val();
 
 	// output it to the console
-	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}` );
+	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/\(/g,'&gt;')}` );
 
 	// check if it was a command...
 	if ( text.substring(0, 1) === cmdSettings.symbol ) {
