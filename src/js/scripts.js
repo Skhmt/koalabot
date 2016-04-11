@@ -23,9 +23,9 @@ var execPath;
 var hosts = [];
 var viewers = [];
 var startDate = new Date();
-var subBadgeUrl = "";
+var subBadgeUrl = '';
 var permitted = [];
-var emoticons = [];
+var emoticons = new Map();
 var currentUsers = [];
 var recentEvents = [];
 var mainwin;
@@ -289,11 +289,11 @@ function runChat() {
 				} );
 			} );
 
-			bot.addListener( "error", function( message ) {
+			bot.addListener( 'error', function( message ) {
 				log( "* Error: " + message );
 			} );
 
-			bot.addListener( "raw", function( message ) {
+			bot.addListener( 'raw', function( message ) {
 				var args = message.args[0].split(" ");
 				var command = message.command;
 				var user = message.user;
@@ -305,7 +305,7 @@ function runChat() {
 				<b>args: </b> ${JSON.stringify(message.args)}` );
 				}
 
-				if ( message.user == "twitchnotify" ) { // if it's a sub notification
+				if ( message.user == 'twitchnotify' ) { // if it's a sub notification
 					subNotify(message.args[1]);
 				} else {
 					parseMsg(command, args, user);
@@ -462,15 +462,15 @@ function updateViewerCount( viewerCount ) {
 
 function getEmoticons() {
 	$.getJSON(
-		"https://api.twitch.tv/kraken/chat/emoticons",
+		'https://api.twitch.tv/kraken/chat/emoticons',
 		{
 			"client_id" : clientid,
 			"api_version" : 3
 		},
 		function( response ) {
-			if ( "emoticons" in response ) {
+			if ( 'emoticons' in response ) {
 				for (var i in response.emoticons) {
-					emoticons[response.emoticons[i].regex] = response.emoticons[i].images[0].url;
+					emoticons.set(response.emoticons[i].regex, response.emoticons[i].images[0].url);
 				}
 			}
 			else {
@@ -488,19 +488,19 @@ function getEmoticonsBTTV() {
 		function ( response ) {
 			if ( "emotes" in response ) {
 				for (var i in response.emotes) {
-					emoticons[response.emotes[i].code] = `https://cdn.betterttv.net/emote/${response.emotes[i].id}/1x`;
+					emoticons.set(response.emotes[i].code, `https://cdn.betterttv.net/emote/${response.emotes[i].id}/1x`);
 				}
 			}
 		}
 	);
 
 	$.getJSON(
-		"https://api.betterttv.net/emotes",
+		'https://api.betterttv.net/emotes',
 		{},
 		function ( response ) {
 			if ( "emotes" in response ) {
 				for (var i in response.emotes) {
-					emoticons[response.emotes[i].regex] = `https:${response.emotes[i].url}`;
+					emoticons.set(response.emotes[i].regex, `https:${response.emotes[i].url}`);
 				}
 			}
 		}
@@ -508,46 +508,18 @@ function getEmoticonsBTTV() {
 }
 
 function writeEmoticons( message ) {
-	var output = "";
-	var text = message.split(" ");
-
-	var arrayWords = ['every',
-		'join',
-		'concat',
-		'filter',
-		'map',
-		'pop',
-		'push',
-		'reduce',
-		'reverse',
-		'shift',
-		'some',
-		'slice',
-		'sort',
-		'unshift',
-		'length',
-		'prototype',
-		'constructor',
-		'find'
-	];
+	var output = '';
+	var text = message.split(' ');
 
 	// for each word, check if it's an emoticon and if it is, output the url instead of the text
 	for( var i = 0; i < text.length; i++ ) {
 		var word = text[i];
-		// Check arrayWords...
-		var found = false;
-		for( var x = 0; x < arrayWords.length; x++ ) {
-			if ( arrayWords[x] == word ) {
-				found = true;
-				break;
-			}
-		}
 
-		if (!found && emoticons[word] ) {
-			output += `<abbr title="${word}"><img src="${emoticons[word]}"></abbr> `;
+		if ( emoticons.has(word) ) {
+			output += `<abbr title="${word}" style="border: 0;"><img src="${emoticons.get(word)}"></abbr> `;
 		}
 		else {
-			output += `${word} `;
+			output += word + ' ';
 		}
 	}
 
@@ -566,9 +538,7 @@ function log( message ) {
 	var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 20;
 
 	// add message
-	// var start = $.now();
 	$('#console').append( `${writeEmoticons(message)} <br>` );
-	// console.log(`${parseInt($.now())-parseInt(start)}ms : "${message}"`);
 
 	// if it was scrolled to the bottom before the message was appended, scroll to the bottom
 	if( isScrolledToBottom )
@@ -589,7 +559,7 @@ function chat() {
 	var text = $('#chatText').val();
 
 	// output it to the console
-	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}` );
+	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/\(/g,'&gt;')}` );
 
 	// check if it was a command...
 	if ( text.substring(0, 1) === cmdSettings.symbol ) {

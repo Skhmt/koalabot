@@ -139,7 +139,7 @@ function msgPriv( command, args ) {
 		return log( output );
 	}
 	else { // not an action
-		text += " " + lessargs; // text is merged with lessargs to make up the entire text string
+		text += ' ' + lessargs; // text is merged with lessargs to make up the entire text string
 		output += `<b>:</b> ${text.replace(/</g,"&lt;").replace(/>/g,"&gt;")}`;
 
 		// if it's a command, send to parseCommand
