@@ -559,7 +559,7 @@ function chat() {
 	var text = $('#chatText').val();
 
 	// output it to the console
-	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/\(/g,'&gt;')}` );
+	log( `${getTimeStamp()} <b>&gt;</b> ${text.replace(/</g,'&lt;').replace(/\(/g,'&#40;')}` );
 
 	// check if it was a command...
 	if ( text.substring(0, 1) === cmdSettings.symbol ) {
