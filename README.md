@@ -1,5 +1,7 @@
 # KoalaBot, a chat bot for Twitch
 
+A complete rewrite is being worked on at: https://github.com/Skhmt/koalabot2
+
  ![gpl](https://img.shields.io/badge/license-GPLv3-red.svg?style=flat-square)
 
 #### What is this?
