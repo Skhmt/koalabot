@@ -85,7 +85,7 @@ It's a moderation bot for Twitch meant for roughly the same things as nightbot, 
 
 #### How to use:
 * For Windows: Run koalaBot.exe
-* For OS X: Get nwjs 0.12.3 from the app store or their website. Download the Koalabot osx .zip and unzip it into the same directory as nwjs.app. Run nwjs.app.
+* For OS X: NWJS is no longer available from the app store, but is available at their [website](https://nwjs.io/). Download the Koalabot osx .zip and unzip it into the same directory as nwjs.app. Run nwjs.app. OSX may prompt that the application is from an untrusted source. If that happens, go to settings > Security & Privacy > General, and set the "Allow Apps from Anywhere" option and launch the application. After launching for the first time, it would be a good idea to set the securtiy settings back to "App Store and Identified Developers".
 * Go to Settings > Bot Config
 * Click "Get Token"
 * If Windows pops up something about the firewall, click OK. 
