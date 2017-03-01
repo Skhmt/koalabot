@@ -17,6 +17,7 @@
  // vars
 var clientid = "3y2ofy4qcsvnaybw9ogdzwmwfode8y0"; /* this is the (public) client_id of KoalaBot. */
 var bot;
+var server = "irc.chat.twitch.tv"; // This is what needs to happen but idk the correct way to implenment
 var fs;
 var logFile;
 var execPath;
