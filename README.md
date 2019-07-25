@@ -1,3 +1,5 @@
+# This will stop working completely by September 12 2019, if it still works at all. I do not have plans to update this project.
+
 # KoalaBot, a chat bot for Twitch
 
 A complete rewrite is being worked on at: https://github.com/Skhmt/koalabot2
